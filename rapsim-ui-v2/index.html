@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RapSim — The Ultimate Rap Career Simulator</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <!-- Google Fonts Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <div id="app">
+    
+    <!-- ================= SCREEN: NEW GAME ================= -->
+    <section id="screen-new" class="screen active">
+      <div class="glow-bg"></div>
+      <div class="new-game-container">
+        <div class="logo-area">
+          <i data-lucide="disc" class="logo-icon spin-slow"></i>
+          <h1>RAPSIM</h1>
+          <p class="tagline">From the Streets to the Billboard Hot 100</p>
+        </div>
+        
+        <div class="card setup-card">
+          <h2>Create Your Artist</h2>
+          <form id="form-new-game">
+            <div class="form-group">
+              <label for="input-artist-name">Stage Name</label>
+              <input type="text" id="input-artist-name" name="name" value="Shatam Rai" placeholder="Enter artist name..." required />
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="sel-gender">Gender</label>
+                <select name="gender" id="sel-gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="non-binary">Non-binary</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="sel-sexuality">Sexuality</label>
+                <select name="sexuality" id="sel-sexuality"></select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Starting Skills (Pick 2)</label>
+              <div class="skills-grid" id="skills-checkboxes"></div>
+            </div>
+            
+            <div class="form-group">
+              <label>Starting Genres (Pick 2)</label>
+              <div class="genres-grid" id="genres-checkboxes"></div>
+            </div>
+            
+            <button type="submit" class="btn primary btn-large">
+              <i data-lucide="play"></i> Start Career
+            </button>
+          </form>
+          <div id="new-error" class="error-alert hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN: MAIN GAMEPLAY ================= -->
+    <section id="screen-game" class="screen">
+      
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <i data-lucide="disc" class="spin-slow text-gold"></i>
+          <span>RAPSIM</span>
+          <span class="badge">PRO</span>
+        </div>
+
+        <!-- Artist Mini-Card HUD -->
+        <div class="artist-hud" id="artist-hud-panel">
+          <div class="artist-header">
+            <div class="avatar-circle" id="hud-avatar">SR</div>
+            <div class="artist-names">
+              <h3 id="hud-name">Shatam Rai</h3>
+              <p id="hud-tier">Local Talent</p>
+            </div>
+          </div>
+          <div class="hud-meters">
+            <div class="meter-group">
+              <div class="meter-labels">
+                <span>Popularity</span>
+                <strong id="hud-pop-val">25%</strong>
+              </div>
+              <div class="meter-bar"><span id="hud-pop-bar" style="width: 25%"></span></div>
+            </div>
+            <div class="meter-group">
+              <div class="meter-labels">
+                <span>Reputation</span>
+                <strong id="hud-rep-val">50%</strong>
+              </div>
+              <div class="meter-bar rep-bar"><span id="hud-rep-bar" style="width: 50%"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="sidebar-nav">
+          <!-- Section: Career -->
+          <div class="nav-section">
+            <span class="nav-section-title">Career</span>
+            <button class="nav-item active" data-tab="dashboard">
+              <i data-lucide="layout-dashboard"></i> Dashboard
+            </button>
+            <button class="nav-item" data-tab="studio">
+              <i data-lucide="mic-2"></i> Studio
+            </button>
+            <button class="nav-item" data-tab="beats">
+              <i data-lucide="music-4"></i> Beats
+            </button>
+            <button class="nav-item" data-tab="catalog">
+              <i data-lucide="library"></i> Catalog Manager
+            </button>
+            <button class="nav-item" data-tab="shawtify">
+              <i data-lucide="play-circle"></i> Shawtify Streams
+            </button>
+            <button class="nav-item" data-tab="critic-reviews">
+              <i data-lucide="message-square-dashed"></i> Critic Reviews
+            </button>
+            <button class="nav-item" data-tab="concerts">
+              <i data-lucide="ticket"></i> Concerts & Shows
+            </button>
+          </div>
+
+          <!-- Section: Industry -->
+          <div class="nav-section">
+            <span class="nav-section-title">Industry</span>
+            <button class="nav-item" data-tab="hot100">
+              <i data-lucide="trending-up"></i> Hot 100 Chart
+            </button>
+            <button class="nav-item" data-tab="ratings">
+              <i data-lucide="star"></i> User Ratings
+            </button>
+            <button class="nav-item" data-tab="disstracks">
+              <i data-lucide="swords"></i> Diss Tracks
+            </button>
+            <button class="nav-item" data-tab="twitter">
+              <i data-lucide="twitter"></i> Twitter Feed
+            </button>
+            <button class="nav-item" data-tab="news">
+              <i data-lucide="newspaper"></i> Industry News
+            </button>
+            <button class="nav-item" data-tab="grammy">
+              <i data-lucide="award"></i> Grammys
+            </button>
+          </div>
+
+          <!-- Section: Operations -->
+          <div class="nav-section">
+            <span class="nav-section-title">Operations</span>
+            <button class="nav-item" data-tab="management">
+              <i data-lucide="briefcase"></i> Operations
+            </button>
+            <button class="nav-item" data-tab="social">
+              <i data-lucide="users"></i> Social & Love
+            </button>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="stat-footer-item">
+            <span>Health</span>
+            <strong id="footer-health">100%</strong>
+          </div>
+          <div class="stat-footer-item">
+            <span>Fatigue</span>
+            <strong id="footer-fatigue">0%</strong>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN GAME PLAY AREA -->
+      <div class="game-layout">
+        
+        <!-- HEADER TOPBAR -->
+        <header class="topbar">
+          <div class="topbar-info">
+            <div class="info-pill">
+              <i data-lucide="calendar"></i>
+              <span id="topbar-week">Year 1 · Week 1</span>
+            </div>
+            <div class="info-pill">
+              <i data-lucide="dollar-sign" class="text-green"></i>
+              <span id="topbar-money">$0</span>
+            </div>
+            <div class="info-pill" id="pill-partner">
+              <i data-lucide="heart" class="text-terracotta"></i>
+              <span id="topbar-partner">Single</span>
+            </div>
+          </div>
+          
+          <div class="topbar-actions" style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn secondary" id="btn-restart-career" title="Start a new career">
+              <i data-lucide="rotate-ccw"></i> New Career
+            </button>
+            <button type="button" class="btn success" id="btn-sim-week">
+              <i data-lucide="chevrons-right"></i> Simulate Week
+            </button>
+          </div>
+        </header>
+
+        <!-- VIEWPORTS -->
+        <main class="viewport" id="game-viewport">
+          
+          <!-- TAB VIEWPORT: DASHBOARD -->
+          <div class="viewport-tab active" id="tab-dashboard">
+            <div class="dashboard-grid">
+              
+              <!-- STAT CARDS -->
+              <div class="stat-card">
+                <div class="card-icon"><i data-lucide="music-4" class="text-gold"></i></div>
+                <div class="card-content">
+                  <span class="label">Weekly Streams</span>
+                  <h2 id="dash-streams">0.0M</h2>
+                  <span class="trend" id="dash-streams-trend">+0M this week</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="card-icon"><i data-lucide="dollar-sign" class="text-gold"></i></div>
+                <div class="card-content">
+                  <span class="label">Weekly Earnings</span>
+                  <h2 id="dash-earnings">$0K</h2>
+                  <span class="trend" id="dash-earnings-trend">+$0 this week</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="card-icon"><i data-lucide="users-2" class="text-gold"></i></div>
+                <div class="card-content">
+                  <span class="label">Popularity</span>
+                  <h2 id="dash-pop">25%</h2>
+                  <span class="trend" id="dash-pop-trend">No change</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="card-icon"><i data-lucide="star" class="text-gold"></i></div>
+                <div class="card-content">
+                  <span class="label">Reputation</span>
+                  <h2 id="dash-rep">50%</h2>
+                  <span class="trend" id="dash-rep-trend">No change</span>
+                </div>
+              </div>
+
+              <!-- DASHBOARD PANELS -->
+              <div class="col-main">
+                <!-- Activity summary card -->
+                <div class="card border-gold">
+                  <h3><i data-lucide="zap" class="text-gold"></i> Actions & Activity</h3>
+                  <div class="activity-panel">
+                    <div class="activity-summary-grid">
+                      <div class="act-item">
+                        <span>Beats in Vault</span>
+                        <strong id="act-beats-count">0</strong>
+                      </div>
+                      <div class="act-item">
+                        <span>Songs Created</span>
+                        <strong id="act-singles-count">0</strong>
+                      </div>
+                      <div class="act-item">
+                        <span>Album Drafts</span>
+                        <strong id="act-albums-count">0</strong>
+                      </div>
+                      <div class="act-item">
+                        <span>Side Hustle Active</span>
+                        <strong id="act-hustle">No</strong>
+                      </div>
+                    </div>
+                    <div class="skills-genre-container">
+                      <div class="skills-column">
+                        <h3>SKILLS</h3>
+                        <div class="skill-progress-item">
+                          <span class="skill-name">lyrics</span>
+                          <div class="progress-bar-wrapper">
+                            <div class="progress-bar-fill" id="bar-lyrics" style="width: 25%"></div>
+                          </div>
+                          <span class="skill-val" id="val-lyrics">25</span>
+                        </div>
+                        <div class="skill-progress-item">
+                          <span class="skill-name">vocals</span>
+                          <div class="progress-bar-wrapper">
+                            <div class="progress-bar-fill" id="bar-vocals" style="width: 25%"></div>
+                          </div>
+                          <span class="skill-val" id="val-vocals">25</span>
+                        </div>
+                        <div class="skill-progress-item">
+                          <span class="skill-name">production</span>
+                          <div class="progress-bar-wrapper">
+                            <div class="progress-bar-fill" id="bar-production" style="width: 25%"></div>
+                          </div>
+                          <span class="skill-val" id="val-production">25</span>
+                        </div>
+                        <div class="skill-progress-item">
+                          <span class="skill-name">mix/master</span>
+                          <div class="progress-bar-wrapper">
+                            <div class="progress-bar-fill" id="bar-mix" style="width: 25%"></div>
+                          </div>
+                          <span class="skill-val" id="val-mix">25</span>
+                        </div>
+                      </div>
+                      <div class="genre-proficiency-column">
+                        <h3>GENRE PROFICIENCY</h3>
+                        <div id="genre-proficiency-list">
+                          <!-- Dynamically populated top genres -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="activity-actions">
+                      <button class="btn primary" onclick="switchTab('studio')">
+                        <i data-lucide="mic"></i> Open Studio
+                      </button>
+                      <button class="btn secondary" id="btn-dash-sim-week">
+                        <i data-lucide="refresh-cw"></i> Simulate Next Week
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Latest News headlines -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3><i data-lucide="newspaper"></i> Industry News</h3>
+                    <button class="btn ghost small" onclick="switchTab('news')">View All</button>
+                  </div>
+                  <div class="dashboard-news-list" id="dash-news-list">
+                    <p class="muted text-small">No news headlines available yet. Simulate a week to check industry rumors.</p>
+                  </div>
+                </div>
+
+                <!-- New Releases widget -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3><i data-lucide="music-2" class="text-gold"></i> Ecosystem New Releases</h3>
+                  </div>
+                  <div class="dashboard-news-list" id="dash-new-releases-list">
+                    <p class="muted text-small">No new releases dropped in the ecosystem this week. Simulate a week to check.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-side">
+                <!-- Hot Right Now (Dynamic Billboard top 3) -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3><i data-lucide="flame" class="text-terracotta"></i> Hot Right Now</h3>
+                    <button class="btn ghost small" onclick="switchTab('hot100')">Chart</button>
+                  </div>
+                  <div class="mini-hot-list" id="dash-hot-list">
+                    <p class="muted text-center py-2 text-small">Simulate weeks or click Hot 100 Chart to sync ranking.</p>
+                  </div>
+                </div>
+
+                <!-- Release Calendar -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3><i data-lucide="calendar-days"></i> Release Calendar</h3>
+                    <button class="btn ghost small" id="btn-check-release-calendar" data-action="16">Update</button>
+                  </div>
+                  <div class="mini-calendar" id="dash-calendar-list">
+                    <p class="muted text-center py-2 text-small">Simulate weeks or check the calendar menu to populate.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- TAB VIEWPORT: STUDIO -->
+          <div class="viewport-tab" id="tab-studio">
+            
+            <!-- Last Created Quality Banner -->
+            <div id="last-creation-banner" class="card banner-card border-gold hidden">
+              <div class="banner-content">
+                <div class="banner-icon"><i data-lucide="sparkles" class="text-gold"></i></div>
+                <div class="banner-text">
+                  <span class="label">Last Created Quality</span>
+                  <h3 id="banner-creation-title">Song Title</h3>
+                  <p id="banner-creation-details">Quality: 8.5/10 · Genre: Hip-Hop</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="studio-two-col">
+              
+              <!-- SONG RECORDING DESK -->
+              <div class="card studio-card">
+                <div class="studio-wizard-header">
+                  <h3><i data-lucide="mic" class="text-gold"></i> Song Recording Desk</h3>
+                  <div class="wizard-steps-indicator">
+                    <span id="step-ind-1" class="step-badge active">1. Style</span>
+                    <span id="step-ind-2" class="step-badge">2. Details</span>
+                  </div>
+                </div>
+
+                <form id="form-create-song">
+                  <!-- STEP 1: Genre & Theme -->
+                  <div id="song-step-1" class="wizard-step">
+                    <div class="form-group">
+                      <label>Select Genres (Pick 1 or 2)</label>
+                      <div class="genres-grid" id="song-genre-selects">
+                        <!-- Populated dynamically -->
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="song-theme-select">Song Theme</label>
+                      <select id="song-theme-select"></select>
+                    </div>
+                    <div class="wizard-buttons">
+                      <button type="button" class="btn primary btn-large" id="btn-song-next">
+                        Next: Configure Details <i data-lucide="arrow-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- STEP 2: Title, Duration, Beat, Single/Album -->
+                  <div id="song-step-2" class="wizard-step hidden">
+                    <div class="form-group">
+                      <label for="song-title-input">Song Title</label>
+                      <input type="text" id="song-title-input" placeholder="e.g. Arose" required />
+                    </div>
+                    
+                    <div class="form-grid">
+                      <div class="form-group">
+                        <label>Song Duration</label>
+                        <div class="duration-input-wrapper">
+                          <input type="number" id="song-duration-mins" min="0" max="15" value="2" style="width: 70px; text-align: center;" />
+                          <span class="muted">:</span>
+                          <input type="number" id="song-duration-secs" min="0" max="59" value="45" style="width: 70px; text-align: center;" />
+                          <button type="button" class="btn secondary" id="btn-roll-duration" title="Randomize song duration (1:01 - 8:59)">
+                            <i data-lucide="dices"></i>
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="song-beat-select">Beat Vault Selector</label>
+                        <select id="song-beat-select">
+                          <option value="">No Vault Beat (Roll standard beat)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="song-dest-select">Where should this song go?</label>
+                      <select id="song-dest-select">
+                        <option value="single">Save as unreleased Single</option>
+                        <option value="album">Add to Album Draft</option>
+                      </select>
+                    </div>
+
+                    <!-- Optional New Album configuration (toggled in UI) -->
+                    <div id="new-album-fields" class="new-album-block hidden">
+                      <div class="form-group">
+                        <label for="album-draft-select">Add to Album Draft</label>
+                        <select id="album-draft-select">
+                          <option value="new">[Create New Album Draft]</option>
+                        </select>
+                      </div>
+                      <div id="create-album-inputs" class="form-grid">
+                        <div class="form-group">
+                          <label for="album-new-title">New Album Title</label>
+                          <input type="text" id="album-new-title" placeholder="My First Album" />
+                        </div>
+                        <div class="form-group">
+                          <label for="album-new-genre">Core Genre</label>
+                          <select id="album-new-genre"></select>
+                        </div>
+                        <div class="form-group">
+                          <label for="album-new-theme">Core Theme</label>
+                          <select id="album-new-theme"></select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="wizard-buttons">
+                      <button type="button" class="btn secondary" id="btn-song-back">
+                        <i data-lucide="arrow-left"></i> Back
+                      </button>
+                      <button type="submit" class="btn primary">
+                        <i data-lucide="disc"></i> Record Song (Costs 8.5 Fatigue)
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <!-- BEAT PRODUCTION SYSTEM -->
+              <div class="card studio-card">
+                <h3><i data-lucide="sliders" class="text-gold"></i> Beat Production DAW</h3>
+                
+                <!-- Studio Skills Indicators -->
+                <div class="activity-summary-grid" style="margin-bottom: 1.5rem; background-color: var(--bg-deep); padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border-dim);">
+                  <div class="act-item" style="padding: 0.3rem;">
+                    <span style="font-size: 0.75rem;">Lyrics</span>
+                    <strong id="studio-skill-lyrics" style="font-size: 1.1rem; color: var(--accent-gold);">25</strong>
+                  </div>
+                  <div class="act-item" style="padding: 0.3rem;">
+                    <span style="font-size: 0.75rem;">Vocals</span>
+                    <strong id="studio-skill-vocals" style="font-size: 1.1rem; color: var(--accent-gold);">25</strong>
+                  </div>
+                  <div class="act-item" style="padding: 0.3rem;">
+                    <span style="font-size: 0.75rem;">Production</span>
+                    <strong id="studio-skill-production" style="font-size: 1.1rem; color: var(--accent-gold);">25</strong>
+                  </div>
+                  <div class="act-item" style="padding: 0.3rem;">
+                    <span style="font-size: 0.75rem;">Mix/Master</span>
+                    <strong id="studio-skill-mix" style="font-size: 1.1rem; color: var(--accent-gold);">25</strong>
+                  </div>
+                </div>
+
+                <form id="form-create-beat">
+                  <div class="form-group">
+                    <label for="beat-name-input">Beat Name</label>
+                    <input type="text" id="beat-name-input" placeholder="e.g. Street Banger" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="beat-genre-select">Beat Genre</label>
+                    <select id="beat-genre-select"></select>
+                  </div>
+                  <button type="submit" class="btn primary btn-large" style="margin-top: 1rem;">
+                    <i data-lucide="plus-circle"></i> Produce Beat (Costs 6.0 Fatigue)
+                  </button>
+                </form>
+                
+                <div class="divider" style="margin: 1.5rem 0;"></div>
+                
+                <!-- Training & Classes operations -->
+                <h3><i data-lucide="graduation-cap"></i> Practice & Education</h3>
+                <div class="vertical-buttons">
+                  <button class="btn action-btn text-left" id="action-start-course" data-action="5">
+                    <i data-lucide="book-open"></i> Start Genre Course
+                  </button>
+                  <button class="btn action-btn text-left" id="action-practice-lyrics" data-action="1">
+                    <i data-lucide="pen-tool"></i> Lyrics Practice (+1 Ly)
+                  </button>
+                  <button class="btn action-btn text-left" id="action-practice-vocals" data-action="2">
+                    <i data-lucide="mic"></i> Vocals Practice (+1 Vo)
+                  </button>
+                  <button class="btn action-btn text-left" id="action-practice-prod" data-action="3">
+                    <i data-lucide="sliders-horizontal"></i> Production Practice (+1 Pr)
+                  </button>
+                  <button class="btn action-btn text-left" id="action-practice-mix" data-action="4">
+                    <i data-lucide="settings"></i> Mix/Master Practice (+1 Mx)
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Vault Display directly inside Studio -->
+            <div class="card mt-4">
+              <div class="card-header">
+                <h3><i data-lucide="folder-open"></i> Your Beat Vault</h3>
+                <div class="topbar-actions">
+                  <button class="btn primary small" id="btn-open-beat-store-studio" data-action="32"><i data-lucide="shopping-cart"></i> Buy Beats (Store)</button>
+                  <button class="btn secondary small" id="btn-refresh-vault"><i data-lucide="refresh-cw"></i> Refresh</button>
+                </div>
+              </div>
+              <div class="beat-grid" id="studio-beat-vault">
+                <p class="muted py-4 text-center">Loading beats vault...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: BEATS -->
+          <div class="viewport-tab" id="tab-beats">
+            <div class="card border-gold" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem;">
+              <div>
+                <h3 class="mb-0"><i data-lucide="music" class="text-gold"></i> Beats & Sales Center</h3>
+                <p class="text-xs text-muted mb-0">List player beats individually or in packs, check ecosystem sales, or browse the active beat store.</p>
+              </div>
+              <div>
+                <button type="button" class="btn primary btn-large" id="btn-open-beat-store-tab">
+                  <i data-lucide="shopping-cart"></i> Open Interactive Beat Store
+                </button>
+              </div>
+            </div>
+
+            <div class="studio-two-col">
+              <!-- BEAT VAULT GRID -->
+              <div class="card">
+                <h3><i data-lucide="archive" class="text-gold"></i> Your Beat Vault</h3>
+                <p class="text-xs text-muted mb-2">Beats you have produced or purchased. Used for song recording.</p>
+                <div class="beat-grid" id="beats-tab-vault-list">
+                  <!-- Dynamic beats list -->
+                </div>
+              </div>
+
+              <!-- BEAT SALES FEED -->
+              <div class="card">
+                <h3><i data-lucide="trending-up" class="text-gold"></i> Weekly Beat Sales Feed</h3>
+                <p class="text-xs text-muted mb-2">Transactions in the ecosystem this week (updated weekly).</p>
+                <div class="sales-feed-list" id="beats-tab-sales-feed" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <p class="muted text-small text-center py-4">No transactions recorded this week yet. Simulate weeks to watch the market!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: CATALOG MANAGER -->
+          <div class="viewport-tab" id="tab-catalog">
+            <div class="catalog-container">
+              <div class="card border-gold">
+                <div class="card-header">
+                  <h3><i data-lucide="folder-heart" class="text-gold"></i> Catalog Operations</h3>
+                  <div class="topbar-actions">
+                    <button class="btn secondary" data-action="21" id="btn-cat-view-details">
+                      <i data-lucide="info"></i> View Song Metadata Details
+                    </button>
+                    <button class="btn secondary" data-action="21" id="btn-cat-view-tracklist">
+                      <i data-lucide="list"></i> View Album Tracklist
+                    </button>
+                    <button class="btn primary" data-action="21" id="btn-run-catalog-manager">
+                      <i data-lucide="arrow-right-left"></i> Launch Interactive Catalog Menu
+                    </button>
+                  </div>
+                </div>
+                <div class="catalog-manager-quick-actions mt-3">
+                  <button class="btn secondary small" data-action="21" id="btn-cat-add-to-album">Add Single to Album Draft</button>
+                  <button class="btn secondary small" data-action="21" id="btn-cat-send-feature">Send Feature Request</button>
+                  <button class="btn secondary small text-danger" data-action="21" id="btn-cat-delete">Delete Single Entry</button>
+                </div>
+              </div>
+
+              <div class="catalog-grids-layout">
+                <div class="card">
+                  <h3>Your Singles</h3>
+                  <div class="catalog-list" id="catalog-singles-list">
+                    <p class="muted py-4 text-center">Run the Catalog Manager to inspect details.</p>
+                  </div>
+                </div>
+                <div class="card">
+                  <h3>Your Albums</h3>
+                  <div class="catalog-list" id="catalog-albums-list">
+                    <p class="muted py-4 text-center">Run the Catalog Manager to inspect details.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: SHAWTIFY STREAMS -->
+          <div class="viewport-tab" id="tab-shawtify">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="mb-0"><i data-lucide="play-circle" class="text-gold"></i> Shawtify Streams Central</h3>
+                  <p class="text-xs text-muted mb-0">RIAA certifications, stream records, and virality status</p>
+                </div>
+                <button type="button" class="btn primary" id="btn-load-shawtify" data-action="13">
+                  <i data-lucide="refresh-cw"></i> Refresh Stream Stats
+                </button>
+              </div>
+              
+              <div class="table-container">
+                <table class="premium-table" id="shawtify-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;">Index</th>
+                      <th>Song Title</th>
+                      <th>Source Type</th>
+                      <th>Total Streams</th>
+                      <th>This Week</th>
+                      <th>Total Sales</th>
+                      <th>Certifications</th>
+                      <th style="text-align: right;">Avg Review</th>
+                    </tr>
+                  </thead>
+                  <tbody id="shawtify-body">
+                    <tr>
+                      <td colspan="8" class="text-center py-5 muted">Click "Refresh Stream Stats" to pull catalog streaming statistics.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: CRITIC REVIEWS -->
+          <div class="viewport-tab" id="tab-critic-reviews">
+            <div class="card border-gold">
+              <div class="card-header">
+                <div>
+                  <h3 class="mb-0"><i data-lucide="message-square-dashed" class="text-gold"></i> Album & Song Critical Reviews</h3>
+                  <p class="text-xs text-muted mb-0">Review scores are generated upon releasing albums/singles.</p>
+                </div>
+                <div id="critic-reviews-selector-container" class="hidden">
+                  <select id="sel-critic-review-album" style="width: 280px; padding: 0.4rem 0.8rem; font-size: 0.85rem;"></select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="critic-reviews-layout" id="critic-reviews-container">
+              <p class="muted py-5 text-center">No reviews recorded in this session yet. Release music to view critic quotes.</p>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: CONCERTS & VENUES -->
+          <div class="viewport-tab" id="tab-concerts">
+            <div class="concerts-container">
+              <div class="concerts-sidebar">
+                <div class="card">
+                  <h3>Concert Management</h3>
+                  <div class="vertical-buttons">
+                    <button class="btn action-btn text-left" data-action="37">
+                      <i data-lucide="calendar-plus"></i> Book a Venue
+                    </button>
+                    <button class="btn action-btn text-left" data-action="38">
+                      <i data-lucide="warehouse"></i> Manage Owned Venues
+                    </button>
+                    <button class="btn action-btn text-left" id="action-go-live" data-action="10">
+                      <i data-lucide="radio"></i> Go Live on Social Media
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="concerts-main">
+                <div class="card">
+                  <h3>Live Events Guide</h3>
+                  <p class="muted mb-4">
+                    Setup ticket prices, book opening acts, hire feature guest artists, and play the live stage show!
+                  </p>
+                  
+                  <div class="concert-guide-grid">
+                    <div class="guide-item">
+                      <i data-lucide="map-pin" class="text-gold"></i>
+                      <h4>Venue Tiering</h4>
+                      <p class="text-small muted">Requires local popularity and cash. Stadium bookings unlocked at high popularity.</p>
+                    </div>
+                    <div class="guide-item">
+                      <i data-lucide="percent" class="text-gold"></i>
+                      <h4>Pricing Templates</h4>
+                      <p class="text-small muted">Floor/Gen/VIP prices influence attendance fill rates and gross revenues.</p>
+                    </div>
+                    <div class="guide-item">
+                      <i data-lucide="star-half" class="text-gold"></i>
+                      <h4>Performance Score</h4>
+                      <p class="text-small muted">Driven by song quality, streams, and crowd energy choices. Caps at 10.0.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: HOT 100 -->
+          <div class="viewport-tab" id="tab-hot100">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="mb-0"><i data-lucide="bar-chart-3" class="text-gold"></i> Billboard Hot 100</h3>
+                  <p class="text-xs text-muted mb-0">Ecosystem & Player tracks ranked by last week's streams</p>
+                </div>
+                <button type="button" class="btn primary" id="btn-load-hot100" data-action="25">
+                  <i data-lucide="refresh-cw"></i> Refresh Chart
+                </button>
+              </div>
+              
+              <div class="table-container">
+                <table class="premium-table" id="hot100-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 70px;">Rank</th>
+                      <th>Song Title</th>
+                      <th>Artist</th>
+                      <th>Project</th>
+                      <th style="width: 140px;">Release Date</th>
+                      <th style="text-align: right; width: 180px;">Last Week Streams</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hot100-body">
+                    <tr>
+                      <td colspan="6" class="text-center py-5 muted">Click "Refresh Chart" to load the latest ranking.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: USER RATINGS -->
+          <div class="viewport-tab" id="tab-ratings">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="mb-0"><i data-lucide="star" class="text-gold"></i> User Ratings Central</h3>
+                  <p class="text-xs text-muted mb-0">IMDb song/artist ratings, hate indices, and project user scores</p>
+                </div>
+                <div class="ratings-dropdown-wrapper">
+                  <select id="sel-ratings-chart" style="width: 280px; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+                    <option value="2">Top 100 rated projects of all time</option>
+                    <option value="3">Top 50 rated projects of current Year</option>
+                    <option value="4">Top 20 rated artists of all time</option>
+                    <option value="5">Top 10 hated artists of all time</option>
+                    <option value="6">Top 100 rated songs of all time</option>
+                    <option value="7">Top 50 rated songs of current Year</option>
+                    <option value="8">Top 20 rated diss tracks of all time</option>
+                  </select>
+                  <button type="button" class="btn primary small" id="btn-load-ratings" data-action="19">
+                    <i data-lucide="refresh-cw"></i> Sync Ratings
+                  </button>
+                </div>
+              </div>
+              
+              <div class="table-container">
+                <table class="premium-table" id="ratings-table">
+                  <thead>
+                    <tr id="ratings-table-headers">
+                      <th style="width: 70px;">Rank</th>
+                      <th>Title</th>
+                      <th>Artist</th>
+                      <th>Score</th>
+                      <th style="text-align: right;">Votes</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ratings-table-body">
+                    <tr>
+                      <td colspan="5" class="text-center py-5 muted">Click "Sync Ratings" to load IMDb user scores.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: DISS TRACKS -->
+          <div class="viewport-tab" id="tab-disstracks">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="mb-0"><i data-lucide="swords" class="text-gold"></i> Diss Tracks & Beefs</h3>
+                  <p class="text-xs text-muted mb-0">Active beefs, allegations, and diss track stream ratings</p>
+                </div>
+                <button type="button" class="btn primary" id="btn-load-disstracks" data-action="27">
+                  <i data-lucide="refresh-cw"></i> Refresh Beefs
+                </button>
+              </div>
+              
+              <div class="diss-tracks-list" id="disstracks-feed-container">
+                <div class="text-center py-5 muted">Click "Refresh Beefs" to check active community wars.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: TWITTER -->
+          <div class="viewport-tab" id="tab-twitter">
+            <div class="twitter-layout">
+              <div class="twitter-feed-column">
+                <div class="card no-padding">
+                  <div class="twitter-tabs">
+                    <button class="tw-tab active" id="btn-tw-thisweek">This Week</button>
+                    <button class="tw-tab" id="btn-tw-archive">Archive / Search</button>
+                    <button type="button" class="btn ghost small mr-3" id="btn-refresh-twitter" data-action="18" style="margin-left: auto;">
+                      <i data-lucide="refresh-cw"></i> Load Twitter
+                    </button>
+                  </div>
+                  
+                  <div class="twitter-posts" id="twitter-posts-container">
+                    <div class="text-center py-5 muted">Click "Load Twitter" to sync social media feeds.</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="twitter-sidebar">
+                <div class="card">
+                  <h3>Trending Topics</h3>
+                  <div class="trends-list" id="twitter-trends">
+                    <p class="muted text-small">#RapsimBack</p>
+                    <p class="muted text-small">#BillboardHot100</p>
+                    <p class="muted text-small">#NewMusicFriday</p>
+                  </div>
+                </div>
+                <div class="card" id="twitter-heat-panel">
+                  <h3>Heat Meter</h3>
+                  <div class="controversy-meter">
+                    <span class="label">Viral Index</span>
+                    <strong class="text-terracotta">25.0</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: NEWS -->
+          <div class="viewport-tab" id="tab-news">
+            <div class="news-layout">
+              <div class="card">
+                <div class="card-header">
+                  <h3><i data-lucide="globe" class="text-gold"></i> Industry Rumor & Sales News Desk</h3>
+                  <button type="button" class="btn primary" id="btn-load-news" data-action="17">
+                    <i data-lucide="refresh-cw"></i> Fetch News
+                  </button>
+                </div>
+                
+                <div class="news-feed" id="news-feed-container">
+                  <p class="muted py-5 text-center">Click "Fetch News" to download the latest agency briefings.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: GRAMMY AWARDS -->
+          <div class="viewport-tab" id="tab-grammy">
+            <div class="grammy-layout">
+              <div class="card border-gold">
+                <div class="card-header">
+                  <h3><i data-lucide="award" class="text-gold"></i> Grammy Awards Ceremony</h3>
+                  <button type="button" class="btn primary" id="btn-load-grammys" data-action="26">
+                    <i data-lucide="trophy"></i> Open Grammy Menu
+                  </button>
+                </div>
+                <p class="muted text-small">
+                  Eligible releases (Weeks 1-48) are nominated and awarded in Weeks 49-52 of each simulator year.
+                </p>
+              </div>
+              
+              <div class="grammy-nominees-panel" id="grammy-results-panel">
+                <div class="card">
+                  <h3>Annual Awards Showcase</h3>
+                  <p class="muted text-center py-4">Click "Open Grammy Menu" to load awards and nominations.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: OPERATIONS -->
+          <div class="viewport-tab" id="tab-management">
+            <div class="management-container">
+              <div class="card">
+                <h3>Management Operations</h3>
+                <div class="hustle-grid">
+                  <div class="hustle-card">
+                    <h4>Management Contract</h4>
+                    <p class="text-small muted">Hire a manager to secure better marketing boosts and features.</p>
+                    <button class="btn secondary" data-action="12">Manage Agency</button>
+                  </div>
+                  <div class="hustle-card">
+                    <h4>Side Hustles</h4>
+                    <p class="text-small muted">Out of cash? Do side gigs (ghostwriting, beat selling, mix gigs) to survive.</p>
+                    <button class="btn secondary" data-action="11">Work Hustles</button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card mt-4">
+                <h3>Ecosystem Roster</h3>
+                <div class="roster-actions">
+                  <button class="btn secondary" data-action="15">Browse Roster</button>
+                  <button class="btn secondary" data-action="14">View New Releases</button>
+                  <button class="btn secondary" data-action="16">View Release Calendar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB VIEWPORT: SOCIAL & LOVE -->
+          <div class="viewport-tab" id="tab-social">
+            <div class="social-container">
+              <div class="card">
+                <h3>Ecosystem Social & Networking</h3>
+                <div class="social-actions-grid">
+                  <div class="social-card">
+                    <h4>Manage Relationships</h4>
+                    <p class="text-small muted">Build partnerships, text features, or beef with other artists.</p>
+                    <button class="btn secondary" data-action="20">Network Manager</button>
+                  </div>
+                  <div class="social-card">
+                    <h4>Numble Game</h4>
+                    <p class="text-small muted">Play the Numble word-connection game to earn clout.</p>
+                    <button class="btn secondary" data-action="33">Play Numble</button>
+                  </div>
+                  <div class="social-card">
+                    <h4>Love Relationships</h4>
+                    <p class="text-small muted">Manage romantic partnerships, date, or split up.</p>
+                    <button class="btn secondary" data-action="34">Your Love Life</button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card mt-4">
+                <h3>Ecosystem Gossip / Status</h3>
+                <div class="social-actions-grid">
+                  <div class="social-card">
+                    <h4>Diss Track Central</h4>
+                    <p class="text-small muted">Check out current beefs and active diss tracks in the community.</p>
+                    <button class="btn secondary" data-action="27">Diss Tracks</button>
+                  </div>
+                  <div class="social-card">
+                    <h4>Ecosystem Love Relationships</h4>
+                    <p class="text-small muted">Gossip on who other artists in the world are currently dating.</p>
+                    <button class="btn secondary" data-action="28">Ecosystem Romance</button>
+                  </div>
+                  <div class="social-card">
+                    <h4>Ecosystem Breakups</h4>
+                    <p class="text-small muted">Who broke up recently in the ecosystem.</p>
+                    <button class="btn secondary" data-action="29">Ecosystem Breakups</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </main>
+        
+        <!-- FLOATING CONSOLE LOGS -->
+        <footer class="console-pane collapsed" id="console-pane">
+          <div class="console-header" id="console-header">
+            <div class="console-title">
+              <i data-lucide="terminal"></i>
+              <span>Console Output Logs</span>
+            </div>
+            <div class="console-controls">
+              <button class="btn-icon" id="btn-console-clear" title="Clear console"><i data-lucide="trash-2"></i></button>
+              <button class="btn-icon" id="btn-console-toggle" title="Toggle console height"><i data-lucide="chevron-up" id="console-chevron"></i></button>
+            </div>
+          </div>
+          <div class="console-body">
+            <pre id="log-output">Simulator logs initialized. Run an action to display Python stdout stream.</pre>
+          </div>
+        </footer>
+
+        <!-- DYNAMIC PROMPT MODAL -->
+        <div class="modal-backdrop hidden" id="prompt-modal">
+          <div class="modal-card">
+            <div class="modal-header">
+              <h3 id="prompt-title">Input Required</h3>
+              <button class="btn-close" id="btn-close-prompt"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" id="prompt-body">
+              <!-- Input fields will inject here dynamically -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn ghost hidden" id="btn-cancel-prompt">Cancel</button>
+              <button type="button" class="btn primary" id="btn-submit-prompt">Confirm</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- LIVE CONCERT SCREEN overlay -->
+        <div class="concert-overlay hidden" id="concert-overlay">
+          <div class="concert-stage-container">
+            <div class="stage-header">
+              <div class="venue-title">
+                <i data-lucide="mic"></i>
+                <h2 id="stage-venue-name">Madison Square Garden</h2>
+              </div>
+              <div class="stats-pills">
+                <div class="pill">Attendance: <strong id="stage-attendance">0</strong></div>
+                <div class="pill">Setlist: <strong id="stage-progress">1 / 5</strong></div>
+              </div>
+            </div>
+            
+            <div class="stage-performance-area">
+              <div class="vinyl-holder">
+                <i data-lucide="disc-3" class="vinyl spin-slow"></i>
+              </div>
+              <div class="now-performing">
+                <span class="label">Now Performing</span>
+                <h1 id="stage-song-name">Concrete Season</h1>
+              </div>
+            </div>
+            
+            <div class="stage-meters">
+              <div class="stage-meter-group">
+                <span class="label">Crowd Energy</span>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" id="stage-energy-fill" style="width: 50%"></div>
+                </div>
+                <span class="percentage" id="stage-energy-val">50%</span>
+              </div>
+            </div>
+            
+            <div class="stage-controls">
+              <h3>What do you do next?</h3>
+              <div class="controls-grid" id="stage-choices">
+                <!-- Dynamically populated buttons -->
+              </div>
+            </div>
+            
+            <div class="stage-feed">
+              <div class="stage-feed-header"><i data-lucide="messages-square"></i> Live Crowd & News Feed</div>
+              <div class="stage-feed-body" id="stage-feed-body"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

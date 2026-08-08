@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rapsim — Career Simulator</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <h1>Rapsim</h1>
+      <p class="tagline">Music career simulator — all modules connected</p>
+    </header>
+
+    <section id="screen-new" class="screen active">
+      <div class="card">
+        <h2>New career</h2>
+        <form id="form-new-game">
+          <label>Artist name<input name="name" value="Untitled Artist" required /></label>
+          <label>Gender
+            <select name="gender" id="sel-gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="non-binary">Non-binary</option>
+            </select>
+          </label>
+          <label>Sexuality<select name="sexuality" id="sel-sexuality"></select></label>
+          <label>Starting skills (pick 2)<select name="skills" id="sel-skills" multiple size="4"></select></label>
+          <label>Starting genres (pick 2)<select name="genres" id="sel-genres" multiple size="6"></select></label>
+          <button type="submit" class="btn primary">Start career</button>
+        </form>
+        <p id="new-error" class="error hidden"></p>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen">
+      <aside class="sidebar">
+        <div class="artist-panel" id="artist-panel"></div>
+        <nav id="action-nav" class="action-nav"></nav>
+      </aside>
+      <main class="main">
+        <div class="toolbar">
+          <button type="button" class="btn ghost" id="btn-refresh">Refresh</button>
+          <button type="button" class="btn ghost" id="btn-vault">Vault beats</button>
+          <span id="session-label" class="muted"></span>
+        </div>
+        <div id="prompt-panel" class="prompt-panel hidden">
+          <h3 id="prompt-title">Input needed</h3>
+          <div id="prompt-body"></div>
+          <button type="button" class="btn primary" id="btn-submit-prompt">Continue</button>
+        </div>
+        <pre id="log-output" class="log-output">Run an action from the sidebar.</pre>
+      </main>
+    </section>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
