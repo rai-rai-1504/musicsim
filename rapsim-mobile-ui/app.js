@@ -3269,6 +3269,10 @@ const PROFILE_MODULES_DATA = {
 
 function openProfileModule(moduleKey) {
   playMechanicalClick();
+  if (moduleKey === "labels") {
+    openProfileLabelsSubpage();
+    return;
+  }
   const data = PROFILE_MODULES_DATA[moduleKey];
   if (!data) return;
 
@@ -3308,6 +3312,1253 @@ function closeProfilePlaceholder() {
   const hub = document.getElementById("profileMainHub");
   if (view) view.style.display = "none";
   if (hub) hub.style.display = "flex";
+}
+
+// ==========================================================================
+// PROFILE SUBPAGE: LABELS & RECORD DEALS ENGINE
+// ==========================================================================
+
+let currentLabelsSection = "all"; // "all" | "your"
+let currentSignedLabelId = "label-greater";
+
+let greaterRecordsState = {
+  recoupmentRemaining: 793428,
+  commitmentFulfilled: 2,
+  commitmentTotal: 4,
+  weeksLeft: 56,
+  totalWeeks: 102,
+  prestige: 78
+};
+
+let staffRelationships = {
+  vance: 68,
+  rostova: 74,
+  hayes: 58,
+  chen: 82
+};
+
+const LABELS_DATA = [
+  {
+    id: "label-apex",
+    name: "APEX RECORDS",
+    prestige: 94,
+    minPopularity: 85,
+    contractYears: 8,
+    contractWeeks: 416,
+    albumCommitment: 4,
+    advance: 35000000,
+    advanceDisplay: "$ 35,000,000",
+    tier: "Global Megacorp",
+    royaltySplit: "18% Artist / 82% Label",
+    mastersOwnership: "Label Owns 100% In Perpetuity",
+    marketingBudget: "$ 5,000,000 Guaranteed per LP",
+    creativeControl: "Label Executive Final Say",
+    territory: "Worldwide Exclusive",
+    description: "Apex Records is the supreme titan of the global music industry. Home to stadium-selling icons, Apex guarantees ungodly resources, massive radio monopolization, and eight-figure advances, but demands strictly calculated commercial hits.",
+    promises: [
+      "$5,000,000 worldwide multimedia marketing campaign per album cycle",
+      "Immediate front-page placement on all streaming services worldwide",
+      "Direct clearances with A-list producers and superstar feature artists",
+      "Super Bowl and global stadium tour booking priority"
+    ],
+    cuts: [
+      "Streaming & Digital Sales: 18% Artist / 82% Label",
+      "Physical Vinyl / CD Distribution: 15% Artist / 85% Label",
+      "Sync & Commercial Licenses: 50% Artist / 50% Label",
+      "Merchandise & Touring 360 Cut: 25% Label Deduction"
+    ]
+  },
+  {
+    id: "label-midass",
+    name: "MIDASS RECORDS",
+    prestige: 65,
+    minPopularity: 55,
+    contractYears: 3,
+    contractWeeks: 156,
+    albumCommitment: 2,
+    advance: 1000000,
+    advanceDisplay: "$ 1,000,000",
+    tier: "Mid-Tier Major-Indie",
+    royaltySplit: "40% Artist / 60% Label",
+    mastersOwnership: "10-Year Reversion to Artist",
+    marketingBudget: "$ 400,000 Targeted Budget",
+    creativeControl: "Mutual Creative Approval",
+    territory: "Worldwide Exclusive",
+    description: "Midass Records strikes a rare, artist-friendly balance. Offering a seven-figure advance with fair 40% royalties and a 10-year master reversion clause, they are a favorite among rising rap visionaries.",
+    promises: [
+      "$400,000 targeted digital & influencer promotional campaign",
+      "Full master recording reversion back to artist after 10 years",
+      "Complete artistic freedom on beat selection and track length",
+      "Dedicated A&R sound engineering liaison"
+    ],
+    cuts: [
+      "Streaming & Digital: 40% Artist / 60% Label",
+      "Sync & Licensing: 50% Artist / 50% Label",
+      "Zero deductions on touring and personal merchandise"
+    ]
+  },
+  {
+    id: "label-never",
+    name: "NEVER RECORDS",
+    prestige: 25,
+    minPopularity: 25,
+    contractYears: 4,
+    contractWeeks: 208,
+    albumCommitment: 5,
+    advance: 350000,
+    advanceDisplay: "$ 350,000",
+    tier: "Predatory Underground Deal",
+    royaltySplit: "12% Artist / 88% Label",
+    mastersOwnership: "Label Owns In Perpetuity",
+    marketingBudget: "$ 150,000 Budget",
+    creativeControl: "Strict Label Direction",
+    territory: "Worldwide 360 Deal",
+    description: "Infamous predatory 360 trap deal. Low popularity barrier makes it tempting for starving newcomers, but the five-project commitment and punitive 12% royalty rate will lock you in legal shackles.",
+    promises: [
+      "Fast cash advance injection directly into your account",
+      "Standard digital distribution to Spotify, Apple, and Tidal",
+      "Local club DJ network promotion"
+    ],
+    cuts: [
+      "Streaming & Digital: 12% Artist / 88% Label",
+      "Merchandise Take: 40% Label Cut",
+      "Live Touring Take: 30% Label Cut"
+    ]
+  },
+  {
+    id: "label-greater",
+    name: "GREATER RECORDS",
+    isCurrentLabel: true,
+    prestige: 78,
+    minPopularity: 60,
+    contractYears: 4,
+    contractWeeks: 102,
+    albumCommitment: 4,
+    advance: 1800000,
+    advanceDisplay: "$ 1,800,000",
+    tier: "Prestigious Urban Powerhouse",
+    royaltySplit: "35% Artist / 65% Label (Jumps to 45% post-recoupment)",
+    mastersOwnership: "Joint Venture (50/50 Split)",
+    marketingBudget: "$ 750,000 per project",
+    creativeControl: "Artist Holds Full Sonic Discretion",
+    territory: "Worldwide Exclusive",
+    description: "Your current record label! Greater Records is an elite hip-hop and alternative powerhouse founded by music veteran Marcus Vance. Home to megastar K-Vibe and yourself.",
+    promises: [
+      "$750,000 marketing and video budget per project",
+      "Direct placement on Rap Caviar and flagship Spotify playlists",
+      "Full access to Greater Sound complexes in Tokyo & Los Angeles",
+      "Dedicated in-house Grammy-winning mixing engineers"
+    ],
+    cuts: [
+      "Streaming & Digital: 35% Artist / 65% Label until recoupment",
+      "Post-Recoupment: 45% Artist / 55% Label for life of contract",
+      "Sync & Film: 50% / 50% split",
+      "Zero touring cuts (Artist keeps 100% of live revenue)"
+    ]
+  },
+  {
+    id: "label-deathrow",
+    name: "DEATH ROW HERITAGE",
+    prestige: 82,
+    minPopularity: 70,
+    contractYears: 5,
+    contractWeeks: 260,
+    albumCommitment: 3,
+    advance: 4500000,
+    advanceDisplay: "$ 4,500,000",
+    tier: "Legacy Street Heavyweight",
+    royaltySplit: "25% Artist / 75% Label",
+    mastersOwnership: "Label Owns 100%",
+    marketingBudget: "$ 1,200,000 Budget",
+    creativeControl: "Street Authenticity Required",
+    territory: "Worldwide Exclusive",
+    description: "Legendary West Coast imprint known for hardcore anthems, unmistakable swagger, and street credibility that money cannot buy.",
+    promises: [
+      "$1,200,000 street-level & national radio promotional push",
+      "Collaborative access to the iconic Death Row archives & producers",
+      "Heavy radio rotation across major coastal markets"
+    ],
+    cuts: [
+      "Streaming: 25% Artist / 75% Label",
+      "Merch: 20% Label Cut",
+      "Sync & Games: 50% / 50% Split"
+    ]
+  },
+  {
+    id: "label-ovosound",
+    name: "OVO SOUND DISTRO",
+    prestige: 91,
+    minPopularity: 80,
+    contractYears: 3,
+    contractWeeks: 156,
+    albumCommitment: 2,
+    advance: 12500000,
+    advanceDisplay: "$ 12,500,000",
+    tier: "Boutique Megastar Imprint",
+    royaltySplit: "30% Artist / 70% Label",
+    mastersOwnership: "7-Year Reversion Clause",
+    marketingBudget: "$ 3,000,000 Global Push",
+    creativeControl: "Full Artist Direction",
+    territory: "Worldwide Exclusive",
+    description: "Elite boutique label offering massive eight-figure funding, moody atmospheric sonic palettes, and direct co-signs that turn underground artists into global icons.",
+    promises: [
+      "$3,000,000 global marketing rollout and visual trailers",
+      "Immediate Apple Music & Spotify front-cover placement",
+      "Direct collaborations with the Toronto & OVO sound collective"
+    ],
+    cuts: [
+      "Streaming: 30% Artist / 70% Label",
+      "Masters revert after 7 years",
+      "Sync & Brand Deals: 60% Artist / 40% Label"
+    ]
+  },
+  {
+    id: "label-cactusjack",
+    name: "CACTUS JACK SOUND",
+    prestige: 88,
+    minPopularity: 75,
+    contractYears: 4,
+    contractWeeks: 208,
+    albumCommitment: 3,
+    advance: 8000000,
+    advanceDisplay: "$ 8,000,000",
+    tier: "Cultural Hype Machine",
+    royaltySplit: "32% Artist / 68% Label",
+    mastersOwnership: "Joint Venture Imprint",
+    marketingBudget: "$ 2,500,000 Merch & Visuals",
+    creativeControl: "Experimental Artistic Freedom",
+    territory: "Worldwide Exclusive",
+    description: "The epicenter of rage, psychedelic trap, and streetwear domination. Signing here pairs your music with insane merchandise rollouts and arena festival slots.",
+    promises: [
+      "$2,500,000 experimental visual & festival stage marketing budget",
+      "Global collaborative merchandise capsules & sneaker tie-ins",
+      "Headline festival billing across rolling loud circuits"
+    ],
+    cuts: [
+      "Streaming: 32% Artist / 68% Label",
+      "Joint venture imprint profit sharing",
+      "Merchandise: 50% / 50% Split"
+    ]
+  },
+  {
+    id: "label-rusticroots",
+    name: "RUSTIC ROOTS ENT",
+    prestige: 52,
+    minPopularity: 30,
+    contractYears: 2,
+    contractWeeks: 104,
+    albumCommitment: 1,
+    advance: 250000,
+    advanceDisplay: "$ 250,000",
+    tier: "Pure Indie Sanctuary",
+    royaltySplit: "70% Artist / 30% Label",
+    mastersOwnership: "Artist Owns 100% From Day 1",
+    marketingBudget: "$ 100,000 Grassroots Push",
+    creativeControl: "100% Unfiltered Artist Autonomy",
+    territory: "Non-Exclusive Distribution",
+    description: "An ethical indie haven. Perfect for lyrical purists who want to own 100% of their masters, keep 70% of royalties, and answer to no corporate boardroom.",
+    promises: [
+      "Artist retains 100% master ownership from moment of creation",
+      "70% artist royalty rate on all digital sales and streams",
+      "Zero contractual intervention in track themes or runtime"
+    ],
+    cuts: [
+      "Streaming: 70% Artist / 30% Label",
+      "Zero 360 deductions on tours, merch, or publishing"
+    ]
+  },
+  {
+    id: "label-subzero",
+    name: "SUB ZERO RECORDS",
+    prestige: 60,
+    minPopularity: 45,
+    contractYears: 3,
+    contractWeeks: 156,
+    albumCommitment: 3,
+    advance: 750000,
+    advanceDisplay: "$ 750,000",
+    tier: "Street Drill Pioneer",
+    royaltySplit: "28% Artist / 72% Label",
+    mastersOwnership: "Label Owns 100%",
+    marketingBudget: "$ 300,000 Street & Visuals",
+    creativeControl: "Raw Street Autonomy",
+    territory: "UK & US Drill Specialist",
+    description: "The raw home of UK and Brooklyn drill. Dark 808 slides, aggressive cinematic music videos, and heavy European festival distribution.",
+    promises: [
+      "$300,000 budget for 4K cinematic music videos and visualizers",
+      "Direct pitching to top UK drill & grime editorial playlists",
+      "London & New York cross-Atlantic promotion"
+    ],
+    cuts: [
+      "Streaming: 28% Artist / 72% Label",
+      "Sync: 50% / 50% Split",
+      "Touring: 15% Label Cut"
+    ]
+  },
+  {
+    id: "label-monolith",
+    name: "MONOLITH GLOBAL CORP",
+    prestige: 98,
+    minPopularity: 92,
+    contractYears: 10,
+    contractWeeks: 520,
+    albumCommitment: 6,
+    advance: 50000000,
+    advanceDisplay: "$ 50,000,000",
+    tier: "Trillion-Dollar Conglomerate",
+    royaltySplit: "15% Artist / 85% Label",
+    mastersOwnership: "In Perpetuity Corporate Asset",
+    marketingBudget: "$ 10,000,000 Global Blitz",
+    creativeControl: "Strict Boardroom Approval",
+    territory: "Intergalactic / Worldwide",
+    description: "The ultimate corporate behemoth. A $50,000,000 check that puts your music into Hollywood franchise blockbusters, theme parks, and every radio wave on Earth—at the cost of a decade-long corporate contract.",
+    promises: [
+      "$10,000,000 worldwide omni-channel release budget per album",
+      "Guaranteed Billboard #1 chart lobbying and Grammy push",
+      "Placement on billion-dollar Hollywood blockbuster soundtracks",
+      "Private jet travel and dedicated security detachment"
+    ],
+    cuts: [
+      "Streaming: 15% Artist / 85% Label",
+      "Physical: 12% Artist / 88% Label",
+      "Masters: Corporate property in perpetuity",
+      "Merch & Touring: 30% Label cut"
+    ]
+  }
+];
+
+const GREATER_RECORDS_MUSIC = [
+  {
+    title: "Late Night in Shibuya",
+    type: "Studio LP",
+    year: "Year 2",
+    tracksCount: 12,
+    streams: 48290100,
+    grossRevenue: 193160,
+    artistCut: 67606,
+    recoupedAmount: 67606,
+    cover: "album covers/download (10).jpg"
+  },
+  {
+    title: "Tokyo Drift",
+    type: "EP",
+    year: "Year 2",
+    tracksCount: 6,
+    streams: 24120000,
+    grossRevenue: 96480,
+    artistCut: 33768,
+    recoupedAmount: 33768,
+    cover: "album covers/download (4).jpg"
+  }
+];
+
+const GREATER_RECORDS_ROSTER = [
+  {
+    id: "roster-kvibe",
+    name: "K-Vibe",
+    tier: "Flagship Megastar",
+    monthlyListeners: "28,400,000",
+    chemistry: 85,
+    avatar: "album covers/Tyler Durden.jpg",
+    status: "Label Flagship"
+  },
+  {
+    id: "roster-synapse",
+    name: "Lil Synapse",
+    tier: "Rising Phenom (YOU)",
+    monthlyListeners: "4,820,000",
+    chemistry: 100,
+    avatar: "album covers/download (10).jpg",
+    status: "Priority Prospect"
+  },
+  {
+    id: "roster-asapghost",
+    name: "A$AP Ghost",
+    tier: "Mainstream Heavyweight",
+    monthlyListeners: "14,200,000",
+    chemistry: 62,
+    avatar: "album covers/download (6).jpg",
+    status: "Album Dropping in 2 Wks"
+  },
+  {
+    id: "roster-lunasky",
+    name: "Luna Sky",
+    tier: "R&B Sensation",
+    monthlyListeners: "9,800,000",
+    chemistry: 75,
+    avatar: "album covers/Music artwork for Frank Ocean - _.jpg",
+    status: "Single Dropping this Week"
+  },
+  {
+    id: "roster-trapsensei",
+    name: "Trap Sensei",
+    tier: "Underground Signee",
+    monthlyListeners: "1,200,000",
+    chemistry: 45,
+    avatar: "album covers/download (3).jpg",
+    status: "Developing"
+  }
+];
+
+const GREATER_RECORDS_CALENDAR = [
+  {
+    week: "WEEK 1 (CURRENT)",
+    dateRange: "JUN 12 - 18",
+    artist: "Luna Sky",
+    releaseTitle: "Velvet Nights (Lead Single)",
+    format: "Single + Music Video",
+    promoPush: "Billboard Blitz & Spotify New Music Friday Cover",
+    status: "Dropping This Friday"
+  },
+  {
+    week: "WEEK 2",
+    dateRange: "JUN 19 - 25",
+    artist: "A$AP Ghost",
+    releaseTitle: "Grim Reaper (Studio LP)",
+    format: "14-Track Album",
+    promoPush: "Rolling Stone Feature & National Radio Syndication",
+    status: "Master Turned In"
+  },
+  {
+    week: "WEEK 3",
+    dateRange: "JUN 26 - JUL 02",
+    artist: "Lil Synapse (YOU)",
+    releaseTitle: "Scheduled Studio Session & Pre-Save Push",
+    format: "Pre-Release Rollout",
+    promoPush: "TikTok Trend Campaign & DJ Pool Promo",
+    status: "Your Allocated Window"
+  },
+  {
+    week: "WEEK 4",
+    dateRange: "JUL 03 - 09",
+    artist: "K-Vibe ft. Lil Synapse",
+    releaseTitle: "Crown Heavy (Summer Anthem)",
+    format: "Major Collab Single",
+    promoPush: "Rap Caviar #1 Placement & Global DSP Banner",
+    status: "In Final Mix & Master"
+  }
+];
+
+const GREATER_RECORDS_STAFF = [
+  {
+    id: "vance",
+    name: "Marcus Vance",
+    role: "Founder & Chief Executive Officer",
+    avatarLetter: "M",
+    relationship: 68,
+    quote: "Keep your work ethic high. Greater Records has the resources to make you an untouchable icon if you deliver.",
+    reputationBenefit: "Good relationship with Marcus boosts label priority and unlocks early release permissions."
+  },
+  {
+    id: "rostova",
+    name: "Elena Rostova",
+    role: "Head of A&R & Talent Direction",
+    avatarLetter: "E",
+    relationship: 74,
+    quote: "I just secured a folder of unreleased superstar beats. Let me know when you want to pick production for project #3.",
+    reputationBenefit: "High relationship clears superstar guest features with 50% discount."
+  },
+  {
+    id: "hayes",
+    name: "Darnell 'D-Beam' Hayes",
+    role: "VP of Global Marketing & DSP Relations",
+    avatarLetter: "D",
+    relationship: 58,
+    quote: "Give me an irresistible 15-second hook and I will get your face plastered across Times Square.",
+    reputationBenefit: "High relationship unlocks editorial playlist pitching and Times Square billboards."
+  },
+  {
+    id: "chen",
+    name: "Chloe Chen",
+    role: "Lead In-House Sound Engineer",
+    avatarLetter: "C",
+    relationship: 82,
+    quote: "Your vocals cut through the low end like butter. Let's lock in for another marathon mixing session.",
+    reputationBenefit: "High relationship gives free studio vocal polish and boosts track sonic quality."
+  }
+];
+
+// SVGs Helper Generators
+function getWaxSealSVG(size = 44) {
+  return `
+    <svg width="${size}" height="${size}" viewBox="0 0 60 60" fill="none">
+      <defs>
+        <radialGradient id="waxGrad_${size}" cx="35%" cy="30%" r="65%">
+          <stop offset="0%" stop-color="#b91c1c"/>
+          <stop offset="50%" stop-color="#991b1b"/>
+          <stop offset="85%" stop-color="#7f1d1d"/>
+          <stop offset="100%" stop-color="#450a0a"/>
+        </radialGradient>
+      </defs>
+      <path d="M30 3 C36 3, 39 6, 44 7 C49 8, 53 12, 56 17 C59 22, 57 26, 58 31 C59 36, 57 41, 54 46 C51 51, 47 54, 42 56 C37 58, 33 57, 30 57 C27 57, 23 58, 18 56 C13 54, 9 51, 6 46 C3 41, 1 36, 2 31 C3 26, 1 22, 4 17 C7 12, 11 8, 16 7 C21 6, 24 3, 30 3 Z" fill="url(#waxGrad_${size})" filter="drop-shadow(0 3px 4px rgba(0,0,0,0.45))"/>
+      <circle cx="30" cy="30" r="18" fill="none" stroke="#520e0e" stroke-width="1.6" stroke-dasharray="3.5 2"/>
+      <circle cx="30" cy="30" r="14" fill="#781717"/>
+      <circle cx="30" cy="30" r="10" stroke="#991b1b" stroke-width="1.2" fill="none"/>
+      <circle cx="30" cy="30" r="6" stroke="#991b1b" stroke-width="1" fill="none"/>
+      <circle cx="30" cy="30" r="3" fill="#450a0a"/>
+      <path d="M18 20 C22 14, 38 14, 42 20" stroke="#fca5a5" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.45"/>
+    </svg>
+  `;
+}
+
+function getFountainPenSigSVG() {
+  return `
+    <svg width="44" height="34" viewBox="0 0 52 40" fill="none">
+      <path d="M4 35 Q 16 26, 26 34 T 44 31" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <path d="M12 33 Q 18 20, 24 32" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <path d="M26 31 Q 32 18, 38 29" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <g transform="translate(24, 2) rotate(42)">
+        <path d="M0 0 L7 0 L7 17 L3.5 25 L0 17 Z" fill="#0f172a"/>
+        <path d="M1.2 17 L5.8 17 L3.5 25 Z" fill="#f59e0b" stroke="#b45309" stroke-width="0.5"/>
+        <line x1="3.5" y1="17" x2="3.5" y2="23" stroke="#78350f" stroke-width="0.6"/>
+        <rect x="0" y="0" width="7" height="4" fill="#94a3b8"/>
+        <line x1="2" y1="4" x2="2" y2="15" stroke="#334155" stroke-width="1"/>
+      </g>
+    </svg>
+  `;
+}
+
+function getContractDocInspectSVG() {
+  return `
+    <svg width="30" height="34" viewBox="0 0 34 38" fill="none">
+      <path d="M4 3 L22 3 L29 10 L29 35 A 2 2 0 0 1 27 37 L4 37 A 2 2 0 0 1 2 35 L2 5 A 2 2 0 0 1 4 3 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+      <path d="M22 3 L22 10 L29 10 Z" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.6"/>
+      <line x1="6" y1="13" x2="19" y2="13" stroke="#334155" stroke-width="1.6"/>
+      <line x1="6" y1="18" x2="25" y2="18" stroke="#334155" stroke-width="1.6"/>
+      <line x1="6" y1="23" x2="18" y2="23" stroke="#334155" stroke-width="1.6"/>
+      <circle cx="21" cy="27" r="5.5" fill="#f8fafc" stroke="#1e293b" stroke-width="2"/>
+      <line x1="25.5" y1="31.5" x2="31" y2="37" stroke="#1e293b" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="21" cy="27" r="3" fill="#60a5fa" opacity="0.3"/>
+    </svg>
+  `;
+}
+
+function getYourMusicIconSVG() {
+  return `
+    <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+      <circle cx="15" cy="17" r="13" fill="#18181b" stroke="#3f3f46" stroke-width="1"/>
+      <circle cx="15" cy="17" r="8" stroke="#71717a" stroke-width="0.8" fill="none"/>
+      <circle cx="15" cy="17" r="5" fill="#b91c1c"/>
+      <circle cx="15" cy="17" r="2" fill="#fef08a"/>
+      <circle cx="23" cy="20" r="13" fill="#27272a" stroke="#d97706" stroke-width="1.2"/>
+      <circle cx="23" cy="20" r="9" stroke="#fbbf24" stroke-width="0.8" stroke-dasharray="6 3" fill="none"/>
+      <circle cx="23" cy="20" r="5" fill="#d97706"/>
+      <circle cx="23" cy="20" r="2" fill="#fffbeb"/>
+    </svg>
+  `;
+}
+
+function getLabelRosterIconSVG() {
+  return `
+    <svg width="28" height="30" viewBox="0 0 32 36" fill="none">
+      <rect x="3" y="5" width="26" height="28" rx="2.5" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.4"/>
+      <rect x="11" y="2" width="10" height="6" rx="1.5" fill="#64748b" stroke="#334155" stroke-width="1.2"/>
+      <rect x="6.5" y="11" width="3.5" height="3.5" rx="0.6" fill="#f97316"/>
+      <line x1="12.5" y1="13" x2="25" y2="13" stroke="#334155" stroke-width="1.6"/>
+      <rect x="6.5" y="17" width="3.5" height="3.5" rx="0.6" fill="#f97316"/>
+      <line x1="12.5" y1="19" x2="23" y2="19" stroke="#334155" stroke-width="1.6"/>
+      <rect x="6.5" y="23" width="3.5" height="3.5" rx="0.6" fill="#f97316"/>
+      <line x1="12.5" y1="25" x2="25" y2="25" stroke="#334155" stroke-width="1.6"/>
+    </svg>
+  `;
+}
+
+function getLabelCalendarIconSVG() {
+  return `
+    <svg width="30" height="30" viewBox="0 0 36 34" fill="none">
+      <rect x="2" y="8" width="32" height="23" rx="2.5" fill="#ffffff" stroke="#94a3b8" stroke-width="1.4"/>
+      <path d="M2 10.5 A 2.5 2.5 0 0 1 4.5 8 L31.5 8 A 2.5 2.5 0 0 1 34 10.5 L34 15 L2 15 Z" fill="#ef4444"/>
+      <circle cx="8" cy="8" r="1.6" fill="#1e293b"/>
+      <circle cx="15" cy="8" r="1.6" fill="#1e293b"/>
+      <circle cx="22" cy="8" r="1.6" fill="#1e293b"/>
+      <circle cx="29" cy="8" r="1.6" fill="#1e293b"/>
+      <circle cx="9" cy="20" r="1.4" fill="#64748b"/>
+      <circle cx="16" cy="20" r="1.4" fill="#64748b"/>
+      <circle cx="23" cy="20" r="1.4" fill="#64748b"/>
+      <circle cx="30" cy="20" r="1.4" fill="#ef4444"/>
+      <circle cx="9" cy="26" r="1.4" fill="#64748b"/>
+      <circle cx="16" cy="26" r="1.4" fill="#64748b"/>
+      <circle cx="23" cy="26" r="1.4" fill="#ef4444"/>
+      <circle cx="30" cy="26" r="1.4" fill="#64748b"/>
+    </svg>
+  `;
+}
+
+function getLabelStaffIconSVG() {
+  return `
+    <svg width="30" height="30" viewBox="0 0 36 34" fill="none">
+      <circle cx="18" cy="11" r="5" stroke="#3b82f6" stroke-width="2" fill="none"/>
+      <path d="M9 27 C9 20, 27 20, 27 27" stroke="#3b82f6" stroke-width="2" fill="none"/>
+      <circle cx="8.5" cy="13" r="3.8" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+      <path d="M2 28 C2 23, 13 23, 13 28" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+      <circle cx="27.5" cy="13" r="3.8" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+      <path d="M23 28 C23 23, 34 23, 34 28" stroke="#6366f1" stroke-width="1.8" fill="none"/>
+    </svg>
+  `;
+}
+
+function getLabelRequestsIconSVG() {
+  return `
+    <svg width="30" height="28" viewBox="0 0 36 34" fill="none">
+      <ellipse cx="14" cy="14" rx="12" ry="9" fill="#ef4444" opacity="0.85"/>
+      <polygon points="7,21 12,20 6,26" fill="#ef4444" opacity="0.85"/>
+      <ellipse cx="24" cy="20" rx="11" ry="8" fill="#dc2626"/>
+      <polygon points="27,26 23,24 28,30" fill="#dc2626"/>
+    </svg>
+  `;
+}
+
+function getLabelHistoryIconSVG() {
+  return `
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="12" stroke="#1e293b" stroke-width="2.4"/>
+      <polyline points="16,10 16,16 21,16" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M9 9 L4 13 L10 14" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `;
+}
+
+// Subpage Open & Close
+function openProfileLabelsSubpage(initialSection = "all") {
+  playMechanicalClick();
+  const hub = document.getElementById("profileMainHub");
+  const subpage = document.getElementById("profileSubpageLabels");
+  if (!subpage) return;
+
+  if (hub) hub.style.display = "none";
+  subpage.style.display = "flex";
+  subpage.scrollTop = 0;
+
+  switchLabelsSection(initialSection);
+}
+
+function closeProfileLabelsSubpage() {
+  playMechanicalClick();
+  const hub = document.getElementById("profileMainHub");
+  const subpage = document.getElementById("profileSubpageLabels");
+  if (subpage) subpage.style.display = "none";
+  if (hub) hub.style.display = "flex";
+}
+
+function switchLabelsSection(section) {
+  playMechanicalClick();
+  currentLabelsSection = section;
+
+  const btnAll = document.getElementById("tabBtnLabelsAll");
+  const btnYour = document.getElementById("tabBtnLabelsYour");
+  const secAll = document.getElementById("labelsSectionAll");
+  const secYour = document.getElementById("labelsSectionYour");
+
+  if (section === "all") {
+    if (btnAll) btnAll.classList.add("active");
+    if (btnYour) btnYour.classList.remove("active");
+    if (secAll) secAll.style.display = "flex";
+    if (secYour) secYour.style.display = "none";
+    renderAllLabelsContracts();
+  } else {
+    if (btnAll) btnAll.classList.remove("active");
+    if (btnYour) btnYour.classList.add("active");
+    if (secAll) secAll.style.display = "none";
+    if (secYour) secYour.style.display = "flex";
+    renderYourLabelContract();
+  }
+}
+
+// 1. Render ALL LABELS (10 Dummy Contracts)
+function renderAllLabelsContracts() {
+  const container = document.getElementById("labelsSectionAll");
+  if (!container) return;
+
+  container.innerHTML = LABELS_DATA.map(label => `
+    <div class="label-contract-card" onclick="openLabelContractModal('${label.id}')">
+      <!-- Crimson Wax Seal Stamp -->
+      <div class="contract-wax-seal">
+        ${getWaxSealSVG(44)}
+      </div>
+
+      <!-- Label Title -->
+      <h2 class="label-contract-title">${label.name}</h2>
+
+      <!-- Contract Conditions Grid -->
+      <div class="label-contract-meta-grid">
+        <div class="label-meta-row">
+          <span class="label-meta-key">PRESTIGE :</span>
+          <span class="label-meta-val">${label.prestige}/100</span>
+        </div>
+        <div class="label-meta-row">
+          <span class="label-meta-key">MIN ARTIST POPULARITY :</span>
+          <span class="label-meta-val">${label.minPopularity}/100</span>
+        </div>
+        <div class="label-meta-row">
+          <span class="label-meta-key">CONTRACT LENGTH :</span>
+          <span class="label-meta-val">${label.contractYears} YEARS</span>
+        </div>
+        <div class="label-meta-row">
+          <span class="label-meta-key">ALBUM COMMITMENT :</span>
+          <span class="label-meta-val">${label.albumCommitment} PROJECTS</span>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Advance Pill + Signature Pen -->
+      <div class="label-contract-bottom-row">
+        <div class="label-advance-group">
+          <span class="label-advance-label">ADVANCE :</span>
+          <div class="label-advance-pill">${label.advanceDisplay}</div>
+        </div>
+        <div class="label-pen-signature">
+          ${getFountainPenSigSVG()}
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// 2. Render YOUR LABEL (GREATER RECORDS)
+function renderYourLabelContract() {
+  const container = document.getElementById("labelsSectionYour");
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="your-label-parchment-card">
+      <!-- Top Right Seals & Inspection Button -->
+      <div class="your-label-top-seals">
+        <div class="contract-wax-seal">
+          ${getWaxSealSVG(44)}
+        </div>
+        <button class="your-label-contract-doc-btn" onclick="openLabelContractModal('label-greater')" title="Inspect Complete Contract">
+          ${getContractDocInspectSVG()}
+        </button>
+      </div>
+
+      <!-- Title -->
+      <h1 class="your-label-title">GREATER RECORDS</h1>
+
+      <!-- Stats Cluster -->
+      <div class="your-label-stats-box">
+        <div class="your-label-recoupment-pill">
+          RECOUPMENT : $${Number(greaterRecordsState.recoupmentRemaining).toLocaleString()}
+        </div>
+        <div class="your-label-meta-item">
+          <span>PRESTIGE : ${greaterRecordsState.prestige}/100</span>
+          <span style="color: #eab308; font-size: 0.85rem;">★</span>
+        </div>
+        <div class="your-label-meta-item">
+          COMMITMENT : ${greaterRecordsState.commitmentFulfilled}/${greaterRecordsState.commitmentTotal}
+        </div>
+        <div class="your-label-meta-item">
+          WEEKS LEFT : ${greaterRecordsState.weeksLeft}/${greaterRecordsState.totalWeeks}
+        </div>
+      </div>
+
+      <!-- 5 Action Buttons -->
+      <div class="your-label-action-buttons">
+        <button class="your-label-action-btn" onclick="openYourLabelSubdrawer('music')">
+          <div class="your-label-btn-icon">${getYourMusicIconSVG()}</div>
+          <span class="your-label-btn-label">YOUR MUSIC</span>
+        </button>
+
+        <button class="your-label-action-btn" onclick="openYourLabelSubdrawer('roster')">
+          <div class="your-label-btn-icon">${getLabelRosterIconSVG()}</div>
+          <span class="your-label-btn-label">LABEL ROSTER</span>
+        </button>
+
+        <button class="your-label-action-btn" onclick="openYourLabelSubdrawer('calendar')">
+          <div class="your-label-btn-icon">${getLabelCalendarIconSVG()}</div>
+          <span class="your-label-btn-label">LABEL RELEASE CALENDAR</span>
+        </button>
+
+        <button class="your-label-action-btn" onclick="openYourLabelSubdrawer('staff')">
+          <div class="your-label-btn-icon">${getLabelStaffIconSVG()}</div>
+          <span class="your-label-btn-label">LABEL STAFF</span>
+        </button>
+
+        <button class="your-label-action-btn" onclick="openYourLabelSubdrawer('requests')">
+          <div class="your-label-btn-icon">${getLabelRequestsIconSVG()}</div>
+          <span class="your-label-btn-label">REQUESTS</span>
+        </button>
+      </div>
+
+      <!-- History Button -->
+      <div class="your-label-history-wrap">
+        <button class="your-label-history-btn" onclick="openLabelHistoryModal()" title="Contract History Archive">
+          ${getLabelHistoryIconSVG()}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// 3. Complete Formal Contract Modal
+function openLabelContractModal(labelId) {
+  playMechanicalClick();
+  const label = LABELS_DATA.find(l => l.id === labelId) || LABELS_DATA[3];
+  if (!label) return;
+
+  const modal = document.getElementById("labelContractModal");
+  const sealRow = document.getElementById("contractModalSealRow");
+  const bodyContent = document.getElementById("contractModalBodyContent");
+  const footerActions = document.getElementById("contractModalFooterActions");
+  if (!modal || !sealRow || !bodyContent || !footerActions) return;
+
+  const isCurrent = label.id === currentSignedLabelId;
+
+  sealRow.innerHTML = `
+    <div class="contract-modal-seal-badge">
+      ${getWaxSealSVG(48)}
+    </div>
+    <div class="contract-modal-title-block">
+      <h2>${label.name}</h2>
+      <span>${label.tier} &bull; ${label.territory}</span>
+    </div>
+  `;
+
+  bodyContent.innerHTML = `
+    <!-- Preamble / Summary -->
+    <p style="margin: 0; font-size: 0.74rem; color: #475569; font-style: italic;">
+      ${label.description}
+    </p>
+
+    <!-- Clause 1: Key Terms & Commitment -->
+    <div class="contract-clause-box">
+      <div class="contract-clause-title">
+        <span>§ 1. CONTRACT TERM & OUTPUT COMMITMENT</span>
+      </div>
+      <div class="contract-clause-grid">
+        <div class="contract-clause-item">
+          <span class="c-lbl">Contract Duration</span>
+          <span class="c-val">${label.contractYears} Years (${label.contractWeeks} Weeks)</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Album Commitment</span>
+          <span class="c-val">${label.albumCommitment} Studio Projects</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Prestige Rating</span>
+          <span class="c-val">${label.prestige}/100</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Min Popularity Req</span>
+          <span class="c-val">${label.minPopularity}/100</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clause 2: Financial Terms & Advance -->
+    <div class="contract-clause-box">
+      <div class="contract-clause-title">
+        <span>§ 2. FINANCIAL ADVANCE & RECOUPMENT</span>
+      </div>
+      <div class="contract-clause-grid">
+        <div class="contract-clause-item">
+          <span class="c-lbl">Upfront Cash Advance</span>
+          <span class="c-val" style="color: #15803d; font-size: 0.85rem;">$ ${Number(label.advance).toLocaleString()}</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Master Ownership</span>
+          <span class="c-val">${label.mastersOwnership}</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Royalty Split</span>
+          <span class="c-val">${label.royaltySplit}</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Creative Control</span>
+          <span class="c-val">${label.creativeControl}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clause 3: Label Promises & Support -->
+    <div class="contract-clause-box">
+      <div class="contract-clause-title">
+        <span>§ 3. LABEL GUARANTEES & PROMISES</span>
+      </div>
+      <div class="contract-promise-list">
+        ${label.promises.map(p => `
+          <div class="contract-promise-row">
+            <span class="bullet">✓</span>
+            <span>${p}</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    <!-- Clause 4: Revenue Deductions & Cuts -->
+    <div class="contract-clause-box">
+      <div class="contract-clause-title">
+        <span>§ 4. DEDUCTIONS, SYNC & 360 TAKES</span>
+      </div>
+      <div class="contract-promise-list">
+        ${label.cuts.map(c => `
+          <div class="contract-promise-row">
+            <span class="bullet" style="color: #dc2626;">&bull;</span>
+            <span>${c}</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  if (isCurrent) {
+    footerActions.innerHTML = `
+      <button class="contract-btn-sign" style="background: #2563eb; border-color: #1d4ed8;" onclick="showToast('THIS IS YOUR CURRENTLY ACTIVE LABEL DEAL')">
+        CURRENT DEAL (ACTIVE)
+      </button>
+      <button class="contract-btn-close" onclick="closeLabelContractModal()">CLOSE</button>
+    `;
+  } else {
+    footerActions.innerHTML = `
+      <button class="contract-btn-sign" onclick="signLabelDeal('${label.id}')">
+        SIGN DEAL (${label.advanceDisplay})
+      </button>
+      <button class="contract-btn-close" onclick="closeLabelContractModal()">CLOSE</button>
+    `;
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeLabelContractModal(e) {
+  if (e && e.target && e.target.id !== "labelContractModal" && !e.target.classList.contains("contract-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("labelContractModal");
+  if (modal) modal.style.display = "none";
+}
+
+// 4. Interactive Sub-Drawer (Music, Roster, Calendar, Staff, Requests)
+function openYourLabelSubdrawer(drawerType) {
+  playMechanicalClick();
+  const drawer = document.getElementById("yourLabelSubDrawer");
+  const iconEl = document.getElementById("subdrawerHeaderIcon");
+  const titleEl = document.getElementById("subdrawerHeaderTitle");
+  const contentEl = document.getElementById("subdrawerBodyContent");
+  if (!drawer || !iconEl || !titleEl || !contentEl) return;
+
+  if (drawerType === "music") {
+    iconEl.innerHTML = getYourMusicIconSVG();
+    titleEl.textContent = "YOUR MUSIC UNDER GREATER RECORDS";
+    contentEl.innerHTML = `
+      <!-- Recoupment Progress Box -->
+      <div style="background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px 14px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: 800; color: #1e293b;">
+          <span>RECOUPMENT PROGRESS</span>
+          <span style="color: #15803d;">$101,374 / $894,802</span>
+        </div>
+        <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; margin-top: 6px; overflow: hidden;">
+          <div style="width: 11.3%; height: 100%; background: #22c55e; border-radius: 999px;"></div>
+        </div>
+        <span style="font-size: 0.65rem; color: #64748b; font-weight: 600; display: block; margin-top: 4px;">
+          Unrecouped Balance: $793,428. Upon reaching $0, your streaming royalty jumps from 35% to 45%!
+        </span>
+      </div>
+
+      <!-- Released Music Items -->
+      ${GREATER_RECORDS_MUSIC.map(m => `
+        <div class="subdrawer-music-item">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="${m.cover}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;" alt="${m.title}">
+            <div class="subdrawer-music-info">
+              <h4>${m.title}</h4>
+              <span>${m.type} &bull; ${m.tracksCount} Tracks &bull; ${m.year}</span>
+            </div>
+          </div>
+          <div class="subdrawer-music-stat">
+            <span class="streams">${Number(m.streams).toLocaleString()} streams</span>
+            <span class="recouped">+$${Number(m.recoupedAmount).toLocaleString()} recouped</span>
+          </div>
+        </div>
+      `).join("")}
+
+      <div style="padding: 10px; background: #eff6ff; border: 1px dashed #93c5fd; border-radius: 12px; font-size: 0.7rem; color: #1e40af;">
+        <strong>Upcoming Delivery Requirement:</strong> 2 more albums required to fulfill Greater Records contractual commitment.
+      </div>
+    `;
+  }
+  else if (drawerType === "roster") {
+    iconEl.innerHTML = getLabelRosterIconSVG();
+    titleEl.textContent = "GREATER RECORDS ARTIST ROSTER";
+    contentEl.innerHTML = `
+      <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; margin-bottom: 4px;">
+        Artists signed to Greater Records. High chemistry unlocks direct studio collaborations and package tours.
+      </div>
+
+      ${GREATER_RECORDS_ROSTER.map(art => `
+        <div class="subdrawer-roster-item">
+          <div class="roster-left">
+            <img src="${art.avatar}" class="roster-avatar" alt="${art.name}">
+            <div class="roster-info">
+              <h4>${art.name}</h4>
+              <span>${art.tier} &bull; ${art.monthlyListeners} Listeners</span>
+            </div>
+          </div>
+          ${art.id !== 'roster-synapse' ? `
+            <button class="roster-action-btn" onclick="showToast('FEATURE REQUEST SENT TO ${art.name.toUpperCase()}')">
+              REQUEST FEATURE
+            </button>
+          ` : `
+            <span style="font-size: 0.68rem; font-weight: 900; color: #2563eb; background: #dbeafe; padding: 4px 8px; border-radius: 6px;">YOU</span>
+          `}
+        </div>
+      `).join("")}
+    `;
+  }
+  else if (drawerType === "calendar") {
+    iconEl.innerHTML = getLabelCalendarIconSVG();
+    titleEl.textContent = "LABEL 4-WEEK RELEASE CALENDAR";
+    contentEl.innerHTML = `
+      <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; margin-bottom: 4px;">
+        Scheduled priority releases from Greater Records over the next month.
+      </div>
+
+      ${GREATER_RECORDS_CALENDAR.map(cal => `
+        <div class="subdrawer-calendar-week">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="cal-week-badge">${cal.week} &bull; ${cal.dateRange}</span>
+            <span style="font-size: 0.68rem; font-weight: 800; color: #15803d;">${cal.status}</span>
+          </div>
+          <h4 class="cal-release-title">${cal.releaseTitle}</h4>
+          <p class="cal-release-artist">${cal.artist} &bull; Format: ${cal.format}</p>
+          <div style="font-size: 0.68rem; color: #475569; background: #f1f5f9; padding: 4px 8px; border-radius: 6px;">
+            <strong>Promo Focus:</strong> ${cal.promoPush}
+          </div>
+        </div>
+      `).join("")}
+
+      <div style="padding: 10px; background: #fffbeb; border: 1px dashed #fcd34d; border-radius: 12px; font-size: 0.7rem; color: #92400e;">
+        <strong>Label Strategy Tip:</strong> Coordinate your album drops to avoid clashing with A$AP Ghost's rollout in Week 2.
+      </div>
+    `;
+  }
+  else if (drawerType === "staff") {
+    iconEl.innerHTML = getLabelStaffIconSVG();
+    titleEl.textContent = "GREATER RECORDS KEY STAFF";
+    contentEl.innerHTML = `
+      <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; margin-bottom: 4px;">
+        Network and converse with key personnel. Strong relationships unlock marketing boosts, feature clearances, and CEO leverage!
+      </div>
+
+      ${GREATER_RECORDS_STAFF.map(st => {
+        const currentRel = staffRelationships[st.id] || st.relationship;
+        return `
+        <div class="subdrawer-staff-card" id="staffCard_${st.id}">
+          <div class="staff-card-top">
+            <div class="staff-avatar-box">${st.avatarLetter}</div>
+            <div class="staff-info-box" style="flex: 1;">
+              <h4>${st.name}</h4>
+              <span class="role">${st.role}</span>
+              <div class="staff-rel-meter-row">
+                <span>Relationship</span>
+                <span id="staffRelScore_${st.id}">${currentRel}/100</span>
+              </div>
+              <div class="staff-rel-bar">
+                <div class="staff-rel-bar-fill" id="staffRelBar_${st.id}" style="width: ${currentRel}%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-quote">
+            "${st.quote}"
+          </div>
+
+          <div style="font-size: 0.67rem; color: #0284c7; font-weight: 600;">
+            ${st.reputationBenefit}
+          </div>
+
+          <div class="staff-actions-row">
+            <button class="staff-action-btn staff-btn-chat" onclick="interactWithStaff('${st.id}', 'chat')">
+              NETWORK CONVERSATION (+4)
+            </button>
+            <button class="staff-action-btn staff-btn-gift" onclick="interactWithStaff('${st.id}', 'gift')">
+              SEND GIFT (-$5,000, +10)
+            </button>
+          </div>
+        </div>
+      `;}).join("")}
+    `;
+  }
+  else if (drawerType === "requests") {
+    iconEl.innerHTML = getLabelRequestsIconSVG();
+    titleEl.textContent = "OFFICIAL LABEL PETITIONS & REQUESTS";
+    contentEl.innerHTML = `
+      <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; margin-bottom: 4px;">
+        Submit formal contract petitions to Greater Records executives.
+      </div>
+
+      <!-- 1. Request Contract Buy-Out -->
+      <div class="subdrawer-request-card">
+        <h4>REQUEST CONTRACT BUY-OUT</h4>
+        <p>Pay off the remaining 56 weeks and 2 project commitments in full to terminate your deal immediately and become 100% independent.</p>
+        <div class="request-card-foot">
+          <span class="request-cost-badge">COST: $1,200,000</span>
+          <button class="request-submit-btn" onclick="submitLabelRequest('buyout')">SUBMIT BUY-OUT</button>
+        </div>
+      </div>
+
+      <!-- 2. Request Contract Extension -->
+      <div class="subdrawer-request-card">
+        <h4>REQUEST CONTRACT EXTENSION</h4>
+        <p>Extend your contract by +2 Years (+2 Albums) in exchange for an instant upfront $2,500,000 cash advance bonus.</p>
+        <div class="request-card-foot">
+          <span style="font-size: 0.74rem; font-weight: 900; color: #15803d;">BONUS: +$2,500,000</span>
+          <button class="request-submit-btn" style="background: #2563eb;" onclick="submitLabelRequest('extension')">SUBMIT EXTENSION</button>
+        </div>
+      </div>
+
+      <!-- 3. Request Early Release -->
+      <div class="subdrawer-request-card">
+        <h4>REQUEST EARLY RELEASE</h4>
+        <p>Petition CEO Marcus Vance for a mutual contract release with zero financial penalty. Requires at least 80/100 Relationship with Marcus Vance.</p>
+        <div class="request-card-foot">
+          <span style="font-size: 0.72rem; font-weight: 800; color: #64748b;">REQ: 80 RELATIONSHIP</span>
+          <button class="request-submit-btn" style="background: #e11d48;" onclick="submitLabelRequest('early_release')">SUBMIT PETITION</button>
+        </div>
+      </div>
+
+      <!-- 4. Request Emergency Video Advance -->
+      <div class="subdrawer-request-card">
+        <h4>EMERGENCY MUSIC VIDEO ADVANCE</h4>
+        <p>Request an immediate $250,000 video production grant added to your recoupment ledger for your next single rollout.</p>
+        <div class="request-card-foot">
+          <span class="request-cost-badge" style="color: #2563eb; background: #dbeafe;">FUNDS: +$250,000 CASH</span>
+          <button class="request-submit-btn" style="background: #0284c7;" onclick="submitLabelRequest('video_advance')">REQUEST FUNDS</button>
+        </div>
+      </div>
+
+      <!-- 5. Request Royalty Hike to 45% -->
+      <div class="subdrawer-request-card">
+        <h4>ROYALTY HIKE RENEGOTIATION</h4>
+        <p>Petition the board to permanently increase your artist streaming split from 35% to 45% based on 70M+ total streaming volume.</p>
+        <div class="request-card-foot">
+          <span style="font-size: 0.72rem; font-weight: 800; color: #15803d;">NEW SPLIT: 45% ARTIST</span>
+          <button class="request-submit-btn" style="background: #16a34a;" onclick="submitLabelRequest('royalty_hike')">PETITION BOARD</button>
+        </div>
+      </div>
+    `;
+  }
+
+  drawer.style.display = "flex";
+}
+
+function closeYourLabelSubdrawer(e) {
+  if (e && e.target && e.target.id !== "yourLabelSubDrawer" && !e.target.classList.contains("subdrawer-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const drawer = document.getElementById("yourLabelSubDrawer");
+  if (drawer) drawer.style.display = "none";
+}
+
+// 5. Contract History Modal
+function openLabelHistoryModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("labelHistoryModal");
+  const content = document.getElementById("labelHistoryContent");
+  if (!modal || !content) return;
+
+  content.innerHTML = `
+    <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; margin-bottom: 6px;">
+      Chronological record of all recording agreements and label affiliations.
+    </div>
+
+    <!-- Active Deal -->
+    <div class="history-contract-entry active">
+      <span class="history-active-tag">CURRENTLY ACTIVE</span>
+      <h4 style="margin: 0; font-size: 0.88rem; font-weight: 900; color: #0f172a;">GREATER RECORDS</h4>
+      <span style="font-size: 0.7rem; color: #64748b; font-weight: 700;">Year 2 – Present &bull; 4 Projects &bull; $1,800,000 Advance</span>
+      <p style="margin: 4px 0 0 0; font-size: 0.72rem; color: #334155;">
+        Signed 4-year exclusive artist agreement. 2 of 4 album commitments delivered. 56 weeks remaining.
+      </p>
+    </div>
+
+    <!-- Era 1: Independent -->
+    <div class="history-contract-entry">
+      <h4 style="margin: 0; font-size: 0.88rem; font-weight: 900; color: #0f172a;">INDEPENDENT ARTIST (SELF-RELEASED)</h4>
+      <span style="font-size: 0.7rem; color: #64748b; font-weight: 700;">Year 1 – Year 2 &bull; 100% Masters Ownership</span>
+      <p style="margin: 4px 0 0 0; font-size: 0.72rem; color: #334155;">
+        Self-funded early mixtapes and singles. 100% artist royalty and master ownership prior to major label signing.
+      </p>
+    </div>
+
+    <div style="padding: 10px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; font-size: 0.68rem; color: #64748b; text-align: center;">
+      ARCHIVAL REGISTRY &bull; OFFICIAL CONTRACT RECORDS AUTHENTICATED
+    </div>
+  `;
+
+  modal.style.display = "flex";
+}
+
+function closeLabelHistoryModal(e) {
+  if (e && e.target && e.target.id !== "labelHistoryModal" && !e.target.classList.contains("subdrawer-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("labelHistoryModal");
+  if (modal) modal.style.display = "none";
+}
+
+// 6. Interactive Staff & Request Handlers
+function interactWithStaff(staffId, actionType) {
+  playMechanicalClick();
+  const staff = GREATER_RECORDS_STAFF.find(s => s.id === staffId);
+  if (!staff) return;
+
+  if (actionType === "chat") {
+    staffRelationships[staffId] = Math.min(100, (staffRelationships[staffId] || staff.relationship) + 4);
+    const scoreEl = document.getElementById(`staffRelScore_${staffId}`);
+    const barEl = document.getElementById(`staffRelBar_${staffId}`);
+    if (scoreEl) scoreEl.textContent = `${staffRelationships[staffId]}/100`;
+    if (barEl) barEl.style.width = `${staffRelationships[staffId]}%`;
+
+    showToast(`CONVERSATION HELD: ${staff.name.toUpperCase()} RELATIONSHIP +4`);
+  } else if (actionType === "gift") {
+    staffRelationships[staffId] = Math.min(100, (staffRelationships[staffId] || staff.relationship) + 10);
+    const scoreEl = document.getElementById(`staffRelScore_${staffId}`);
+    const barEl = document.getElementById(`staffRelBar_${staffId}`);
+    if (scoreEl) scoreEl.textContent = `${staffRelationships[staffId]}/100`;
+    if (barEl) barEl.style.width = `${staffRelationships[staffId]}%`;
+
+    showToast(`SENT LUXURY GIFT (-$5,000): ${staff.name.toUpperCase()} RELATIONSHIP +10`);
+  }
+}
+
+function submitLabelRequest(reqType) {
+  playMechanicalClick();
+  if (reqType === "buyout") {
+    showToast("BUY-OUT PROPOSAL SUBMITTED TO GREATER RECORDS BOARD ($1,200,000)");
+  } else if (reqType === "extension") {
+    greaterRecordsState.weeksLeft += 104;
+    greaterRecordsState.commitmentTotal += 2;
+    showToast("CONTRACT EXTENSION SIGNED: +2 YEARS / +$2,500,000 ADVANCE GRANTED");
+    renderYourLabelContract();
+  } else if (reqType === "early_release") {
+    const vanceRel = staffRelationships.vance || 68;
+    if (vanceRel >= 80) {
+      showToast("EARLY RELEASE PETITION APPROVED BY MARCUS VANCE!");
+    } else {
+      showToast(`PETITION DENIED: MARCUS VANCE REQUIRES 80+ RELATIONSHIP (CURRENT: ${vanceRel}/100)`);
+    }
+  } else if (reqType === "video_advance") {
+    greaterRecordsState.recoupmentRemaining += 250000;
+    showToast("EMERGENCY VIDEO ADVANCE APPROVED: +$250,000 ADDED TO RECOUPMENT");
+    renderYourLabelContract();
+  } else if (reqType === "royalty_hike") {
+    showToast("ROYALTY HIKE PROPOSAL ACCEPTED: STREAMING SPLIT SET TO 45%");
+  }
+}
+
+function signLabelDeal(labelId) {
+  playMechanicalClick();
+  const label = LABELS_DATA.find(l => l.id === labelId);
+  if (!label) return;
+
+  if (label.id === currentSignedLabelId) {
+    showToast("ALREADY SIGNED TO THIS LABEL");
+    return;
+  }
+
+  showToast(`CANNOT SIGN ${label.name}: CURRENTLY BOUND TO GREATER RECORDS (REQUEST BUYOUT FIRST)`);
 }
 
 // --- Initialize App ---

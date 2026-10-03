@@ -2325,6 +2325,103 @@
 
             </div>
 
+            <!-- =========================================================
+                 PROFILE SUBPAGE: LABELS & RECORD DEALS (CONTRACTS SYSTEM)
+                 ========================================================= -->
+            <div class="profile-labels-subpage-view" id="profileSubpageLabels" style="display: none;">
+              <!-- Topbar: Back to Profile + Badge -->
+              <div class="subpage-topbar" style="margin-bottom: 6px;">
+                <button class="skeuo-btn app-back-btn" onclick="closeProfileLabelsSubpage()" title="Back to Profile">
+                  &lsaquo; Back to Profile
+                </button>
+                <span class="subpage-badge" style="background: #1e293b; color: #fff; border-color: #3b4d7c;">RECORD DEALS</span>
+              </div>
+
+              <!-- Dual Switcher: ALL LABELS | YOUR LABEL -->
+              <div class="labels-dual-switcher-wrap">
+                <div class="labels-dual-switcher-bar">
+                  <button class="labels-switcher-tab active" id="tabBtnLabelsAll" onclick="switchLabelsSection('all')">
+                    ALL LABELS
+                  </button>
+                  <div class="labels-switcher-divider"></div>
+                  <button class="labels-switcher-tab" id="tabBtnLabelsYour" onclick="switchLabelsSection('your')">
+                    YOUR LABEL
+                  </button>
+                </div>
+                <div class="labels-switcher-underline"></div>
+              </div>
+
+              <!-- SECTION 1: ALL LABELS (SCROLLABLE CONTRACTS DIRECTORY) -->
+              <div class="labels-section-content" id="labelsSectionAll">
+                <!-- Dynamically populated via renderAllLabelsContracts() -->
+              </div>
+
+              <!-- SECTION 2: YOUR LABEL (CURRENT SIGNED CONTRACT & HUB) -->
+              <div class="labels-section-content" id="labelsSectionYour" style="display: none;">
+                <!-- Dynamically populated via renderYourLabelContract() -->
+              </div>
+            </div>
+
+            <!-- MODAL 1: FORMAL LABEL CONTRACT INSPECTOR MODAL -->
+            <div class="label-modal-backdrop" id="labelContractModal" style="display: none;" onclick="closeLabelContractModal(event)">
+              <div class="label-contract-parchment-sheet" onclick="event.stopPropagation()">
+                <div class="contract-parchment-header">
+                  <div class="contract-parchment-top-row">
+                    <span class="contract-legal-seal-stamp">OFFICIAL RECORDING AGREEMENT</span>
+                    <button class="contract-modal-close-btn" onclick="closeLabelContractModal()">&times;</button>
+                  </div>
+                  <div class="contract-parchment-seal-row" id="contractModalSealRow">
+                    <!-- Dynamic seal & title -->
+                  </div>
+                </div>
+
+                <div class="contract-parchment-body" id="contractModalBodyContent">
+                  <!-- Dynamic clauses -->
+                </div>
+
+                <div class="contract-parchment-footer" id="contractModalFooterActions">
+                  <!-- Action buttons -->
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL 2: YOUR LABEL INTERACTIVE SUB-DRAWER (MUSIC, ROSTER, CALENDAR, STAFF, REQUESTS) -->
+            <div class="label-modal-backdrop" id="yourLabelSubDrawer" style="display: none;" onclick="closeYourLabelSubdrawer(event)">
+              <div class="your-label-subdrawer-card" onclick="event.stopPropagation()">
+                <div class="subdrawer-header">
+                  <div class="subdrawer-header-left">
+                    <span class="subdrawer-icon-wrap" id="subdrawerHeaderIcon"></span>
+                    <h3 class="subdrawer-title" id="subdrawerHeaderTitle">DRAWER TITLE</h3>
+                  </div>
+                  <button class="subdrawer-close-btn" onclick="closeYourLabelSubdrawer()">&times;</button>
+                </div>
+
+                <div class="subdrawer-content-scroll" id="subdrawerBodyContent">
+                  <!-- Dynamic subdrawer content -->
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL 3: CONTRACT HISTORY MODAL -->
+            <div class="label-modal-backdrop" id="labelHistoryModal" style="display: none;" onclick="closeLabelHistoryModal(event)">
+              <div class="your-label-subdrawer-card history-card" onclick="event.stopPropagation()">
+                <div class="subdrawer-header">
+                  <div class="subdrawer-header-left">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#212E53" stroke-width="2.2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <h3 class="subdrawer-title">CONTRACT HISTORY</h3>
+                  </div>
+                  <button class="subdrawer-close-btn" onclick="closeLabelHistoryModal()">&times;</button>
+                </div>
+
+                <div class="subdrawer-content-scroll" id="labelHistoryContent">
+                  <!-- Dynamic history list -->
+                </div>
+              </div>
+            </div>
+
             <!-- PROFILE SUBPAGE: DEDICATED PHASE 2 PLACEHOLDER VIEW -->
             <div class="analyze-subpage-view" id="profileAppPlaceholderView" style="display: none;">
               <div class="subpage-topbar">

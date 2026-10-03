@@ -2117,9 +2117,12 @@ def run_concert(booking, venue, artist, all_songs, world=None):
         from rapsim_reviews.label_system import get_label_by_id
         lbl = get_label_by_id(contract.label_id)
         if lbl:
-            gig_boost = lbl.gig_promotion_boost if getattr(contract, "is_priority_artist", True) else (1.0 + (lbl.gig_promotion_boost - 1.0) * 0.15)
-            fill_pct *= gig_boost
-            booking.label_promotion_boost = gig_boost
+            guaranteed_pct = getattr(lbl, "guaranteed_attendance_pct", 0.0)
+            # Label guarantees minimum % of seats filled (e.g. 50% for major, 70% for elite)
+            min_floor = guaranteed_pct if getattr(contract, "is_priority_artist", True) else (guaranteed_pct * 0.60)
+            if fill_pct < min_floor:
+                fill_pct = min_floor
+            booking.label_promotion_boost = fill_pct
     
     # Apply opener attendance boost (famous/mid opener boost calculated at booking)
     # If the opener is famous (popularity >= 70) we boost fill percent by +0.25

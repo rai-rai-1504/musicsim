@@ -10111,3 +10111,1012 @@ body[data-wood="gold-wood"]::after {
   background: #ffffff;
   transition: width 0.3s linear;
 }
+
+/* ==========================================================================
+   PROFILE SUBPAGE: LABELS & RECORD DEALS (AUTHENTIC SKEUOMORPHIC SYSTEM)
+   ========================================================================== */
+
+.profile-labels-subpage-view {
+  position: absolute;
+  inset: 0;
+  background: var(--screen-hardwood);
+  padding: 8px 12px 76px 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+  animation: fadeIn 0.18s ease;
+}
+
+/* Dual Switcher Bar (ALL LABELS | YOUR LABEL) */
+.labels-dual-switcher-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 10px 0;
+}
+
+.labels-dual-switcher-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.labels-switcher-tab {
+  flex: 1;
+  height: 38px;
+  border-radius: 20px;
+  background: rgba(206, 106, 107, 0.42);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.labels-switcher-tab:hover {
+  background: rgba(206, 106, 107, 0.65);
+}
+
+.labels-switcher-tab.active {
+  background: #CE6A6B;
+  border: 2.2px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(206, 106, 107, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+
+.labels-switcher-divider {
+  width: 2.5px;
+  height: 26px;
+  background: #ffffff;
+  border-radius: 2px;
+  flex-shrink: 0;
+  opacity: 0.95;
+}
+
+.labels-switcher-underline {
+  width: 100%;
+  height: 3.5px;
+  background: #ffffff;
+  border-radius: 2px;
+  opacity: 0.95;
+  margin-top: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Scrollable Container */
+.labels-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 24px;
+}
+
+/* ==========================================================================
+   SECTION 1: "ALL LABELS" CONTRACT CARD (AUTHENTIC PHYSICAL CONTRACT)
+   ========================================================================== */
+
+.label-contract-card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  padding: 18px 18px 14px 18px;
+  position: relative;
+  border: 2px solid #ded6c8;
+  box-shadow: 
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 #ffffff;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  color: #111827;
+}
+
+.label-contract-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 #ffffff;
+}
+
+.label-contract-card:active {
+  transform: scale(0.985);
+}
+
+/* Crimson Wax Seal Stamp */
+.contract-wax-seal {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.label-contract-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #111827;
+  margin: 0 0 12px 0;
+  max-width: calc(100% - 56px);
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+.label-contract-meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.label-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #1e293b;
+}
+
+.label-meta-key {
+  color: #334155;
+  font-weight: 800;
+}
+
+.label-meta-val {
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.label-contract-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 4px;
+}
+
+.label-advance-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label-advance-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.6px;
+}
+
+.label-advance-pill {
+  background: #52c46e;
+  color: #0a2f14;
+  font-size: 0.76rem;
+  font-weight: 900;
+  padding: 4px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(82, 196, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.label-pen-signature {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 48px;
+  height: 36px;
+}
+
+/* ==========================================================================
+   SECTION 2: "YOUR LABEL" (GREATER RECORDS HOME VIEW)
+   ========================================================================== */
+
+.your-label-parchment-card {
+  background: #FAF1E6;
+  border-radius: 26px;
+  padding: 20px 18px 16px 18px;
+  position: relative;
+  border: 2px solid #e7d8c7;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 #ffffff;
+  color: #111827;
+}
+
+.your-label-top-seals {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.your-label-contract-doc-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.your-label-contract-doc-btn:hover {
+  transform: scale(1.15);
+}
+
+.your-label-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: #111827;
+  margin: 0 0 12px 0;
+  max-width: calc(100% - 60px);
+  text-transform: uppercase;
+}
+
+.your-label-stats-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.your-label-recoupment-pill {
+  background: #52c46e;
+  color: #0a2f14;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 5px 16px;
+  border-radius: 999px;
+  width: fit-content;
+  box-shadow: 0 2px 6px rgba(82, 196, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.6px;
+  margin-bottom: 2px;
+}
+
+.your-label-meta-item {
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #1e293b;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.your-label-prestige-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.your-label-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.your-label-action-btn {
+  width: 100%;
+  height: 50px;
+  background: #CE6A6B;
+  border: 1.5px solid #b75758;
+  border-top: 1.5px solid #e28788;
+  border-bottom: 2.5px solid #993f40;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  outline: none;
+}
+
+.your-label-action-btn:hover {
+  background: #d77677;
+  transform: translateY(-1px);
+}
+
+.your-label-action-btn:active {
+  transform: translateY(1px);
+  border-bottom-width: 1.5px;
+}
+
+.your-label-btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.your-label-btn-label {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #111827;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.your-label-history-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.your-label-history-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.your-label-history-btn:hover {
+  transform: scale(1.18);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   MODAL 1: FORMAL RECORDING CONTRACT SHEET MODAL
+   ========================================================================== */
+
+.label-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 15, 25, 0.82);
+  backdrop-filter: blur(4px);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  animation: fadeIn 0.15s ease;
+}
+
+.label-contract-parchment-sheet {
+  width: 100%;
+  max-height: 86vh;
+  background: #FAF8F5;
+  border-radius: 20px;
+  border: 2px solid #dcd3c1;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), inset 0 1px 0 #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #111827;
+}
+
+.contract-parchment-header {
+  padding: 16px 18px 12px 18px;
+  background: #f3ece0;
+  border-bottom: 1.5px solid #d4c7b2;
+}
+
+.contract-parchment-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.contract-legal-seal-stamp {
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: #78350f;
+  background: #fef3c7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #fde68a;
+  text-transform: uppercase;
+}
+
+.contract-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #475569;
+  padding: 0 4px;
+  transition: color 0.15s ease;
+}
+
+.contract-modal-close-btn:hover {
+  color: #0f172a;
+}
+
+.contract-parchment-seal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contract-modal-seal-badge {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.contract-modal-title-block h2 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin: 0;
+  text-transform: uppercase;
+  color: #111827;
+}
+
+.contract-modal-title-block span {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contract-parchment-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.contract-clause-box {
+  background: #ffffff;
+  border: 1px solid #e2dcd2;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.contract-clause-title {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #991b1b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contract-clause-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.contract-clause-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.contract-clause-item span.c-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.contract-clause-item span.c-val {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #111827;
+}
+
+.contract-promise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.contract-promise-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.contract-promise-row span.bullet {
+  color: #15803d;
+  font-weight: 900;
+}
+
+.contract-parchment-footer {
+  padding: 12px 18px 16px 18px;
+  background: #f3ece0;
+  border-top: 1.5px solid #d4c7b2;
+  display: flex;
+  gap: 10px;
+}
+
+.contract-btn-sign {
+  flex: 2;
+  height: 42px;
+  border-radius: 12px;
+  background: #22c55e;
+  border: 1.5px solid #16a34a;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(34, 197, 94, 0.4);
+  transition: all 0.12s ease;
+}
+
+.contract-btn-sign:hover {
+  background: #16a34a;
+}
+
+.contract-btn-sign:disabled {
+  background: #94a3b8;
+  border-color: #64748b;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.contract-btn-close {
+  flex: 1;
+  height: 42px;
+  border-radius: 12px;
+  background: #e2e8f0;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.contract-btn-close:hover {
+  background: #cbd5e1;
+}
+
+/* ==========================================================================
+   MODAL 2: INTERACTIVE SUBDRAWER (MUSIC, ROSTER, CALENDAR, STAFF, REQUESTS)
+   ========================================================================== */
+
+.your-label-subdrawer-card {
+  width: 100%;
+  max-height: 86vh;
+  background: #ffffff;
+  border-radius: 22px;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #111827;
+}
+
+.subdrawer-header {
+  padding: 14px 18px;
+  background: #212E53;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #141c30;
+}
+
+.subdrawer-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subdrawer-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subdrawer-title {
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 0;
+  color: #ffffff;
+}
+
+.subdrawer-close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.subdrawer-content-scroll {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Subdrawer Items */
+.subdrawer-music-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subdrawer-music-info h4 {
+  font-size: 0.86rem;
+  font-weight: 900;
+  margin: 0 0 2px 0;
+  color: #0f172a;
+}
+
+.subdrawer-music-info span {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.subdrawer-music-stat {
+  text-align: right;
+}
+
+.subdrawer-music-stat span.streams {
+  font-size: 0.76rem;
+  font-weight: 900;
+  color: #15803d;
+  display: block;
+}
+
+.subdrawer-music-stat span.recouped {
+  font-size: 0.66rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* Staff Item */
+.subdrawer-staff-card {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.staff-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.staff-avatar-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #212E53;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.staff-info-box h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.staff-info-box span.role {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.staff-rel-meter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #334155;
+  margin-top: 2px;
+}
+
+.staff-rel-bar {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.staff-rel-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.staff-quote {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.staff-actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+.staff-action-btn {
+  flex: 1;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: all 0.12s ease;
+}
+
+.staff-btn-chat {
+  background: #212E53;
+  color: #ffffff;
+}
+
+.staff-btn-chat:hover {
+  background: #2b3b6b;
+}
+
+.staff-btn-gift {
+  background: #fef08a;
+  border: 1px solid #facc15;
+  color: #854d0e;
+}
+
+.staff-btn-gift:hover {
+  background: #fde047;
+}
+
+/* Request Cards */
+.subdrawer-request-card {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subdrawer-request-card h4 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #0f172a;
+  text-transform: uppercase;
+}
+
+.subdrawer-request-card p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.request-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.request-cost-badge {
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.request-submit-btn {
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #CE6A6B;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.request-submit-btn:hover {
+  background: #b85b5c;
+}
+
+/* Roster Item */
+.subdrawer-roster-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.roster-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.roster-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #212E53;
+}
+
+.roster-info h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.86rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.roster-info span {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.roster-action-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #212E53;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.roster-action-btn:hover {
+  background: #2e3e6e;
+}
+
+/* Calendar Card */
+.subdrawer-calendar-week {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cal-week-badge {
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  text-transform: uppercase;
+}
+
+.cal-release-title {
+  font-size: 0.84rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.cal-release-artist {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0;
+}
+
+/* History Card */
+.history-contract-entry {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.history-contract-entry.active {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.history-active-tag {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+

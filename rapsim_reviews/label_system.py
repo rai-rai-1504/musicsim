@@ -50,10 +50,9 @@ class Label:
     # GIVES
     weekly_ad_budget: int            # $ spent on music ads per week
     collab_discount: bool            # True = label roster collabs are free
-    gig_promotion_boost: float       # multiplier on concert attendance (1.0-1.8)
+    guaranteed_attendance_pct: float # % of venue capacity guaranteed filled (0.20-0.70)
     festival_slots_per_year: int     # guaranteed festival appearances per in-game year
     interview_opportunities_per_year: int  # podcast/talk show/press spots arranged
-    popularity_boost_weekly: float   # flat weekly popularity added while signed
 
     # ROSTER
     signed_artists: list[str] = field(default_factory=list)  # ecosystem artist names currently signed
@@ -62,13 +61,22 @@ class Label:
     artist_signed_weeks: dict[str, int] = field(default_factory=dict) # {artist_name: join_week}
 
     # NEGOTIATION
-    strictness: int = 50              # 0-100, how hard they are to negotiate with
     negotiable_fields: list[str] = field(default_factory=list)  # which terms can actually be negotiated
 
     # BEHAVIOUR
     shelving_threshold: float = 0.0   # if artist streams fall below this % of roster avg, shelving risk rises
     priority_threshold: int = 5       # artist must be in top N of roster by popularity to get full promotion
     drop_threshold: int = 10          # consecutive underperforming weeks before drop consideration
+
+    @property
+    def strictness(self) -> int:
+        """Strictness of a label is always equal to its prestige (label_popularity)."""
+        return self.label_popularity
+
+    @property
+    def gig_promotion_boost(self) -> float:
+        """Compatibility multiplier alias."""
+        return 1.0 + self.guaranteed_attendance_pct
 
 
 @dataclass
@@ -152,14 +160,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=200,
         collab_discount=True,
-        gig_promotion_boost=1.05,
+        guaranteed_attendance_pct=0.20,
         festival_slots_per_year=0,
         interview_opportunities_per_year=1,
-        popularity_boost_weekly=0.1,
 
         signed_artists=[],
         roster_size_max=6,
-        strictness=15,
         negotiable_fields=["advance", "album_commitment", "post_recoup_royalty_cut"],
 
         shelving_threshold=0.0,
@@ -194,14 +200,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=500,
         collab_discount=True,
-        gig_promotion_boost=1.08,
+        guaranteed_attendance_pct=0.20,
         festival_slots_per_year=1,
         interview_opportunities_per_year=2,
-        popularity_boost_weekly=0.2,
 
         signed_artists=[],
         roster_size_max=4,
-        strictness=20,
         negotiable_fields=["advance", "post_recoup_royalty_cut", "contract_years"],
 
         shelving_threshold=0.0,
@@ -239,14 +243,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=2_500,
         collab_discount=True,
-        gig_promotion_boost=1.15,
+        guaranteed_attendance_pct=0.30,
         festival_slots_per_year=2,
         interview_opportunities_per_year=4,
-        popularity_boost_weekly=0.5,
 
         signed_artists=[],
         roster_size_max=12,
-        strictness=35,
         negotiable_fields=["advance", "concert_merch_cut", "post_recoup_royalty_cut",
                            "album_commitment"],
 
@@ -283,14 +285,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=4_000,
         collab_discount=True,
-        gig_promotion_boost=1.20,
+        guaranteed_attendance_pct=0.30,
         festival_slots_per_year=3,
         interview_opportunities_per_year=6,
-        popularity_boost_weekly=0.8,
 
         signed_artists=[],
         roster_size_max=15,
-        strictness=45,
         negotiable_fields=["advance", "post_recoup_royalty_cut", "concert_merch_cut"],
 
         shelving_threshold=0.30,
@@ -329,14 +329,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=15_000,
         collab_discount=True,
-        gig_promotion_boost=1.30,
+        guaranteed_attendance_pct=0.40,
         festival_slots_per_year=4,
         interview_opportunities_per_year=10,
-        popularity_boost_weekly=1.5,
 
         signed_artists=[],
         roster_size_max=30,
-        strictness=58,
         negotiable_fields=["advance", "concert_merch_cut"],
 
         shelving_threshold=0.40,
@@ -350,7 +348,7 @@ LABELS: list[Label] = [
         tier="mid",
         description=(
             "Nocturne is mid-tier but operates like a major. They are aggressive "
-            "negotiators, their contracts are notoriously detailed, and their A&R "
+            "negotiators, their contracts are notoriously detailed, and their executive "
             "team watches streaming data obsessively. Sign here if your numbers are "
             "strong -- they will amplify them enormously. Sign here if your numbers "
             "are soft -- they will shelf you within 6 months and quietly redirect "
@@ -373,14 +371,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=28_000,
         collab_discount=True,
-        gig_promotion_boost=1.40,
+        guaranteed_attendance_pct=0.40,
         festival_slots_per_year=5,
         interview_opportunities_per_year=14,
-        popularity_boost_weekly=2.2,
 
         signed_artists=[],
         roster_size_max=25,
-        strictness=68,
         negotiable_fields=["advance"],
 
         shelving_threshold=0.45,
@@ -419,14 +415,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=80_000,
         collab_discount=True,
-        gig_promotion_boost=1.55,
+        guaranteed_attendance_pct=0.50,
         festival_slots_per_year=8,
         interview_opportunities_per_year=24,
-        popularity_boost_weekly=4.0,
 
         signed_artists=[],
         roster_size_max=50,
-        strictness=78,
         negotiable_fields=["advance"],
 
         shelving_threshold=0.50,
@@ -463,14 +457,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=140_000,
         collab_discount=True,
-        gig_promotion_boost=1.65,
+        guaranteed_attendance_pct=0.50,
         festival_slots_per_year=10,
         interview_opportunities_per_year=32,
-        popularity_boost_weekly=6.0,
 
         signed_artists=[],
         roster_size_max=45,
-        strictness=85,
         negotiable_fields=[],
 
         shelving_threshold=0.55,
@@ -509,14 +501,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=300_000,
         collab_discount=True,
-        gig_promotion_boost=1.75,
+        guaranteed_attendance_pct=0.70,
         festival_slots_per_year=15,
         interview_opportunities_per_year=52,
-        popularity_boost_weekly=10.0,
 
         signed_artists=[],
         roster_size_max=60,
-        strictness=95,
         negotiable_fields=[],
 
         shelving_threshold=0.60,
@@ -555,14 +545,12 @@ LABELS: list[Label] = [
 
         weekly_ad_budget=600_000,
         collab_discount=True,
-        gig_promotion_boost=1.80,
+        guaranteed_attendance_pct=0.70,
         festival_slots_per_year=20,
         interview_opportunities_per_year=80,
-        popularity_boost_weekly=15.0,
 
         signed_artists=[],
         roster_size_max=40,
-        strictness=100,
         negotiable_fields=[],
 
         shelving_threshold=0.65,
@@ -887,10 +875,10 @@ def evaluate_roster_priority(player: Any, contract: LabelContract, label: Label,
     if getattr(contract, "weeks_elapsed", 0) < 4:
         contract.is_priority_artist = False
         effective_ad_budget = float(label.weekly_ad_budget * 0.40)
-        effective_gig_boost = 1.0 + (label.gig_promotion_boost - 1.0) * 0.20
-        effective_pop_boost = 0.0
+        effective_attendance_pct = float(label.guaranteed_attendance_pct * 0.50)
+        effective_pop_boost = 0.0  # No weekly popularity addition by labels
         contract.shelved_weeks = 0  # Do not count toward shelving during onboarding
-        return effective_ad_budget, effective_gig_boost, effective_pop_boost
+        return effective_ad_budget, effective_attendance_pct, effective_pop_boost
 
     # 2. Build or recalculate release priority scores
     roster_views: list[RosterArtistView] = []
@@ -916,16 +904,16 @@ def evaluate_roster_priority(player: Any, contract: LabelContract, label: Label,
     if not contract.is_priority_artist:
         # player is not priority -- label reduces promotion
         effective_ad_budget = label.weekly_ad_budget * 0.20   # 20% of normal
-        effective_gig_boost = 1.0 + (label.gig_promotion_boost - 1.0) * 0.15
-        effective_pop_boost = label.popularity_boost_weekly * 0.10
+        effective_attendance_pct = label.guaranteed_attendance_pct * 0.60
+        effective_pop_boost = 0.0  # No weekly popularity addition by labels
         contract.shelved_weeks += 1
     else:
         effective_ad_budget = float(label.weekly_ad_budget)
-        effective_gig_boost = float(label.gig_promotion_boost)
-        effective_pop_boost = float(label.popularity_boost_weekly)
+        effective_attendance_pct = float(label.guaranteed_attendance_pct)
+        effective_pop_boost = 0.0  # No weekly popularity addition by labels
         contract.shelved_weeks = 0
 
-    return effective_ad_budget, effective_gig_boost, effective_pop_boost
+    return effective_ad_budget, effective_attendance_pct, effective_pop_boost
 
 
 def evaluate_shelving_risk(player: Any, contract: LabelContract, label: Label, all_signed_artists: list[Any]) -> tuple[bool, str]:
@@ -1198,10 +1186,9 @@ def label_management_menu(artist: Any, ecosystem_world: Any = None) -> None:
 
             options = [
                 "1. View Contract Overview & Recoupment Details",
-                "2. View Label Roster & Artist Rankings",
-                "3. A&R Status & Label Meeting",
-                "4. Request Early Release / Buyout Masters",
-                "5. Return to Main Menu",
+                "2. View Label Roster & Release Priority Leaderboard",
+                "3. Request Early Release / Buyout Masters",
+                "4. Return to Main Menu",
             ]
             for opt in options:
                 print("  " + opt)
@@ -1212,10 +1199,8 @@ def label_management_menu(artist: Any, ecosystem_world: Any = None) -> None:
             elif choice == "2":
                 _view_label_roster(artist, label, ecosystem_world)
             elif choice == "3":
-                _conduct_ar_meeting(artist, contract, label, ecosystem_world)
-            elif choice == "4":
                 _handle_contract_buyout(artist, contract, label)
-            elif choice == "5" or not choice:
+            elif choice == "4" or not choice:
                 break
         else:
             print("  Status: INDEPENDENT ARTIST (Unsigned)")
@@ -1270,10 +1255,9 @@ def _browse_all_labels(artist: Any) -> None:
     print(f"  Concert/Merch  : {int(lbl.concert_merch_cut * 100)}% cut")
     print(f"  Masters Rights : {'Label Owns Masters' if lbl.owns_masters else 'Artist Retains Masters'}")
     print(f"  Weekly Ad Pushes: {money_fmt(lbl.weekly_ad_budget)}/week")
-    print(f"  Gig Attendance : {lbl.gig_promotion_boost:.2f}x multiplier")
-    print(f"  Weekly Pop Add : +{lbl.popularity_boost_weekly:.1f} pop/week")
+    print(f"  Seat Guarantee : {int(lbl.guaranteed_attendance_pct * 100)}% minimum concert fill")
     print(f"  Roster Size    : {len(lbl.signed_artists)} / {lbl.roster_size_max} artists")
-    print(f"  Strictness     : {lbl.strictness}/100")
+    print(f"  Prestige/Strictness: {lbl.label_popularity}/100")
     print(f"  Negotiables    : {', '.join(lbl.negotiable_fields) if lbl.negotiable_fields else 'None (Take it or leave it)'}")
     print("=" * 65)
     input("\nPress Enter to return...")
@@ -1468,8 +1452,7 @@ def _view_contract_overview(artist: Any, contract: LabelContract, label: Label) 
     print("-" * 65)
     print("  Active Benefits:")
     print(f"  - Weekly Ad Push   : {money_fmt(label.weekly_ad_budget)}/wk")
-    print(f"  - Concert Attendance: {label.gig_promotion_boost:.2f}x multiplier")
-    print(f"  - Weekly Buzz Boost: +{label.popularity_boost_weekly:.1f} popularity/wk")
+    print(f"  - Seat Guarantee   : {int(label.guaranteed_attendance_pct * 100)}% minimum concert fill")
     print(f"  - Label Collabs    : {'100% Free Collab Discount' if label.collab_discount else 'Standard Market'}")
     print("=" * 65)
     input("\nPress Enter to return...")
@@ -1510,55 +1493,6 @@ def _view_label_roster(artist: Any, label: Label, ecosystem_world: Any = None) -
     print("  Model: P = 0.75 * C (Nonlinear Pop Log-Odds) + 0.25 * M (Absolute Growth Momentum)")
     print(f"  Priority Threshold: Top {label.priority_threshold} artists receive full promotional push & playlisting.")
     print("  Onboarding Rule: Newly signed artists spend 4 weeks in onboarding before entering the priority board.")
-    input("\nPress Enter to return...")
-
-
-def _conduct_ar_meeting(artist: Any, contract: LabelContract, label: Label, ecosystem_world: Any = None) -> None:
-    curr_wk = getattr(artist, "current_week", 1)
-    roster_views = get_label_roster_artists(label, artist, ecosystem_world, current_week=curr_wk)
-    eligible = [a for a in roster_views if not a.is_onboarding]
-    player_view = next((a for a in roster_views if a.name == artist.name), None)
-
-    roster_avg_streams = sum(a.weekly_streams for a in roster_views) / max(len(roster_views), 1)
-    player_streams = artist.weekly_streams
-
-    print("\n" + "=" * 68)
-    print(f"             A&R DIVISION MEETING: {label.name.upper()}")
-    print("=" * 68)
-    print(f"  Your Weekly Streams : {player_streams:,}")
-    print(f"  Label Average Streams: {int(roster_avg_streams):,}")
-
-    ratio = player_streams / max(roster_avg_streams, 1)
-    print(f"  Streaming Ratio     : {ratio:.2f}x of roster average")
-    print(f"  Shelving Threshold  : {label.shelving_threshold:.2f}x")
-    print(f"  Underperform Weeks  : {contract.underperform_weeks} / {label.drop_threshold} (Drop Limit)")
-
-    if contract.weeks_elapsed < 4:
-        print(f"  Roster Status       : Onboarding (Week {contract.weeks_elapsed}/4)")
-    elif player_view:
-        player_rank = next((i + 1 for i, a in enumerate(eligible) if a.name == artist.name), len(eligible) + 1)
-        print(f"  Priority Rank       : #{player_rank} of {len(eligible)} eligible artists")
-        print(f"  Priority Score      : {player_view.priority_score:.1f} / 100")
-        print(f"  Recent Momentum     : {player_view.growth:+0.1f} popularity points over last 4 weeks")
-
-    print("-" * 68)
-
-    if contract.weeks_elapsed < 4:
-        print("  A&R Director: 'Welcome to the roster! You're currently in your 4-week onboarding window.'")
-        print(f"  'You're in Week {contract.weeks_elapsed}/4. Once completed, your momentum will determine your priority ranking.'")
-    elif contract.status == "shelved":
-        print("  A&R Director: 'Look, your streaming numbers are below our threshold.'")
-        print("  'Right now, our marketing capital is redirected. You need a hit song to get back on schedule.'")
-    elif contract.is_priority_artist:
-        print("  A&R Director: 'You are performing in the upper echelon of our roster.'")
-        print("  'The entire machine is working overtime for your next release rollout. Keep the momentum going!'")
-    elif ratio < label.shelving_threshold:
-        print("  A&R Director: 'We're concerned about your latest metrics.'")
-        print("  'If your streams don't pick up soon, our board will delay your upcoming release timeline.'")
-    else:
-        print("  A&R Director: 'Your numbers are stable. Stay consistent and deliver the committed projects.'")
-
-    print("=" * 68)
     input("\nPress Enter to return...")
 
 
