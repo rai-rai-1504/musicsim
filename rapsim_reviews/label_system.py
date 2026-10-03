@@ -7,6 +7,7 @@ shelving risk mechanics, breach penalties, and drop clauses.
 
 from __future__ import annotations
 
+import math
 import random
 from dataclasses import dataclass, field
 from typing import Any, Optional
@@ -57,6 +58,8 @@ class Label:
     # ROSTER
     signed_artists: list[str] = field(default_factory=list)  # ecosystem artist names currently signed
     roster_size_max: int = 10         # maximum artists label will sign simultaneously
+    artist_popularity_history: dict[str, dict[int, float]] = field(default_factory=dict) # {artist_name: {week: pop}}
+    artist_signed_weeks: dict[str, int] = field(default_factory=dict) # {artist_name: join_week}
 
     # NEGOTIATION
     strictness: int = 50              # 0-100, how hard they are to negotiate with
@@ -99,12 +102,23 @@ class LabelContract:
     masters_owned_by_label: bool
     post_contract_recoupment_remaining: int  # balance still owed after contract ends
 
+    # weekly history for priority ranking
+    popularity_history: dict[int, float] = field(default_factory=dict) # {week: pop}
+
 
 @dataclass
 class RosterArtistView:
     name: str
-    popularity: float
-    weekly_streams: int
+    popularity: float                    # W5_i (current week popularity)
+    weekly_streams: int = 0
+    popularity_w1: float = 0.0           # W1_i (popularity 4 weeks ago)
+    weeks_in_label: int = 52             # duration on roster (>=4 means past onboarding)
+    growth: float = 0.0                  # G_i = W5_i - W1_i
+    growth_pct: float = 0.0              # Growth%_i = (W5_i - W1_i) / W1_i * 100
+    norm_current_pop: float = 0.0        # C_i in [0, 100]
+    norm_momentum: float = 0.0           # M_i in [0, 100]
+    priority_score: float = 0.0          # P_i = 0.75 * C_i + 0.25 * M_i in [0, 100]
+    is_onboarding: bool = False          # True if weeks_in_label < 4
 
 
 LABELS: list[Label] = [
@@ -646,18 +660,118 @@ def seed_label_rosters(labels: list[Label] | None = None, ecosystem_world: Any =
         lbl.signed_artists = list(chosen)
 
 
-def get_label_roster_artists(label: Label, player: Any, ecosystem_world: Any = None) -> list[RosterArtistView]:
-    """Returns a list of RosterArtistView objects for all artists signed to the label, including the player."""
+def calculate_release_priority(roster: list[RosterArtistView]) -> list[RosterArtistView]:
+    """
+    Computes Release Priority Scores for all artists according to the
+    Popularity-Based Release Priority Model.
+
+    Formula:
+      G_i = W5_i - W1_i
+      L_i = ln( W5_i / (100 - W5_i) )
+      C_i = 100 * (L_i - L_min) / (L_max - L_min)
+      M_i = 100 * (G_i - G_min) / (G_max - G_min)
+      P_i = 0.75 * C_i + 0.25 * M_i
+
+    Edge case:
+      If an artist has been in a label for less than 4 weeks (weeks_in_label < 4),
+      they are in the onboarding period. The artist is NOT made part of the priority
+      list and receives no priority (P_i = 0.0, is_onboarding = True).
+    """
+    eligible: list[RosterArtistView] = []
+    onboarding: list[RosterArtistView] = []
+
+    for a in roster:
+        # Determine W1 baseline (popularity 4 weeks ago)
+        w5 = float(a.popularity)
+        w1 = float(a.popularity_w1) if a.popularity_w1 > 0.0 else w5
+        a.popularity_w1 = w1
+        a.growth = round(w5 - w1, 2)
+        a.growth_pct = round((a.growth / max(0.1, w1)) * 100.0, 2)
+
+        if getattr(a, "weeks_in_label", 52) < 4:
+            a.is_onboarding = True
+            a.norm_current_pop = 0.0
+            a.norm_momentum = 0.0
+            a.priority_score = 0.0
+            onboarding.append(a)
+        else:
+            a.is_onboarding = False
+            eligible.append(a)
+
+    if not eligible:
+        return onboarding
+
+    # 1. Nonlinear Current Popularity (Log-Odds)
+    log_odds: list[float] = []
+    for a in eligible:
+        # Clamp popularity safely to (0.1, 99.9) for log-odds stability
+        w5_clamped = max(0.1, min(99.9, float(a.popularity)))
+        l_val = math.log(w5_clamped / (100.0 - w5_clamped))
+        log_odds.append(l_val)
+
+    l_min = min(log_odds)
+    l_max = max(log_odds)
+
+    # 2. Absolute Growth / Momentum
+    growths = [a.growth for a in eligible]
+    g_min = min(growths)
+    g_max = max(growths)
+
+    # 3. Normalization and Priority Calculation
+    for idx, a in enumerate(eligible):
+        l_val = log_odds[idx]
+        g_val = a.growth
+
+        if l_max > l_min:
+            c_val = 100.0 * (l_val - l_min) / (l_max - l_min)
+        else:
+            c_val = 50.0  # Equal popularity fallback
+
+        if g_max > g_min:
+            m_val = 100.0 * (g_val - g_min) / (g_max - g_min)
+        else:
+            m_val = 50.0  # Equal growth fallback
+
+        p_val = 0.75 * c_val + 0.25 * m_val
+
+        a.norm_current_pop = round(c_val, 2)
+        a.norm_momentum = round(m_val, 2)
+        a.priority_score = round(p_val, 2)
+
+    # Sort eligible by priority_score descending (tiebreak by current popularity, then streams)
+    eligible.sort(key=lambda x: (x.priority_score, x.popularity, x.weekly_streams), reverse=True)
+
+    return eligible + onboarding
+
+
+def get_label_roster_artists(label: Label, player: Any, ecosystem_world: Any = None, current_week: int = 1) -> list[RosterArtistView]:
+    """Returns a list of RosterArtistView objects for all artists signed to the label, including the player,
+    scored and ordered via the Popularity-Based Release Priority Model."""
     views: list[RosterArtistView] = []
     seen = set()
 
     # Add player if signed
     if player and getattr(player, "label_contract", None) and player.label_contract.label_id == label.id:
+        contract = player.label_contract
+        weeks_elapsed = getattr(contract, "weeks_elapsed", 0)
+        pop_w5 = float(player.popularity)
+
+        # Retrieve W1 (popularity 4 weeks ago)
+        pop_history = getattr(contract, "popularity_history", {})
+        if (current_week - 4) in pop_history:
+            pop_w1 = float(pop_history[current_week - 4])
+        elif pop_history:
+            pop_w1 = float(pop_history.get(contract.signed_week, pop_w5))
+        else:
+            pop_w1 = pop_w5
+
         views.append(
             RosterArtistView(
                 name=player.name,
-                popularity=float(player.popularity),
+                popularity=pop_w5,
                 weekly_streams=int(getattr(player, "weekly_streams", 0)),
+                popularity_w1=pop_w1,
+                weeks_in_label=weeks_elapsed,
             )
         )
         seen.add(player.name)
@@ -688,9 +802,35 @@ def get_label_roster_artists(label: Label, player: Any, ecosystem_world: Any = N
             # Baseline proxy streams based on popularity
             streams = int(pop * 35_000)
 
-        views.append(RosterArtistView(name=name, popularity=pop, weekly_streams=streams))
+        # Weeks signed for ecosystem artist (default 52 for seeded established artists)
+        signed_wk = label.artist_signed_weeks.get(name, None)
+        if signed_wk is not None:
+            weeks_in_label = max(0, current_week - signed_wk)
+        else:
+            weeks_in_label = 52
 
-    return views
+        # Popularity 4 weeks ago (W1)
+        history_map = label.artist_popularity_history.get(name, {})
+        if (current_week - 4) in history_map:
+            pop_w1 = float(history_map[current_week - 4])
+        else:
+            # Deterministic, realistic 4-week starting baseline for established artists
+            seed_rng = random.Random(f"w1_pop:{name}:{label.id}")
+            base_delta = seed_rng.uniform(-2.0, 6.0)
+            pop_w1 = max(1.0, min(99.0, pop - base_delta))
+
+        views.append(
+            RosterArtistView(
+                name=name,
+                popularity=pop,
+                weekly_streams=streams,
+                popularity_w1=pop_w1,
+                weeks_in_label=weeks_in_label,
+            )
+        )
+
+    # Calculate release priority scores and rankings
+    return calculate_release_priority(views)
 
 
 # -----------------------------------------------------------------------------
@@ -733,17 +873,45 @@ def process_weekly_label_recoupment(player: Any, contract: LabelContract, label:
     return float(player_earnings_this_week)
 
 
-def evaluate_roster_priority(player: Any, contract: LabelContract, label: Label, all_signed_artists: list[Any]) -> tuple[float, float, float]:
+def evaluate_roster_priority(player: Any, contract: LabelContract, label: Label, all_signed_artists: list[Any], current_week: int = 1) -> tuple[float, float, float]:
     """
-    Determines whether the label treats the player as a priority artist.
-    Runs every simulate_week call.
-    """
-    # rank all signed artists by popularity
-    roster = sorted(all_signed_artists, key=lambda a: a.popularity, reverse=True)
-    player_rank = next((i+1 for i, a in enumerate(roster)
-                        if a.name == player.name), len(roster))
+    Determines whether the label treats the player as a priority artist based on the
+    Popularity-Based Release Priority Model.
 
-    contract.is_priority_artist = player_rank <= label.priority_threshold
+    Edge case:
+      If the artist has been in a label for less than 4 weeks (weeks_elapsed < 4),
+      they are in the onboarding period and NOT made part of the priority list.
+      The artist has no priority in the first 4 weeks of joining a label.
+    """
+    # 1. Onboarding check (first 4 weeks)
+    if getattr(contract, "weeks_elapsed", 0) < 4:
+        contract.is_priority_artist = False
+        effective_ad_budget = float(label.weekly_ad_budget * 0.40)
+        effective_gig_boost = 1.0 + (label.gig_promotion_boost - 1.0) * 0.20
+        effective_pop_boost = 0.0
+        contract.shelved_weeks = 0  # Do not count toward shelving during onboarding
+        return effective_ad_budget, effective_gig_boost, effective_pop_boost
+
+    # 2. Build or recalculate release priority scores
+    roster_views: list[RosterArtistView] = []
+    for item in all_signed_artists:
+        if isinstance(item, RosterArtistView):
+            roster_views.append(item)
+        else:
+            name = getattr(item, "name", "Unknown")
+            pop = float(getattr(item, "popularity", 50.0))
+            streams = int(getattr(item, "weekly_streams", int(pop * 35_000)))
+            weeks = getattr(item, "weeks_in_label", 52)
+            roster_views.append(RosterArtistView(name=name, popularity=pop, weekly_streams=streams, weeks_in_label=weeks))
+
+    ranked_roster = calculate_release_priority(roster_views)
+
+    # Filter to eligible artists for ranking
+    eligible_roster = [a for a in ranked_roster if not a.is_onboarding]
+
+    player_rank = next((i + 1 for i, a in enumerate(eligible_roster) if a.name == player.name), len(eligible_roster) + 1)
+
+    contract.is_priority_artist = (player_rank <= label.priority_threshold)
 
     if not contract.is_priority_artist:
         # player is not priority -- label reduces promotion
@@ -767,6 +935,10 @@ def evaluate_shelving_risk(player: Any, contract: LabelContract, label: Label, a
     """
     if label.shelving_threshold == 0.0:
         return False, "label never shelves releases"
+
+    # Onboarding protection: new signees are not shelved during first 4 weeks
+    if getattr(contract, "weeks_elapsed", 0) < 4:
+        return False, "artist is in 4-week onboarding window"
 
     roster_avg_streams = sum(a.weekly_streams for a in all_signed_artists) / max(len(all_signed_artists), 1)
     player_stream_ratio = player.weekly_streams / max(roster_avg_streams, 1)
@@ -978,17 +1150,20 @@ def sign_contract(player: Any, label: Label, negotiated_terms: dict[str, Any] | 
         albums_delivered=0,
         weeks_elapsed=0,
         status="active",
-        is_priority_artist=True,
+        is_priority_artist=False,  # Starts in 4-week onboarding window (no priority)
         shelved_weeks=0,
         underperform_weeks=0,
         masters_owned_by_label=label.owns_masters,
         post_contract_recoupment_remaining=0,
+        popularity_history={player.current_week: float(player.popularity)},
     )
 
     player.money += final_advance
     player.label_contract = contract
     if player.name not in label.signed_artists:
         label.signed_artists.append(player.name)
+    label.artist_signed_weeks[player.name] = player.current_week
+    label.artist_popularity_history.setdefault(player.name, {})[player.current_week] = float(player.popularity)
 
     return contract, final_advance
 
@@ -1301,35 +1476,55 @@ def _view_contract_overview(artist: Any, contract: LabelContract, label: Label) 
 
 
 def _view_label_roster(artist: Any, label: Label, ecosystem_world: Any = None) -> None:
-    roster_views = get_label_roster_artists(label, artist, ecosystem_world)
-    sorted_roster = sorted(roster_views, key=lambda a: a.popularity, reverse=True)
+    curr_wk = getattr(artist, "current_week", 1)
+    roster_views = get_label_roster_artists(label, artist, ecosystem_world, current_week=curr_wk)
 
-    print("\n" + "=" * 70)
-    print(f"             {label.name.upper()} OFFICIAL ROSTER")
-    print("=" * 70)
-    print(f"{'Rank':<6} {'Artist Name':<28} {'Popularity':<14} {'Weekly Streams':<18} {'Status':<10}")
-    print("-" * 70)
+    eligible = [a for a in roster_views if not a.is_onboarding]
+    onboarding = [a for a in roster_views if a.is_onboarding]
 
-    for i, a in enumerate(sorted_roster, 1):
+    print("\n" + "=" * 92)
+    print(f"               {label.name.upper()} RELEASE PRIORITY LEADERBOARD")
+    print("=" * 92)
+    print(f"{'Rank':<6} {'Artist Name':<24} {'W5 Pop':<10} {'W1 Pop':<10} {'Growth':<10} {'Priority':<14} {'Status':<14}")
+    print("-" * 92)
+
+    for i, a in enumerate(eligible, 1):
         is_player = (a.name == artist.name)
         status = "* PRIORITY" if i <= label.priority_threshold else "Standard"
         marker = " [YOU]" if is_player else ""
-        name_str = f"{a.name}{marker}"
-        print(f"#{i:<5} {name_str:<28} {a.popularity:<14.1f} {a.weekly_streams:<18,} {status:<10}")
+        name_str = f"{a.name}{marker}"[:23]
+        g_str = f"{a.growth:+0.1f}"
+        print(f"#{i:<5} {name_str:<24} {a.popularity:<10.1f} {a.popularity_w1:<10.1f} {g_str:<10} {a.priority_score:<14.1f} {status:<14}")
 
-    print("=" * 70)
-    print(f"  Priority Threshold: Top {label.priority_threshold} artists receive full label support.")
+    if onboarding:
+        print("-" * 92)
+        print("  ONBOARDING ROSTER (First 4 Weeks -- No Release Priority Yet):")
+        for a in onboarding:
+            is_player = (a.name == artist.name)
+            marker = " [YOU]" if is_player else ""
+            name_str = f"{a.name}{marker}"[:23]
+            wk_status = f"Onboarding (Wk {a.weeks_in_label}/4)"
+            print(f"{'--':<6} {name_str:<24} {a.popularity:<10.1f} {'--':<10} {'--':<10} {'--':<14} {wk_status:<14}")
+
+    print("=" * 92)
+    print("  Model: P = 0.75 * C (Nonlinear Pop Log-Odds) + 0.25 * M (Absolute Growth Momentum)")
+    print(f"  Priority Threshold: Top {label.priority_threshold} artists receive full promotional push & playlisting.")
+    print("  Onboarding Rule: Newly signed artists spend 4 weeks in onboarding before entering the priority board.")
     input("\nPress Enter to return...")
 
 
 def _conduct_ar_meeting(artist: Any, contract: LabelContract, label: Label, ecosystem_world: Any = None) -> None:
-    roster_views = get_label_roster_artists(label, artist, ecosystem_world)
+    curr_wk = getattr(artist, "current_week", 1)
+    roster_views = get_label_roster_artists(label, artist, ecosystem_world, current_week=curr_wk)
+    eligible = [a for a in roster_views if not a.is_onboarding]
+    player_view = next((a for a in roster_views if a.name == artist.name), None)
+
     roster_avg_streams = sum(a.weekly_streams for a in roster_views) / max(len(roster_views), 1)
     player_streams = artist.weekly_streams
 
-    print("\n" + "=" * 65)
+    print("\n" + "=" * 68)
     print(f"             A&R DIVISION MEETING: {label.name.upper()}")
-    print("=" * 65)
+    print("=" * 68)
     print(f"  Your Weekly Streams : {player_streams:,}")
     print(f"  Label Average Streams: {int(roster_avg_streams):,}")
 
@@ -1337,9 +1532,21 @@ def _conduct_ar_meeting(artist: Any, contract: LabelContract, label: Label, ecos
     print(f"  Streaming Ratio     : {ratio:.2f}x of roster average")
     print(f"  Shelving Threshold  : {label.shelving_threshold:.2f}x")
     print(f"  Underperform Weeks  : {contract.underperform_weeks} / {label.drop_threshold} (Drop Limit)")
-    print("-" * 65)
 
-    if contract.status == "shelved":
+    if contract.weeks_elapsed < 4:
+        print(f"  Roster Status       : Onboarding (Week {contract.weeks_elapsed}/4)")
+    elif player_view:
+        player_rank = next((i + 1 for i, a in enumerate(eligible) if a.name == artist.name), len(eligible) + 1)
+        print(f"  Priority Rank       : #{player_rank} of {len(eligible)} eligible artists")
+        print(f"  Priority Score      : {player_view.priority_score:.1f} / 100")
+        print(f"  Recent Momentum     : {player_view.growth:+0.1f} popularity points over last 4 weeks")
+
+    print("-" * 68)
+
+    if contract.weeks_elapsed < 4:
+        print("  A&R Director: 'Welcome to the roster! You're currently in your 4-week onboarding window.'")
+        print(f"  'You're in Week {contract.weeks_elapsed}/4. Once completed, your momentum will determine your priority ranking.'")
+    elif contract.status == "shelved":
         print("  A&R Director: 'Look, your streaming numbers are below our threshold.'")
         print("  'Right now, our marketing capital is redirected. You need a hit song to get back on schedule.'")
     elif contract.is_priority_artist:
@@ -1351,7 +1558,7 @@ def _conduct_ar_meeting(artist: Any, contract: LabelContract, label: Label, ecos
     else:
         print("  A&R Director: 'Your numbers are stable. Stay consistent and deliver the committed projects.'")
 
-    print("=" * 65)
+    print("=" * 68)
     input("\nPress Enter to return...")
 
 

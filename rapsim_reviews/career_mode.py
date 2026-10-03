@@ -1355,13 +1355,23 @@ def simulate_week(artist, ecosystem_world: EcosystemWorld | None = None):
     if contract and getattr(contract, "status", "") in ("active", "shelved", "recouped"):
         lbl = get_label_by_id(contract.label_id)
         if lbl:
+            curr_wk = _player_week_index(artist)
+            contract.popularity_history[curr_wk] = float(artist.popularity)
             contract.weeks_elapsed += 1
-            roster_artists = get_label_roster_artists(lbl, artist, ecosystem_world)
+
+            # Record signed ecosystem artists' popularity
+            for ec_name in lbl.signed_artists:
+                ec_pop = float(getattr(ecosystem_world, "artist_popularity", {}).get(ec_name, 50.0))
+                lbl.artist_popularity_history.setdefault(ec_name, {})[curr_wk] = ec_pop
+
+            roster_artists = get_label_roster_artists(lbl, artist, ecosystem_world, current_week=curr_wk)
 
             # Roster Priority
-            eff_ad, eff_gig, eff_pop = evaluate_roster_priority(artist, contract, lbl, roster_artists)
+            eff_ad, eff_gig, eff_pop = evaluate_roster_priority(artist, contract, lbl, roster_artists, current_week=curr_wk)
             artist.popularity_state.organic = clamp_popularity(artist.popularity_state.organic + eff_pop)
-            if contract.is_priority_artist and eff_pop > 0:
+            if contract.weeks_elapsed < 4:
+                print(f"Label onboarding: Week {contract.weeks_elapsed}/4 at {lbl.name} (no release priority yet)")
+            elif contract.is_priority_artist and eff_pop > 0:
                 print(f"Label priority boost: +{eff_pop:.1f} weekly popularity from {lbl.name}")
 
             # Shelving Risk
