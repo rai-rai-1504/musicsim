@@ -1,0 +1,3337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RapSim - Mobile Career Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Desktop Presentation Stage (9:16 Aspect Ratio - Single Viewport Fit) -->
+  <div class="stage-container" id="stageContainer">
+    
+    <!-- Top Bar for Localhost Testing Controls -->
+    <div class="desktop-controls">
+      <span>
+        <span class="live-dot"></span>
+        RapSim Studio Deck &bull; 9:16 Mobile
+      </span>
+      <button class="btn-frame-toggle" id="toggleFrameBtn">Toggle Frame</button>
+    </div>
+
+    <!-- Smartphone Bezel Mockup (Hardware Studio Monitor Shell) -->
+    <div class="mobile-device">
+      <div class="mobile-screen">
+        
+        <!-- Status Bar with Analog Notch and Readouts -->
+        <div class="status-bar">
+          <span class="status-bar-week" id="statusBarWeekYear">JUN 12 - 18, YEAR 2</span>
+          
+          <div class="notch-pill">
+            <div class="notch-lens"></div>
+            <div class="notch-sensor"></div>
+          </div>
+
+          <div class="status-bar-money" id="statusMoney">$148,200</div>
+        </div>
+
+        <!-- Toast Feedback Notification -->
+        <div class="toast-msg" id="toastMsg">Action triggered</div>
+
+        <!-- App Viewport Container -->
+        <div class="app-viewport">
+          
+          <!-- =========================================================
+               TAB 1: HOME (DASHBOARD)
+               ========================================================= -->
+          <div class="app-screen active" id="screenHome">
+            
+            <!-- 1. TOP HEADER: Profile Icon & Player Name (Left) & Actions (Right: Inbox + Settings) -->
+            <div class="home-top-bar">
+              <!-- Profile Icon & Player Name (Left, Clickable to open Profile Tab) -->
+              <div class="profile-header-group" onclick="switchTab('profile')" style="cursor: pointer;" title="Open Profile & Empire">
+                <div class="profile-avatar-skeuo" title="Artist Profile">
+                  <svg class="profile-avatar-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span class="profile-online-pip"></span>
+                </div>
+                <div class="profile-info-block">
+                  <span class="profile-player-name">LIL SYNAPSE</span>
+                </div>
+              </div>
+
+              <!-- Top Actions (Right, Same Size & Same Y Coordinates: Inbox + Settings) -->
+              <div class="home-top-actions">
+                <!-- Inbox Button -->
+                <button class="inbox-button-skeuo" onclick="openInboxModal()" title="Open Artist Inbox">
+                  <div class="inbox-icon-shell">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </svg>
+                    <span class="inbox-badge-count">3</span>
+                  </div>
+                </button>
+
+                <!-- Settings Button (Beside Inbox Icon) -->
+                <button class="settings-button-skeuo" onclick="openSettingsSubpage()" title="Hardware Settings">
+                  <div class="inbox-icon-shell">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. VITALS ROW: Popularity (2/3rd) + Health & Fatigue (1/3rd) -->
+            <div class="home-vitals-row">
+              <!-- Left: Popularity Card (2/3rd) -->
+              <div class="popularity-console-card">
+                <div class="popularity-card-head">
+                  <div class="pop-title-group">
+                    <span class="chassis-screw micro"></span>
+                    <span class="pop-symbol">★</span>
+                    <span class="pop-title-text">POPULARITY</span>
+                  </div>
+                  <div class="pop-rating-group">
+                    <span class="pop-tier-pill">LVL 4</span>
+                    <span class="pop-percent-val" id="valPopularity">84%</span>
+                  </div>
+                </div>
+                <div class="popularity-gauge-trough">
+                  <div class="popularity-gauge-fill" id="barPopularity" style="width: 84%;">
+                    <span class="gauge-pip-glow"></span>
+                  </div>
+                  <div class="gauge-calibrated-notches">
+                    <span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Fatigue & Health Card (1/3rd) -->
+              <div class="vitals-mini-card">
+                <!-- Health Row -->
+                <div class="vital-mini-row">
+                  <div class="vital-mini-head">
+                    <div style="display: flex; align-items: center; gap: 3px;">
+                      <span class="vital-icon health-color">♥</span>
+                      <span class="vital-label">HEALTH</span>
+                    </div>
+                    <span class="vital-val" id="valHealth">88%</span>
+                  </div>
+                  <div class="vital-mini-trough">
+                    <div class="vital-mini-fill health-gradient" id="barHealth" style="width: 88%;"></div>
+                  </div>
+                </div>
+
+                <!-- Fatigue Row -->
+                <div class="vital-mini-row">
+                  <div class="vital-mini-head">
+                    <div style="display: flex; align-items: center; gap: 3px;">
+                      <span class="vital-icon fatigue-color">⚡</span>
+                      <span class="vital-label">FATIGUE</span>
+                    </div>
+                    <span class="vital-val" id="valFatigue">24%</span>
+                  </div>
+                  <div class="vital-mini-trough">
+                    <div class="vital-mini-fill fatigue-gradient" id="barFatigue" style="width: 24%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. LAST WEEK SECTION (Glowing Digital Studio Readout Boards) -->
+            <div class="last-week-card">
+              <div class="panel-header-bar compact">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="chassis-screw mini"></span>
+                  <span>LAST WEEK</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <span class="led-jewel amber small"></span>
+                  <span class="chassis-screw mini"></span>
+                </div>
+              </div>
+              <div class="last-week-boards-row">
+                <!-- Streams Board -->
+                <div class="digital-studio-board" title="Weekly Streams">
+                  <span class="digital-board-num" id="valLastStreams">384,210</span>
+                  <span class="digital-board-unit">UNITS</span>
+                </div>
+
+                <!-- Money Board -->
+                <div class="digital-studio-board" title="Weekly Earnings">
+                  <span class="digital-board-num" id="valLastMoney">$94,850</span>
+                  <span class="digital-board-unit">MONEY MADE</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. RECENT NEWS BOARD (Snippet of First Headline, Click to View Whole News) -->
+            <div class="recent-news-board" onclick="openWeeklyNewsModal()" title="Click to view full week news wire">
+              <div class="news-board-top">
+                <div class="news-board-badge-wrap">
+                  <span class="skeuo-pill coral mini-pill">NEWS</span>
+                  <span class="news-week-marker">WEEK 24</span>
+                </div>
+                <span class="news-tap-indicator">READ ALL &rsaquo;</span>
+              </div>
+              <div class="news-board-snippet">
+                <p class="news-snippet-text">"Neon Dreams" holds #4 for a third consecutive week as radio rotation...</p>
+              </div>
+            </div>
+
+            <!-- 5. SIDE-BY-SIDE SPLIT: NEW RELEASES (Left) & CURRENT HOT 100 (Right) -->
+            <div class="home-split-grid">
+              <!-- Left Box: New Releases (show only 3, click routes to news page) -->
+              <div class="home-grid-card" onclick="routeToNews()" title="View all new release news">
+                <div class="grid-card-head">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <span class="chassis-screw micro"></span>
+                    <span>NEW RELEASES</span>
+                  </div>
+                  <span class="grid-card-link">&rsaquo;</span>
+                </div>
+                <div class="grid-card-items">
+                  <!-- Item 1 -->
+                  <div class="grid-mini-row">
+                    <div class="grid-thumb-sq">
+                      <img src="album covers/Tyler Durden.jpg" alt="Midnight Dynasty" class="grid-thumb-img">
+                    </div>
+                    <div class="grid-row-text">
+                      <div class="grid-row-title">Midnight Dynasty</div>
+                      <div class="grid-row-artist">Drakeo V</div>
+                    </div>
+                  </div>
+                  <!-- Item 2 -->
+                  <div class="grid-mini-row">
+                    <div class="grid-thumb-sq">
+                      <img src="album covers/download (2).jpg" alt="Velvet Waves" class="grid-thumb-img">
+                    </div>
+                    <div class="grid-row-text">
+                      <div class="grid-row-title">Velvet Waves</div>
+                      <div class="grid-row-artist">SZAria</div>
+                    </div>
+                  </div>
+                  <!-- Item 3 -->
+                  <div class="grid-mini-row">
+                    <div class="grid-thumb-sq">
+                      <img src="album covers/download (3).jpg" alt="Subzero" class="grid-thumb-img">
+                    </div>
+                    <div class="grid-row-text">
+                      <div class="grid-row-title">Subzero</div>
+                      <div class="grid-row-artist">GrimKidd</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Box: Current Hot 100 (Authentic Printed Trade Chart Widget) -->
+              <div class="home-grid-card hot100-trade-card" onclick="openHot100ChartModal()" title="View Official Hot 100 Chart">
+                <!-- Trade Newspaper Masthead -->
+                <div class="hot100-masthead">
+                  <span class="masthead-the">THE</span>
+                  <span class="masthead-brand">OFFICIAL</span>
+                  <span class="masthead-hot">HOT 100</span>
+                </div>
+
+                <!-- Mini Chart Table -->
+                <div class="hot100-mini-table">
+                  <div class="mini-table-head">
+                    <span class="col-tw">TW</span>
+                    <span class="col-song">TITLE &bull; ARTIST</span>
+                    <span class="col-pk">PK</span>
+                  </div>
+                  
+                  <!-- Rank 1 (No. 1 with Red Bullet Oval) -->
+                  <div class="mini-table-row">
+                    <div class="mini-rank-wrap">
+                      <span class="mini-rank bullet-red">1</span>
+                    </div>
+                    <div class="mini-song-meta">
+                      <div class="mini-title-line">
+                        <span class="song-title-text red-title">MIDNIGHT DYNASTY</span>
+                        <span class="bullet-star">★</span>
+                      </div>
+                      <div class="mini-artist-line">&#9670; DRAKEO V</div>
+                    </div>
+                    <span class="mini-peak">1</span>
+                  </div>
+
+                  <!-- Rank 2 (Red Bullet Oval) -->
+                  <div class="mini-table-row">
+                    <div class="mini-rank-wrap">
+                      <span class="mini-rank bullet-red">2</span>
+                    </div>
+                    <div class="mini-song-meta">
+                      <div class="mini-title-line">
+                        <span class="song-title-text">VELVET WAVES</span>
+                        <span class="bullet-star">★</span>
+                      </div>
+                      <div class="mini-artist-line">&#9670; SZARIA</div>
+                    </div>
+                    <span class="mini-peak">2</span>
+                  </div>
+
+                  <!-- Rank 3 (Standard Black Number) -->
+                  <div class="mini-table-row">
+                    <div class="mini-rank-wrap">
+                      <span class="mini-rank">3</span>
+                    </div>
+                    <div class="mini-song-meta">
+                      <div class="mini-title-line">
+                        <span class="song-title-text">CONCRETE GARDEN</span>
+                      </div>
+                      <div class="mini-artist-line">&#9670; KENNY KNOX</div>
+                    </div>
+                    <span class="mini-peak">3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. SIMULATE NEXT WEEK BUTTON -->
+            <button class="simulate-week-punch-btn" onclick="simulateNextWeek()" id="btnSimulateWeek">
+              <div class="punch-btn-surface">
+                <span class="punch-led-jewel"></span>
+                <span class="punch-btn-label">SIMULATE NEXT WEEK</span>
+                <svg class="punch-btn-symbol" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+                  <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
+                  <line x1="19" y1="5" x2="19" y2="19"></line>
+                </svg>
+              </div>
+            </button>
+
+          </div>
+
+          <!-- =========================================================
+               TAB 2: MEDIA
+               ========================================================= -->
+                    <div class="app-screen" id="screenMedia">
+            
+            <!-- =========================================================
+                 MEDIA HUB (DEFAULT 35% / 40% / 25% DASHBOARD)
+                 ========================================================= -->
+            <div class="media-hub-container" id="mediaMainHub">
+              
+              <!-- SECTION 1 (TOP 35%): POPULAR SONGS (TITLES & STREAMS ONLY) -->
+              <div class="media-section-popular">
+                <div class="popular-simple-header">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="chassis-screw mini"></span>
+                    <span>POPULAR SONGS</span>
+                  </div>
+                  <span class="chassis-screw mini"></span>
+                </div>
+                <div class="popular-simple-list">
+                  <div class="popular-simple-row" onclick="simulatePlaySong('Neon Dreams')">
+                    <span class="popular-song-title">Neon Dreams</span>
+                    <span class="popular-song-streams">124.8M</span>
+                  </div>
+                  <div class="popular-simple-row" onclick="simulatePlaySong('Chrome Heart Boulevard')">
+                    <span class="popular-song-title">Chrome Heart Boulevard</span>
+                    <span class="popular-song-streams">88.4M</span>
+                  </div>
+                  <div class="popular-simple-row" onclick="simulatePlaySong('Midnight In Tokyo')">
+                    <span class="popular-song-title">Midnight In Tokyo</span>
+                    <span class="popular-song-streams">52.1M</span>
+                  </div>
+                  <div class="popular-simple-row" onclick="simulatePlaySong('Ghostwriter Blues')">
+                    <span class="popular-song-title">Ghostwriter Blues</span>
+                    <span class="popular-song-streams">31.5M</span>
+                  </div>
+                  <div class="popular-simple-row" onclick="simulatePlaySong('Fast Cash Slow Love')">
+                    <span class="popular-song-title">Fast Cash Slow Love</span>
+                    <span class="popular-song-streams">19.8M</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 2: LAST ALBUM (LEFT) & LAST RELEASE (RIGHT) -->
+              <div class="media-releases-dual">
+                <!-- Left: LAST ALBUM -->
+                <div class="media-release-column">
+                  <div class="media-title-label">LAST ALBUM</div>
+                  <div class="release-art-wrapper" onclick="simulatePlaySong('Midnight Sessions')" title="Play Midnight Sessions">
+                    <div class="release-art-sq">
+                      <img src="album covers/Music artwork for Frank Ocean - _.jpg" alt="Midnight Sessions" class="release-art-img">
+                      <div class="art-reflection-overlay"></div>
+                    </div>
+                  </div>
+                  <div class="release-title-text" onclick="simulatePlaySong('Midnight Sessions')" title="Midnight Sessions">
+                    Midnight Sessions....
+                  </div>
+                </div>
+
+                <!-- Right: LAST RELEASE -->
+                <div class="media-release-column">
+                  <div class="media-title-label">LAST RELEASE</div>
+                  <div class="release-art-wrapper" onclick="simulatePlaySong('Neon Dreams')" title="Play Neon Dreams">
+                    <div class="release-art-sq">
+                      <img src="album covers/download (10).jpg" alt="Neon Dreams" class="release-art-img">
+                      <div class="art-reflection-overlay"></div>
+                    </div>
+                  </div>
+                  <div class="release-title-text" onclick="simulatePlaySong('Neon Dreams')" title="Neon Dreams (Single)">
+                    Neon Dreams (Single....
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 3: ANALYZE APPS -->
+              <div class="media-analyze-section">
+                <div class="media-analyze-header">ANALYZE</div>
+                <div class="analyze-apps-row">
+                  <!-- App 1: IMDb (User Ratings for every release) -->
+                  <button class="analyze-app-tile" onclick="openAnalyzeApp('imdb')" title="Open IMDb User Ratings">
+                    <div class="app-icon-chassis imdb-icon">
+                      <div class="imdb-badge-inner">IMDb</div>
+                      <span class="app-star-pip">★</span>
+                    </div>
+                    <span class="app-tile-name">IMDb</span>
+                  </button>
+
+                  <!-- App 2: SHAWTIFY (Streaming catalog & search) -->
+                  <button class="analyze-app-tile" onclick="openShawtifyApp('you')" title="Open Shawtify Catalog">
+                    <div class="app-icon-chassis shawtify-icon">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1db954" stroke-width="2.5">
+                        <circle cx="12" cy="12" r="10" stroke="#1db954"></circle>
+                        <path d="M8 11.5c3-1 5-1 8 0" stroke="#1db954"></path>
+                        <path d="M7 14.5c4-1 6-1 10 0" stroke="#1db954"></path>
+                        <path d="M9 8.5c2.5-.8 4.5-.8 6 0" stroke="#1db954"></path>
+                      </svg>
+                    </div>
+                    <span class="app-tile-name">SHAWTIFY</span>
+                  </button>
+
+                  <!-- App 3: CRITIQ (Critic reviews & scores) -->
+                  <button class="analyze-app-tile" onclick="openAnalyzeApp('critiq')" title="Open Critiq Reviews">
+                    <div class="app-icon-chassis critiq-icon">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"></polygon>
+                      </svg>
+                    </div>
+                    <span class="app-tile-name">CRITIQ</span>
+                  </button>
+
+                  <!-- App 4: SLANDER (Viral rap community discourse) -->
+                  <button class="analyze-app-tile" onclick="openAnalyzeApp('slander')" title="Open Slander Social Feed">
+                    <div class="app-icon-chassis slander-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
+                      <span class="slander-tag">⚡</span>
+                    </div>
+                    <span class="app-tile-name">SLANDER</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- =========================================================
+                 APP SUBPAGE 1: IMDb USER RATINGS
+                 ========================================================= -->
+            <div class="analyze-subpage-view" id="appView_imdb" style="display: none;">
+              <div class="subpage-topbar">
+                <button class="skeuo-btn app-back-btn" onclick="closeAnalyzeApp()">
+                  &lsaquo; Back to Media
+                </button>
+                <span class="subpage-badge imdb-gold">IMDb RATINGS</span>
+              </div>
+
+              <div class="imdb-ratings-container">
+                <!-- Release 1: Lil Synapse - Neon Dreams -->
+                <div class="imdb-rating-card highlight">
+                  <div class="imdb-card-head">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <img src="album covers/download (10).jpg" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" alt="Neon Dreams">
+                      <div>
+                        <h4>Neon Dreams (Single)</h4>
+                        <p>Lil Synapse &bull; Released 2026</p>
+                      </div>
+                    </div>
+                    <div class="imdb-score-box">
+                      <span class="star-icon">★</span>
+                      <span class="score-val">8.9</span>
+                      <span class="score-max">/10</span>
+                    </div>
+                  </div>
+                  <div class="imdb-meter-bar">
+                    <div class="meter-pos" style="width: 89%;"></div>
+                    <div class="meter-neg" style="width: 11%;"></div>
+                  </div>
+                  <div class="imdb-reviews-quote">
+                    "Peak lo-fi trap execution. The replay value is off the charts." &mdash; <span style="color: #94a3b8;">User @TrapVibes</span>
+                  </div>
+                </div>
+
+                <!-- Release 2: Lil Synapse - Midnight Sessions -->
+                <div class="imdb-rating-card">
+                  <div class="imdb-card-head">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <img src="album covers/Music artwork for Frank Ocean - _.jpg" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" alt="Midnight Sessions">
+                      <div>
+                        <h4>Midnight Sessions (Album)</h4>
+                        <p>Lil Synapse &bull; Released 2025</p>
+                      </div>
+                    </div>
+                    <div class="imdb-score-box">
+                      <span class="star-icon">★</span>
+                      <span class="score-val">8.4</span>
+                      <span class="score-max">/10</span>
+                    </div>
+                  </div>
+                  <div class="imdb-meter-bar">
+                    <div class="meter-pos" style="width: 84%;"></div>
+                    <div class="meter-neg" style="width: 16%;"></div>
+                  </div>
+                  <div class="imdb-reviews-quote">
+                    "Diverse production palette with incredible emotional resonance." &mdash; <span style="color: #94a3b8;">User @Audiophile808</span>
+                  </div>
+                </div>
+
+                <!-- Release 3: Drakeo V - Midnight Dynasty -->
+                <div class="imdb-rating-card">
+                  <div class="imdb-card-head">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <img src="album covers/Tyler Durden.jpg" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" alt="Midnight Dynasty">
+                      <div>
+                        <h4>Midnight Dynasty (Album)</h4>
+                        <p>Drakeo V &bull; Released 2026</p>
+                      </div>
+                    </div>
+                    <div class="imdb-score-box">
+                      <span class="star-icon">★</span>
+                      <span class="score-val">8.1</span>
+                      <span class="score-max">/10</span>
+                    </div>
+                  </div>
+                  <div class="imdb-meter-bar">
+                    <div class="meter-pos" style="width: 81%;"></div>
+                    <div class="meter-neg" style="width: 19%;"></div>
+                  </div>
+                  <div class="imdb-reviews-quote">
+                    "Heavy basslines throughout, though second half feels repetitive." &mdash; <span style="color: #94a3b8;">User @DrillWatcher</span>
+                  </div>
+                </div>
+
+                <!-- Release 4: SZAria - Velvet Waves -->
+                <div class="imdb-rating-card">
+                  <div class="imdb-card-head">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <img src="album covers/download (2).jpg" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" alt="Velvet Waves">
+                      <div>
+                        <h4>Velvet Waves (Single)</h4>
+                        <p>SZAria &bull; Released 2026</p>
+                      </div>
+                    </div>
+                    <div class="imdb-score-box">
+                      <span class="star-icon">★</span>
+                      <span class="score-val">9.3</span>
+                      <span class="score-max">/10</span>
+                    </div>
+                  </div>
+                  <div class="imdb-meter-bar">
+                    <div class="meter-pos" style="width: 93%;"></div>
+                    <div class="meter-neg" style="width: 7%;"></div>
+                  </div>
+                  <div class="imdb-reviews-quote">
+                    "Pure vocal perfection. Grammy nomination locked." &mdash; <span style="color: #94a3b8;">User @SoulCritique</span>
+                  </div>
+                </div>
+
+                <!-- Release 5: Kenny Knox - Concrete Garden -->
+                <div class="imdb-rating-card">
+                  <div class="imdb-card-head">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <img src="album covers/download (4).jpg" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" alt="Concrete Garden">
+                      <div>
+                        <h4>Concrete Garden (Album)</h4>
+                        <p>Kenny Knox &bull; Released 2026</p>
+                      </div>
+                    </div>
+                    <div class="imdb-score-box">
+                      <span class="star-icon">★</span>
+                      <span class="score-val">8.6</span>
+                      <span class="score-max">/10</span>
+                    </div>
+                  </div>
+                  <div class="imdb-meter-bar">
+                    <div class="meter-pos" style="width: 86%;"></div>
+                    <div class="meter-neg" style="width: 14%;"></div>
+                  </div>
+                  <div class="imdb-reviews-quote">
+                    "Masterclass in lyricism and vintage boom-bap rhythm." &mdash; <span style="color: #94a3b8;">User @OldSchoolHead</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+<!-- =========================================================
+                 APP SUBPAGE 3: CRITIQ (CRITIC REVIEWS)
+                 ========================================================= -->
+            <div class="analyze-subpage-view" id="appView_critiq" style="display: none;">
+              <div class="subpage-topbar">
+                <button class="skeuo-btn app-back-btn" onclick="closeAnalyzeApp()">
+                  &lsaquo; Back to Media
+                </button>
+                <span class="subpage-badge critiq-coral">CRITIQ EDITORIAL</span>
+              </div>
+
+              <!-- Critic Filter Tabs -->
+              <div class="critic-filters">
+                <button class="critic-filter-btn active" onclick="filterCriticReviews('all', this)">All Releases</button>
+                <button class="critic-filter-btn" onclick="filterCriticReviews('yours', this)">Your Catalog</button>
+                <button class="critic-filter-btn" onclick="filterCriticReviews('industry', this)">Industry Drops</button>
+              </div>
+
+              <!-- Critic Cards Stream -->
+              <div class="critic-cards-stream">
+                <!-- Review 1: Lil Synapse -->
+                <div class="critic-card" data-catalog="yours">
+                  <div class="critic-card-header">
+                    <div>
+                      <div class="critic-outlet">PITCHFORK REVIEW</div>
+                      <div class="critic-song-title">"Neon Dreams" &bull; Lil Synapse</div>
+                    </div>
+                    <div class="critic-score-badge score-high">8.6</div>
+                  </div>
+                  <p class="critic-snippet">
+                    "A moody masterpiece that merges claustrophobic basslines with a soaring, vulnerable hook. Synapse proves independent hip-hop still commands artistic originality."
+                  </p>
+                  <div class="critic-tags-row">
+                    <span class="critic-tag-pill pro">+ Melodic Flow</span>
+                    <span class="critic-tag-pill pro">+ Punchy 808s</span>
+                  </div>
+                </div>
+
+                <!-- Review 2: Drakeo V -->
+                <div class="critic-card" data-catalog="industry">
+                  <div class="critic-card-header">
+                    <div>
+                      <div class="critic-outlet" style="color: var(--c-navy);">THE NEEDLE DROP</div>
+                      <div class="critic-song-title">"Midnight Dynasty" &bull; Drakeo V</div>
+                    </div>
+                    <div class="critic-score-badge score-mid">6.4</div>
+                  </div>
+                  <p class="critic-snippet">
+                    "Opulent production cannot completely mask a lack of thematic growth. Drakeo stays firmly in his lane without taking creative chances."
+                  </p>
+                  <div class="critic-tags-row">
+                    <span class="critic-tag-pill pro">+ Crisp Mix</span>
+                    <span class="critic-tag-pill con">- Formulaic Bars</span>
+                  </div>
+                </div>
+
+                <!-- Review 3: SZAria -->
+                <div class="critic-card" data-catalog="industry">
+                  <div class="critic-card-header">
+                    <div>
+                      <div class="critic-outlet" style="color: var(--c-teal);">ROLLING STONE</div>
+                      <div class="critic-song-title">"Velvet Waves" &bull; SZAria</div>
+                    </div>
+                    <div class="critic-score-badge score-high">9.1</div>
+                  </div>
+                  <p class="critic-snippet">
+                    "Hypnotic, ethereal R&B with immaculate layered vocal harmonies that cement SZAria as a generational standard bearer."
+                  </p>
+                  <div class="critic-tags-row">
+                    <span class="critic-tag-pill pro">+ Vocal Range</span>
+                    <span class="critic-tag-pill pro">+ Lush Reverb</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- =========================================================
+                 APP SUBPAGE 4: SLANDER (VIRAL RAP COMMUNITY FEED)
+                 ========================================================= -->
+            <div class="analyze-subpage-view" id="appView_slander" style="display: none;">
+              <div class="subpage-topbar">
+                <button class="skeuo-btn app-back-btn" onclick="closeAnalyzeApp()">
+                  &lsaquo; Back to Media
+                </button>
+                <span class="subpage-badge slander-dark">SLANDER FEED</span>
+              </div>
+
+              <!-- Slander Posts Feed -->
+              <div class="slander-posts-stream">
+                <!-- Post 1 -->
+                <div class="tweet-card">
+                  <div class="tweet-header">
+                    <div class="tweet-avatar">LS</div>
+                    <div class="tweet-author">
+                      <div class="tweet-name">
+                        Lil Synapse 
+                        <svg class="verified" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                      </div>
+                      <div class="tweet-handle">@lilsynapse &bull; 2h</div>
+                    </div>
+                  </div>
+                  <div class="tweet-body">
+                    124 MILLION streams on Neon Dreams independently?! y'all changed my entire life. studio sessions this weekend gonna be legendary 💿🕊️ <span class="hashtag">#RapSim</span> <span class="hashtag">#NeonDreams</span>
+                  </div>
+                  <div class="tweet-actions">
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">💬 1,420</button>
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">🔁 8,912</button>
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">❤️ 34.2K</button>
+                    <button class="tweet-action-btn" onclick="showToast('Link copied to clipboard')">🔗 Share</button>
+                  </div>
+                </div>
+
+                <!-- Post 2 -->
+                <div class="tweet-card">
+                  <div class="tweet-header">
+                    <div class="tweet-avatar" style="background: var(--mat-metal-teal); border-color: #1b3648;">DV</div>
+                    <div class="tweet-author">
+                      <div class="tweet-name">
+                        Drakeo V 
+                        <svg class="verified" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                      </div>
+                      <div class="tweet-handle">@drakeov &bull; 5h</div>
+                    </div>
+                  </div>
+                  <div class="tweet-body">
+                    Everybody talking about billboard numbers like they won't be forgotten in 2 months. Make classics or make noise. Pick one.
+                  </div>
+                  <div class="tweet-actions">
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">💬 3,890</button>
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">🔁 14.5K</button>
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">❤️ 68.1K</button>
+                    <button class="tweet-action-btn" onclick="showToast('Link copied to clipboard')">🔗 Share</button>
+                  </div>
+                </div>
+
+                <!-- Post 3 -->
+                <div class="tweet-card">
+                  <div class="tweet-header">
+                    <div class="tweet-avatar" style="background: var(--c-coral); border-color: #8b3435;">RR</div>
+                    <div class="tweet-author">
+                      <div class="tweet-name">RapRadar News</div>
+                      <div class="tweet-handle">@RapRadar &bull; 7h</div>
+                    </div>
+                  </div>
+                  <div class="tweet-body">
+                    📊 Hot 100 projections update: <span class="mention">@lilsynapse</span> "Neon Dreams" projected to climb to #2 next chart tracking cycle following TikTok trend explosion.
+                  </div>
+                  <div class="tweet-actions">
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">💬 840</button>
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">🔁 4,210</button>
+                    <button class="tweet-action-btn" onclick="likeTweet(this)">❤️ 19.4K</button>
+                    <button class="tweet-action-btn" onclick="showToast('Link copied to clipboard')">🔗 Share</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- =========================================================
+               TAB 3: STUDIO (PLACEHOLDER)
+               <!-- =========================================================
+                TAB 3: STUDIO & PRODUCTION CONSOLE
+                ========================================================= -->
+           <div class="app-screen" id="screenStudio">
+             
+             <!-- STUDIO MAIN HUB VIEW -->
+             <div class="studio-hub-container" id="studioMainHub">
+               
+               <!-- SECTION 1: CATALOGUE CARD (RECENTLY CREATED UNRELEASED TRACKS) -->
+               <div class="studio-catalogue-box" onclick="openStudioCatalogueTab()" title="Open Complete Artist Catalogue (Songs, Beats, Projects)">
+                 <div class="catalogue-head">
+                   <div class="catalogue-head-left">
+                     <span class="chassis-screw mini"></span>
+                     <span class="catalogue-title">CATALOGUE</span>
+                   </div>
+                   <div class="catalogue-head-right">
+                     <span class="catalogue-all-link">ALL &rsaquo;</span>
+                     <span class="chassis-screw mini"></span>
+                   </div>
+                 </div>
+
+                 <div class="catalogue-table-header">
+                   <span class="cat-col-num">N.</span>
+                   <span class="cat-col-title">TITLE</span>
+                   <span class="cat-col-quality">Q</span>
+                 </div>
+
+                 <div class="catalogue-list">
+                   <!-- Row 1 -->
+                   <div class="catalogue-row">
+                     <span class="cat-cell-num">1</span>
+                     <div class="cat-cell-title-box">
+                       <span class="cat-row-name">LATE NIGHT IN SHIBUYA</span>
+                     </div>
+                     <div class="cat-cell-quality">
+                       <span class="quality-badge q-mid">4.9</span>
+                     </div>
+                   </div>
+
+                   <!-- Row 2 -->
+                   <div class="catalogue-row">
+                     <span class="cat-cell-num">2</span>
+                     <div class="cat-cell-title-box">
+                       <span class="cat-row-name">VANDALIZED HEART</span>
+                       <span class="cat-row-sub">FT. DON TOLIVER</span>
+                     </div>
+                     <div class="cat-cell-quality">
+                       <span class="quality-badge q-good">6.7</span>
+                     </div>
+                   </div>
+
+                   <!-- Row 3 -->
+                   <div class="catalogue-row">
+                     <span class="cat-cell-num">3</span>
+                     <div class="cat-cell-title-box">
+                       <span class="cat-row-name">CHROME 808S &amp; HEARTBREAK</span>
+                     </div>
+                     <div class="cat-cell-quality">
+                       <span class="quality-badge q-high">8.0</span>
+                     </div>
+                   </div>
+
+                   <!-- Row 4 -->
+                   <div class="catalogue-row">
+                     <span class="cat-cell-num">4</span>
+                     <div class="cat-cell-title-box">
+                       <span class="cat-row-name">NEON DREAMS</span>
+                       <span class="cat-row-sub">FT. TRAVIS SCOTT</span>
+                     </div>
+                     <div class="cat-cell-quality">
+                       <span class="quality-badge q-good">7.4</span>
+                     </div>
+                   </div>
+
+                   <!-- Row 5 -->
+                   <div class="catalogue-row">
+                     <span class="cat-cell-num">5</span>
+                     <div class="cat-cell-title-box">
+                       <span class="cat-row-name">CHROME HEART BOULEVARD</span>
+                     </div>
+                     <div class="cat-cell-quality">
+                       <span class="quality-badge q-high">9.1</span>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+               <!-- SECTION 2: CREATE & RELEASE BUTTONS (SIDE-BY-SIDE PHYSICAL PUNCH KEYS) -->
+               <div class="studio-actions-row">
+                 <button class="skeuo-btn skeuo-btn-studio-action btn-studio-create" onclick="openStudioCreateTab()" title="Record Song, Produce Beat, or Start Album Draft">
+                   <div class="studio-btn-icon-box">
+                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                       <circle cx="12" cy="12" r="10"></circle>
+                       <line x1="12" y1="8" x2="12" y2="16"></line>
+                       <line x1="8" y1="12" x2="16" y2="12"></line>
+                     </svg>
+                   </div>
+                   <span class="studio-btn-txt">CREATE</span>
+                 </button>
+
+                 <button class="skeuo-btn skeuo-btn-coral skeuo-btn-studio-action btn-studio-release" onclick="openStudioReleaseTab()" title="Release Single, EP, or Full Album">
+                   <div class="studio-btn-icon-box">
+                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                       <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                       <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                       <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                       <path d="M12 9v-5s3.03.55 4 2c1.08 1.62 0 5 0 5"></path>
+                     </svg>
+                   </div>
+                   <span class="studio-btn-txt">RELEASE</span>
+                 </button>
+               </div>
+
+               <!-- SECTION 3: BOTTOM DUAL-COLUMN GRID (LEFT: FEAT REQ + PROMOTION, RIGHT: SKILLS) -->
+               <div class="studio-bottom-grid">
+                 
+                 <!-- Left Column: Feat Req & Promotion -->
+                 <div class="studio-left-column">
+                   
+                   <!-- Button 1: FEAT. REQUESTS -->
+                   <button class="studio-sub-btn feat-btn" onclick="openFeatRequestsTab()" title="Manage Inbound & Outbound Feature Requests">
+                     <div class="sub-btn-header">
+                       <div class="sub-btn-icon">
+                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                           <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                           <circle cx="9" cy="7" r="4"></circle>
+                           <line x1="19" y1="8" x2="19" y2="14"></line>
+                           <line x1="22" y1="11" x2="16" y2="11"></line>
+                         </svg>
+                       </div>
+                       <span class="sub-btn-badge">3 PENDING</span>
+                     </div>
+                     <div class="sub-btn-body">
+                       <div class="sub-btn-title">FEAT. REQUESTS</div>
+                     </div>
+                     <div class="sub-btn-foot">
+                       <span><strong>2</strong> INBOUND</span>
+                       <span><strong>1</strong> OUTBOUND</span>
+                     </div>
+                   </button>
+
+                   <!-- Button 2: PROMOTION -->
+                   <button class="studio-sub-btn promo-btn" onclick="openStudioPromotionTab()" title="Manage Promotion &amp; Merchandising">
+                     <div class="sub-btn-header">
+                       <div class="sub-btn-icon promo-color">
+                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                           <circle cx="12" cy="12" r="10"></circle>
+                           <circle cx="12" cy="12" r="3"></circle>
+                           <path d="m4.93 4.93 4.24 4.24"></path>
+                           <path d="m14.83 14.83 4.24 4.24"></path>
+                         </svg>
+                       </div>
+                     </div>
+                     <div class="sub-btn-body">
+                       <div class="sub-btn-title">PROMOTION</div>
+                     </div>
+                   </button>
+
+                 </div>
+
+                 <!-- Right Column: SKILLS SECTION (INLINE VISUAL LEVEL METERS) -->
+                 <div class="studio-skills-module" onclick="openStudioSkillsTab()" style="cursor: pointer;" title="Open Skills & Studio Console">
+                   <div class="skills-module-header">
+                     <div style="display: flex; align-items: center; gap: 5px;">
+                       <span class="chassis-screw micro"></span>
+                       <span class="skills-title">SKILLS</span>
+                     </div>
+                     <div style="display: flex; align-items: center; gap: 5px;">
+                       <div class="skills-status-led" title="Hardware Console Active"></div>
+                     </div>
+                   </div>
+
+                   <div class="skills-list">
+                     <!-- Skill 1: Lyrics -->
+                     <div class="skill-meter-block">
+                       <div class="skill-meter-label-row">
+                         <span class="skill-name">LYRICS</span>
+                         <span class="skill-val">88<small>/100</small></span>
+                       </div>
+                       <div class="skill-bar-trough">
+                         <div class="skill-bar-fill fill-lyrics" style="width: 88%;"></div>
+                         <div class="skill-bar-leds">
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-amber"></span>
+                           <span class="meter-led active-coral"></span>
+                         </div>
+                       </div>
+                     </div>
+
+                     <!-- Skill 2: Vocals -->
+                     <div class="skill-meter-block">
+                       <div class="skill-meter-label-row">
+                         <span class="skill-name">VOCALS</span>
+                         <span class="skill-val">74<small>/100</small></span>
+                       </div>
+                       <div class="skill-bar-trough">
+                         <div class="skill-bar-fill fill-vocals" style="width: 74%;"></div>
+                         <div class="skill-bar-leds">
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-amber"></span>
+                           <span class="meter-led"></span>
+                         </div>
+                       </div>
+                     </div>
+
+                     <!-- Skill 3: Prod -->
+                     <div class="skill-meter-block">
+                       <div class="skill-meter-label-row">
+                         <span class="skill-name">PROD</span>
+                         <span class="skill-val">92<small>/100</small></span>
+                       </div>
+                       <div class="skill-bar-trough">
+                         <div class="skill-bar-fill fill-prod" style="width: 92%;"></div>
+                         <div class="skill-bar-leds">
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-amber"></span>
+                           <span class="meter-led active-coral"></span>
+                         </div>
+                       </div>
+                     </div>
+
+                     <!-- Skill 4: Mix/Master -->
+                     <div class="skill-meter-block">
+                       <div class="skill-meter-label-row">
+                         <span class="skill-name">MIX/MASTER</span>
+                         <span class="skill-val">68<small>/100</small></span>
+                       </div>
+                       <div class="skill-bar-trough">
+                         <div class="skill-bar-fill fill-mix" style="width: 68%;"></div>
+                         <div class="skill-bar-leds">
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-green"></span>
+                           <span class="meter-led active-amber"></span>
+                           <span class="meter-led"></span>
+                           <span class="meter-led"></span>
+                         </div>
+                       </div>
+                     </div>
+
+                     <!-- Console Master Foot -->
+                     <div class="skills-console-foot">
+                       <div class="skills-foot-label">
+                         <span>CONSOLE TIER</span>
+                         <strong>MASTER PRODUCER</strong>
+                       </div>
+                       <div class="skills-foot-pips">
+                         <span class="tier-pip active"></span>
+                         <span class="tier-pip active"></span>
+                         <span class="tier-pip active"></span>
+                         <span class="tier-pip active"></span>
+                         <span class="tier-pip"></span>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+
+               </div>
+
+             </div>
+
+              <!-- =========================================================
+                  STUDIO SUBPAGE 2: FEATURE REQUESTS (INBOUND & OUTBOUND)
+                  ========================================================= -->
+             <div class="analyze-subpage-view feat-subpage-deck" id="studioSubpage_feat-req" style="display: none;">
+               <!-- Fixed / Locked Header: back button, badge, main tabs & outbound sub-tabs -->
+               <div class="feat-req-locked-header" id="featReqLockedHeader">
+                 <div class="subpage-topbar feat-topbar">
+                   <button class="skeuo-btn app-back-btn" onclick="closeStudioSubpage()">
+                     &lsaquo; Back to Studio
+                   </button>
+                   <span class="subpage-badge feat-top-badge">FEAT. REQUESTS</span>
+                 </div>
+
+                 <!-- Primary Inbound / Outbound Tabs (Always Locked) -->
+                 <div class="feat-primary-nav" id="featPrimaryNav">
+                   <button class="feat-main-tab active" id="featTabInbound" onclick="switchFeatPrimaryTab('inbound')">
+                     <svg class="feat-plane-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                       <!-- Flight Landing Icon for Inbound -->
+                       <path d="M2.5,19H21.5V21H2.5V19M9.68,13.27L14.03,14.43L19.34,15.85C20.14,16.06 20.96,15.59 21.18,14.79C21.39,14 20.92,13.17 20.12,12.95L14.81,11.53L12.05,2.5L10.12,2V10.28L5.15,8.95L4.22,6.63L2.77,6.24V11.41L4.37,11.84L9.68,13.27Z"/>
+                     </svg>
+                     INBOUND
+                   </button>
+                   <button class="feat-main-tab" id="featTabOutbound" onclick="switchFeatPrimaryTab('outbound')">
+                     <svg class="feat-plane-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                       <!-- Flight Takeoff Icon for Outbound -->
+                       <path d="M2.5,19H21.5V21H2.5V19M22.07,9.64C21.86,8.84 21.03,8.36 20.23,8.58L14.92,10L8,3.57L6.09,4.08L10.23,11.25L5.26,12.58L3.29,11.04L1.84,11.43L3.66,14.59L4.43,15.92L6.03,15.5L11.34,14.07L15.69,12.91L21,11.5C21.81,11.26 22.28,10.44 22.07,9.64Z"/>
+                     </svg>
+                     OUTBOUND
+                   </button>
+                 </div>
+
+                 <!-- Secondary Outbound Sub-Navigation: WAITING | + | RECIEVED (Locked) -->
+                 <div class="feat-outbound-subnav" id="featOutboundSubNav" style="display: none;">
+                   <button class="feat-sub-tab" id="featSubWaiting" onclick="switchOutboundSubTab('waiting')">WAITING</button>
+                   <button class="feat-plus-btn" id="featBtnNewOffer" onclick="openNewFeatureOfferModal()" title="Send New Feature Request on Unreleased Song">
+                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round">
+                       <line x1="12" y1="5" x2="12" y2="19"></line>
+                       <line x1="5" y1="12" x2="19" y2="12"></line>
+                     </svg>
+                   </button>
+                   <button class="feat-sub-tab active" id="featSubRecieved" onclick="switchOutboundSubTab('recieved')">RECIEVED</button>
+                 </div>
+               </div>
+
+               <!-- Scrollable Body Container for Requests -->
+               <div class="feat-req-scroll-body" id="featReqScrollBody">
+                 <!-- Populated dynamically by app.js -->
+               </div>
+             </div>
+
+             <!-- =========================================================
+                  STUDIO SUBPAGE 3: PROMOTION & MERCHANDISING
+                  ========================================================= -->
+             <div class="analyze-subpage-view promo-subpage-deck" id="studioSubpage_promotion" style="display: none;">
+               <!-- Topbar: Back to Studio & Crimson Badge -->
+               <div class="subpage-topbar promo-topbar">
+                 <button class="skeuo-btn app-back-btn" onclick="closeStudioSubpage()">
+                   &lsaquo; Back to Studio
+                 </button>
+                 <span class="subpage-badge promo-badge">PROMOTION & MERCH</span>
+               </div>
+
+               <!-- 5 Promotion Buttons Layout matching user reference design -->
+                <!-- 5 Promotion Buttons Layout with Images & Title Boards -->
+                <div class="promo-buttons-container">
+                  
+                  <!-- 1. INTERVIEWS (The Tonight Show Set with Title Board) -->
+                  <button class="promo-btn-interviews" onclick="openPromoInterviews()" title="Interviews & Media Press">
+                    <div class="promo-btn-bg promo-bg-interviews"></div>
+                    <div class="promo-title-board board-interviews">
+                      <span class="promo-board-txt">INTERVIEWS</span>
+                    </div>
+                  </button>
+
+                  <!-- 2. Mid Row: MERCH (Clothing Store) & PHYSICAL COPIES (CDs Disc with Center Hole) -->
+                  <div class="promo-mid-row">
+                    <!-- MERCH Button -->
+                    <button class="promo-btn-merch" onclick="openPromoMerch()" title="Merchandise & Drops">
+                      <div class="promo-btn-bg promo-bg-merch"></div>
+                      <div class="promo-title-board board-merch">
+                        <span class="promo-board-txt">MERCH</span>
+                      </div>
+                    </button>
+
+                    <!-- PHYSICAL COPIES (CDs with Real Center Hole & Board) -->
+                    <button class="promo-btn-vinyl" onclick="openPromoPhysicalCopies()" title="Physical Copies (CDs, Vinyl, Cassettes)">
+                      <div class="promo-btn-bg promo-bg-cds"></div>
+                      <div class="vinyl-grooves-overlay"></div>
+                      <div class="vinyl-specular-sheen"></div>
+                      
+                      <!-- Center Spindle Hole -->
+                      <div class="vinyl-center-spindle">
+                        <div class="vinyl-spindle-hole" title="Spindle Hole"></div>
+                      </div>
+
+                      <!-- Bottom Small Title Board -->
+                      <div class="promo-title-board board-cds">
+                        <span class="promo-board-txt">PHYSICAL COPIES</span>
+                      </div>
+                    </button>
+                  </div>
+
+                  <!-- 3. RUN ADS (Times Square Billboards with Title Board) -->
+                  <button class="promo-btn-ads" onclick="openPromoRunAds()" title="Run Ads & Billboard Campaigns">
+                    <div class="promo-btn-bg promo-bg-ads"></div>
+                    <div class="promo-title-board board-ads">
+                      <span class="promo-board-txt">RUN ADS</span>
+                    </div>
+                  </button>
+
+                  <!-- 4. LISTENING PARTIES (Donda Listening Party Stadium House with Title Board) -->
+                  <div class="promo-bottom-row">
+                    <button class="promo-btn-listening" onclick="openPromoListeningParties()" title="Album Listening Parties & Popups">
+                      <div class="promo-btn-bg promo-bg-listening"></div>
+                      <div class="promo-title-board board-listening">
+                        <span class="promo-board-txt">LISTENING PARTIES</span>
+                      </div>
+                    </button>
+                  </div>
+
+                </div>
+
+             </div>
+
+              <!-- =========================================================
+                   STUDIO SUBPAGE 4: SKILLS & MASTERY CONSOLE
+                   ========================================================= -->
+              <div class="analyze-subpage-view skills-subpage-deck" id="studioSubpage_skills" style="display: none;">
+                <!-- Topbar: Back to Studio & Cyan Badge -->
+                <div class="subpage-topbar skills-topbar">
+                  <button class="skeuo-btn app-back-btn" onclick="closeStudioSubpage()" title="Return to Studio Hub">
+                    &lsaquo; Back to Studio
+                  </button>
+                  <span class="subpage-badge skills-badge">SKILLS &amp; MASTERY</span>
+                </div>
+
+                <!-- 1. TOP CARD: PRODUCTION SKILLS (INLINE HORIZONTAL LEVEL METERS) -->
+                <div class="skills-deck-card skills-top-card">
+                  <div class="skills-card-header">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <span class="chassis-screw micro"></span>
+                      <span class="skills-card-title">SKILLS</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <div class="skills-status-led" title="Hardware Active"></div>
+                    </div>
+                  </div>
+
+                  <div class="skills-deck-meters">
+                    <!-- Row 1: Lyrics -->
+                    <div class="skills-deck-meter-row">
+                      <div class="skills-deck-label-row">
+                        <span class="skills-deck-name">LYRICS</span>
+                        <span class="skills-deck-val" id="skillsDeckValLyrics">88<small>/100</small></span>
+                      </div>
+                      <div class="skills-deck-trough">
+                        <div class="skills-deck-fill fill-lyrics" id="skillsDeckFillLyrics" style="width: 88%;"></div>
+                        <div class="skills-deck-led-track">
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-amber"></span>
+                          <span class="meter-led active-coral"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Row 2: Vocals -->
+                    <div class="skills-deck-meter-row">
+                      <div class="skills-deck-label-row">
+                        <span class="skills-deck-name">VOCALS</span>
+                        <span class="skills-deck-val" id="skillsDeckValVocals">74<small>/100</small></span>
+                      </div>
+                      <div class="skills-deck-trough">
+                        <div class="skills-deck-fill fill-vocals" id="skillsDeckFillVocals" style="width: 74%;"></div>
+                        <div class="skills-deck-led-track">
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-amber"></span>
+                          <span class="meter-led"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Row 3: Prod -->
+                    <div class="skills-deck-meter-row">
+                      <div class="skills-deck-label-row">
+                        <span class="skills-deck-name">PROD</span>
+                        <span class="skills-deck-val" id="skillsDeckValProd">92<small>/100</small></span>
+                      </div>
+                      <div class="skills-deck-trough">
+                        <div class="skills-deck-fill fill-prod" id="skillsDeckFillProd" style="width: 92%;"></div>
+                        <div class="skills-deck-led-track">
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-amber"></span>
+                          <span class="meter-led active-coral"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Row 4: Mix/Master -->
+                    <div class="skills-deck-meter-row">
+                      <div class="skills-deck-label-row">
+                        <span class="skills-deck-name">MIX/MASTER</span>
+                        <span class="skills-deck-val" id="skillsDeckValMix">68<small>/100</small></span>
+                      </div>
+                      <div class="skills-deck-trough">
+                        <div class="skills-deck-fill fill-mix" id="skillsDeckFillMix" style="width: 68%;"></div>
+                        <div class="skills-deck-led-track">
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-green"></span>
+                          <span class="meter-led active-amber"></span>
+                          <span class="meter-led"></span>
+                          <span class="meter-led"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. MIDDLE SECTION: DUAL COLUMN (GENRE SKILLS & 2 BEAT MACHINE PADS) -->
+                <div class="skills-mid-deck-row">
+                  <!-- LEFT COLUMN: GENRE SKILLS WITH 4 VERTICAL EQUALIZER TOWERS -->
+                  <div class="genre-skills-card">
+                    <div class="genre-card-header">
+                      <div class="skills-status-led" title="Genre Engine Online"></div>
+                      <span class="chassis-screw micro"></span>
+                    </div>
+
+                    <!-- 4 Vertical Towers Container -->
+                    <div class="genre-towers-matrix">
+                      <!-- Tower 1: HIP HOP -->
+                      <div class="genre-tower-channel">
+                        <div class="genre-tower-val-head">
+                          <span class="tower-num" id="towerNumHipHop">88</span><span class="tower-base">/100</span>
+                        </div>
+                        <div class="genre-tower-slot">
+                          <div class="genre-tower-fill fill-hiphop" id="towerFillHipHop" style="height: 88%;"></div>
+                          <span class="genre-tower-txt">HIP HOP</span>
+                        </div>
+                      </div>
+
+                      <!-- Tower 2: POP -->
+                      <div class="genre-tower-channel">
+                        <div class="genre-tower-val-head">
+                          <span class="tower-num" id="towerNumPop">74</span><span class="tower-base">/100</span>
+                        </div>
+                        <div class="genre-tower-slot">
+                          <div class="genre-tower-fill fill-pop" id="towerFillPop" style="height: 74%;"></div>
+                          <span class="genre-tower-txt">POP</span>
+                        </div>
+                      </div>
+
+                      <!-- Tower 3: JAZZ -->
+                      <div class="genre-tower-channel">
+                        <div class="genre-tower-val-head">
+                          <span class="tower-num" id="towerNumJazz">92</span><span class="tower-base">/100</span>
+                        </div>
+                        <div class="genre-tower-slot">
+                          <div class="genre-tower-fill fill-jazz" id="towerFillJazz" style="height: 92%;"></div>
+                          <span class="genre-tower-txt">JAZZ</span>
+                        </div>
+                      </div>
+
+                      <!-- Tower 4: ROCK -->
+                      <div class="genre-tower-channel">
+                        <div class="genre-tower-val-head">
+                          <span class="tower-num" id="towerNumRock">68</span><span class="tower-base">/100</span>
+                        </div>
+                        <div class="genre-tower-slot">
+                          <div class="genre-tower-fill fill-rock" id="towerFillRock" style="height: 68%;"></div>
+                          <span class="genre-tower-txt">ROCK</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Genre Card Title Footer -->
+                    <div class="genre-card-footer">
+                      <span class="genre-card-title">GENRE SKILLS</span>
+                    </div>
+                  </div>
+
+                  <!-- RIGHT COLUMN: 2 WORLDE ORCA PAD16 SOFT SILICONE PADS -->
+                  <div class="beat-pads-stack">
+                    <!-- Pad 1: IMPROVE SKILLS (Soft Pastel Cyan Silicone Pad) -->
+                    <div class="beat-pad-socket">
+                      <button class="beat-machine-pad pad-soft-cyan" onclick="openImproveSkillsModal()" title="Improve Core Skills">
+                        <span class="pad-action-txt">IMPROVE<br>SKILLS</span>
+                      </button>
+                    </div>
+
+                    <!-- Pad 2: UPGRADE STUDIO (Soft Pastel Amber Silicone Pad) -->
+                    <div class="beat-pad-socket">
+                      <button class="beat-machine-pad pad-soft-amber" onclick="openUpgradeStudioModal()" title="Upgrade Studio Hardware">
+                        <span class="pad-action-txt">UPGRADE<br>STUDIO</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. BOTTOM ROW: FULL-WIDTH WORLDE ORCA PAD16 SOFT SILICONE PAD (GENRE COURSES) -->
+                <div class="skills-bottom-deck-row">
+                  <div class="beat-pad-socket socket-wide">
+                    <button class="beat-machine-pad pad-soft-purple pad-wide" onclick="openGenreCoursesModal()" title="Enroll in Genre Masterclasses">
+                      <span class="pad-action-txt-wide">GENRE COURSES</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+           </div>
+
+          <!-- =========================================================
+               TAB: CREATE (COOL PALETTE FULL-PAGE ABSTRACT CONSOLE)
+               ========================================================= -->
+          <div class="app-screen" id="screenCreate">
+            <div class="create-hub-container">
+
+              <!-- Topbar: Back to Studio -->
+              <div class="subpage-topbar" style="margin-bottom: 6px;">
+                <button class="skeuo-btn app-back-btn" onclick="switchTab('studio')" title="Return to Studio">
+                  &lsaquo; Back to Studio
+                </button>
+                <span class="subpage-badge">CREATE</span>
+              </div>
+
+              <!-- Main Abstract Buttons Suite (Occupies Whole Page) -->
+              <div class="create-abstract-grid">
+
+                <!-- TOP SECTION: THE 4 CREATION BUTTONS (ASYMMETRIC BENTO) -->
+                <div class="create-top-quad">
+                  
+                  <!-- Left: NEW SONG (Tall Hero Button) -->
+                  <button class="create-simple-btn btn-create-song btn-tall-hero" onclick="openCreateWorkflow('song')" title="Record New Song">
+                    <div class="create-btn-icon-box">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="22"/>
+                      </svg>
+                    </div>
+                    <span class="create-btn-txt">NEW SONG</span>
+                  </button>
+
+                  <!-- Right: Stack of NEW PROJECT + NEW BEAT -->
+                  <div class="create-top-right-stack">
+                    <!-- NEW PROJECT -->
+                    <button class="create-simple-btn btn-create-project" onclick="openCreateWorkflow('project')" title="Start New Project">
+                      <div class="create-btn-icon-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <circle cx="12" cy="12" r="3"/>
+                          <line x1="12" y1="2" x2="12" y2="6"/>
+                          <line x1="12" y1="18" x2="12" y2="22"/>
+                        </svg>
+                      </div>
+                      <span class="create-btn-txt">NEW PROJECT</span>
+                    </button>
+
+                    <!-- NEW BEAT -->
+                    <button class="create-simple-btn btn-create-beat" onclick="openCreateWorkflow('beat')" title="Produce New Beat">
+                      <div class="create-btn-icon-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                        </svg>
+                      </div>
+                      <span class="create-btn-txt">NEW BEAT</span>
+                    </button>
+                  </div>
+
+                </div>
+
+                <!-- 4th Creation Button: NEW MUSIC VIDEO (Wide Bar) -->
+                <button class="create-simple-btn btn-create-video" onclick="openCreateWorkflow('video')" title="Produce New Music Video">
+                  <div class="create-btn-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m22 8-6 4 6 4V8Z"/>
+                      <rect x="2" y="6" width="14" height="12" rx="2" ry="2"/>
+                    </svg>
+                  </div>
+                  <span class="create-btn-txt">NEW MUSIC VIDEO</span>
+                </button>
+
+                <!-- SECTION 2: DELUXE & REMIX (ASYMMETRIC SPLIT ROW) -->
+                <div class="create-duo-row">
+                  <!-- DELUXE -->
+                  <button class="create-simple-btn btn-create-deluxe" onclick="openCreateWorkflow('deluxe')" title="Deluxe Edition">
+                    <div class="create-btn-icon-box">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    </div>
+                    <span class="create-btn-txt">DELUXE</span>
+                  </button>
+
+                  <!-- REMIX -->
+                  <button class="create-simple-btn btn-create-remix" onclick="openCreateWorkflow('remix')" title="Track Remix">
+                    <div class="create-btn-icon-box">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="17 1 21 5 17 9"/>
+                        <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                        <polyline points="7 23 3 19 7 15"/>
+                        <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                      </svg>
+                    </div>
+                    <span class="create-btn-txt">REMIX</span>
+                  </button>
+                </div>
+
+                <!-- SECTION 3: CHANGE DEFAULTS (TACTILE HARDWARE PRESET BAR) -->
+                <button class="create-simple-btn btn-create-defaults" onclick="openCreateWorkflow('defaults')" title="Configure Creation Defaults">
+                  <div class="create-btn-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="4" y1="21" x2="4" y2="14"/>
+                      <line x1="4" y1="10" x2="4" y2="3"/>
+                      <line x1="12" y1="21" x2="12" y2="12"/>
+                      <line x1="12" y1="8" x2="12" y2="3"/>
+                      <line x1="20" y1="21" x2="20" y2="16"/>
+                      <line x1="20" y1="12" x2="20" y2="3"/>
+                      <line x1="1" y1="14" x2="7" y2="14"/>
+                      <line x1="9" y1="8" x2="15" y2="8"/>
+                      <line x1="17" y1="16" x2="23" y2="16"/>
+                    </svg>
+                  </div>
+                  <span class="create-btn-txt">CHANGE DEFAULTS</span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               TAB: RELEASE (SONGS, PROJECTS, MUSIC VIDEOS RELEASER)
+               ========================================================= -->
+          <div class="app-screen" id="screenRelease">
+            <div class="release-hub-container">
+
+              <!-- Topbar: Back to Studio -->
+              <div class="subpage-topbar" style="margin-bottom: 6px;">
+                <button class="skeuo-btn app-back-btn" onclick="switchTab('studio')" title="Return to Studio">
+                  &lsaquo; Back to Studio
+                </button>
+                <span class="subpage-badge">RELEASE</span>
+              </div>
+
+              <!-- Main Chassis: Top 3-Icon Rail + Divider + Bottom Cream Paper Card -->
+              <div class="release-main-chassis">
+                
+                <!-- Top Horizontal Rail: 3 Icon Buttons -->
+                <div class="release-top-rail">
+                  <!-- 1. Song Release (Microphone) - Default Active -->
+                  <button class="release-tab-btn btn-rel-song active" id="relTabBtnSong" onclick="switchReleaseType('song')" title="Release Song">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="22"/>
+                    </svg>
+                  </button>
+
+                  <!-- 2. Project Release (Vinyl / CD) -->
+                  <button class="release-tab-btn btn-rel-project" id="relTabBtnProject" onclick="switchReleaseType('project')" title="Release Project / Album">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <circle cx="12" cy="12" r="3"/>
+                      <line x1="12" y1="2" x2="12" y2="6"/>
+                      <line x1="12" y1="18" x2="12" y2="22"/>
+                    </svg>
+                  </button>
+
+                  <!-- 3. Music Video Release (Camera) -->
+                  <button class="release-tab-btn btn-rel-video" id="relTabBtnVideo" onclick="switchReleaseType('video')" title="Release Music Video">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m22 8-6 4 6 4V8Z"/>
+                      <rect x="2" y="6" width="14" height="12" rx="2" ry="2"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Horizontal Dividing Line -->
+                <div class="release-rail-divider"></div>
+
+                <!-- Bottom Cream Paper Card -->
+                <div class="release-content-card">
+                  <!-- Dynamic Section Header (YOUR SONGS / YOUR PROJECTS / YOUR MUSIC VIDEOS) -->
+                  <div class="release-card-head">
+                    <h3 class="release-card-title" id="releaseCardTitle">YOUR SONGS</h3>
+                    <span class="release-count-badge" id="releaseItemCount">8 UNRELEASED</span>
+                  </div>
+
+                  <!-- Search Box -->
+                  <div class="release-search-wrap">
+                    <svg class="release-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="releaseSearchInput" class="release-search-input" placeholder="Search unreleased songs..." oninput="onReleaseSearchInput(this.value)" autocomplete="off">
+                    <button class="release-search-clear" id="releaseSearchClear" onclick="clearReleaseSearch()" style="display: none;" title="Clear search">&times;</button>
+                  </div>
+
+                  <!-- Scrollable List of Items -->
+                  <div class="release-items-scroll" id="releaseItemsList">
+                    <!-- Populated dynamically by renderReleaseList() -->
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- =========================================================
+               TAB: CATALOGUE (COMPLETE ARTIST CATALOGUE TAB)
+               ========================================================= -->
+          <div class="app-screen" id="screenCatalogue">
+            <div class="cat-hub-container">
+              <!-- Topbar: Back to Studio + Badge -->
+              <div class="subpage-topbar" style="margin-bottom: 6px;">
+                <button class="skeuo-btn app-back-btn" onclick="switchTab('studio')" title="Return to Studio">
+                  &lsaquo; Back to Studio
+                </button>
+                <span class="subpage-badge" style="background: var(--c-navy); color: #fff; border-color: #3b4d7c;">ARTIST CATALOGUE</span>
+              </div>
+
+              <!-- Released / Unreleased Toggle Bar (Physical Switcher) -->
+              <div class="cat-release-toggle-bar">
+                <button class="cat-toggle-btn active" id="catToggleUnreleased" onclick="switchCatalogueReleaseState('unreleased')">
+                  UNRELEASED
+                </button>
+                <div class="cat-toggle-switch-track" id="catToggleTrack" onclick="toggleCatalogueReleaseState()" title="Toggle Released / Unreleased">
+                  <span class="cat-toggle-switch-thumb" id="catToggleThumb"></span>
+                </div>
+                <button class="cat-toggle-btn" id="catToggleReleased" onclick="switchCatalogueReleaseState('released')">
+                  RELEASED
+                </button>
+              </div>
+
+              <!-- Main Chassis: #CE6A6B Terracotta Rose Enclosure -->
+              <div class="cat-main-chassis">
+                
+                <!-- Top Horizontal Rail: 4 Icon Buttons -->
+                <div class="cat-top-rail">
+                  <!-- 1. Songs (Microphone) - Default Active -->
+                  <button class="cat-type-icon-btn btn-cat-song active" id="catTypeBtn_song" onclick="switchCatalogueType('song')" title="Songs">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="22"/>
+                    </svg>
+                  </button>
+
+                  <!-- 2. Projects (Vinyl / CD) -->
+                  <button class="cat-type-icon-btn btn-cat-project" id="catTypeBtn_project" onclick="switchCatalogueType('project')" title="Projects &amp; Albums">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <circle cx="12" cy="12" r="3"/>
+                      <line x1="12" y1="2" x2="12" y2="6"/>
+                      <line x1="12" y1="18" x2="12" y2="22"/>
+                    </svg>
+                  </button>
+
+                  <!-- 3. Music Videos (Camera) -->
+                  <button class="cat-type-icon-btn btn-cat-video" id="catTypeBtn_video" onclick="switchCatalogueType('video')" title="Music Videos">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m22 8-6 4 6 4V8Z"/>
+                      <rect x="2" y="6" width="14" height="12" rx="2" ry="2"/>
+                    </svg>
+                  </button>
+
+                  <!-- 4. Beats (Waveform) -->
+                  <button class="cat-type-icon-btn btn-cat-beat" id="catTypeBtn_beat" onclick="switchCatalogueType('beat')" title="Beats &amp; Instrumentals">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="2" y1="12" x2="2" y2="12"/>
+                      <line x1="6" y1="8" x2="6" y2="16"/>
+                      <line x1="10" y1="4" x2="10" y2="20"/>
+                      <line x1="14" y1="7" x2="14" y2="17"/>
+                      <line x1="18" y1="9" x2="18" y2="15"/>
+                      <line x1="22" y1="12" x2="22" y2="12"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Horizontal Divider Line -->
+                <div class="cat-rail-divider"></div>
+
+                <!-- Warm Cream Paper Card -->
+                <div class="cat-content-card">
+                  <!-- Search Box on top of card -->
+                  <div class="cat-search-wrap">
+                    <svg class="cat-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="catSearchInput" class="cat-search-input" placeholder="Search songs..." oninput="onCatalogueSearchInput(this.value)" autocomplete="off">
+                    <button class="cat-search-clear" id="catSearchClear" onclick="clearCatalogueSearch()" style="display: none;" title="Clear search">&times;</button>
+                  </div>
+
+                  <!-- Section Title Row: YOUR SONGS / YOUR PROJECTS / etc. -->
+                  <div class="cat-card-head">
+                    <h3 class="cat-card-title" id="catCardTitle">YOUR SONGS</h3>
+                    <span class="cat-count-badge" id="catItemCount">5 UNRELEASED</span>
+                  </div>
+
+                  <!-- Scrollable List of Catalogue Items -->
+                  <div class="cat-items-scroll" id="catalogueFullList">
+                    <!-- Populated dynamically via renderCatalogueFull() -->
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Phase 2 Action Inspector Drawer -->
+              <div class="catalogue-action-drawer" id="catalogueActionDrawer" style="display: none;">
+                <div class="action-drawer-head">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <img id="drawerThumb" src="album covers/download (10).jpg" class="drawer-thumb-img" alt="Artwork">
+                    <div>
+                      <h4 id="drawerTitle" class="drawer-title">Late Night in Shibuya</h4>
+                      <span id="drawerType" class="drawer-meta">Unreleased Track &bull; Quality: 4.9/10</span>
+                    </div>
+                  </div>
+                  <button class="drawer-close-btn" onclick="closeCatalogueDrawer()">&times;</button>
+                </div>
+                
+                <!-- Studio Playback Waveform Preview -->
+                <div class="drawer-waveform-box">
+                  <div class="drawer-wave-bars">
+                    <span style="height: 35%;"></span>
+                    <span style="height: 60%;"></span>
+                    <span style="height: 90%;"></span>
+                    <span style="height: 45%;"></span>
+                    <span style="height: 75%;"></span>
+                    <span style="height: 100%;"></span>
+                    <span style="height: 55%;"></span>
+                    <span style="height: 80%;"></span>
+                    <span style="height: 40%;"></span>
+                    <span style="height: 95%;"></span>
+                    <span style="height: 70%;"></span>
+                    <span style="height: 50%;"></span>
+                    <span style="height: 85%;"></span>
+                    <span style="height: 65%;"></span>
+                    <span style="height: 30%;"></span>
+                  </div>
+                  <div class="drawer-wave-info">
+                    <span>AUDIO PREVIEW</span>
+                    <span>0:30 DEMO</span>
+                  </div>
+                </div>
+
+                <!-- Phase 2 Action Buttons Hub -->
+                <div class="drawer-actions-label">STUDIO ACTIONS:</div>
+                <div class="drawer-actions-grid" id="drawerActionsContainer">
+                  <!-- Populated dynamically per item type -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- =========================================================
+               TAB 4: SOCIALS & INDUSTRY APPS
+               ========================================================= -->
+          <div class="app-screen" id="screenSocial">
+            
+            <!-- SOCIAL MAIN HUB: 12 APP ICONS GRID -->
+            <div class="social-hub-container" id="socialMainHub">
+              
+              <!-- Clean Header directly on Hardwood -->
+              <div class="social-topbar">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="chassis-screw micro"></span>
+                  <span class="social-header-title">INDUSTRY APPS &amp; NETWORK</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <span class="led-jewel green small"></span>
+                  <span class="chassis-screw micro"></span>
+                </div>
+              </div>
+
+              <!-- 12 App Icons Grid (4 columns × 3 rows, same 58px × 56px size as Media page) -->
+              <div class="social-apps-grid">
+                
+                <!-- 1. CALENDAR -->
+                <button class="social-app-tile" onclick="openSocialApp('calendar')" title="Release Calendar & Schedule">
+                  <div class="app-icon-chassis calendar-icon">
+                    <div class="cal-top-strip">
+                      <span class="cal-pin"></span>
+                      <span class="cal-pin"></span>
+                    </div>
+                    <span class="cal-date-num" id="socialCalWeekNum">24</span>
+                    <span class="cal-month-lbl">WEEK</span>
+                  </div>
+                  <span class="app-tile-name">CALENDAR</span>
+                </button>
+
+                <!-- 2. NEWS -->
+                <button class="social-app-tile" onclick="openSocialApp('news')" title="Industry News Wire">
+                  <div class="app-icon-chassis news-app-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+                      <path d="M18 14h-8"/>
+                      <path d="M15 18h-5"/>
+                      <path d="M10 6h8v4h-8V6Z"/>
+                    </svg>
+                  </div>
+                  <span class="app-tile-name">NEWS</span>
+                </button>
+
+                <!-- 3. SLANDER -->
+                <button class="social-app-tile" onclick="openSocialApp('slander')" title="Viral Rap Community Feed">
+                  <div class="app-icon-chassis slander-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#ffffff">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    <span class="slander-tag">⚡</span>
+                  </div>
+                  <span class="app-tile-name">SLANDER</span>
+                </button>
+
+                <!-- 4. IMDb -->
+                <button class="social-app-tile" onclick="openSocialApp('imdb')" title="Release Ratings & Reviews">
+                  <div class="app-icon-chassis imdb-icon">
+                    <span class="imdb-badge-inner">IMDb</span>
+                    <span class="app-star-pip">&#9733;</span>
+                  </div>
+                  <span class="app-tile-name">IMDb</span>
+                </button>
+
+                <!-- 5. CRITIQ -->
+                <button class="social-app-tile" onclick="openSocialApp('critiq')" title="Music Critic Reviews">
+                  <div class="app-icon-chassis critiq-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  </div>
+                  <span class="app-tile-name">CRITIQ</span>
+                </button>
+
+                <!-- 6. BEAT STORE -->
+                <button class="social-app-tile" onclick="openSocialApp('beatstore')" title="Online Beat Marketplace">
+                  <div class="app-icon-chassis beatstore-icon">
+                    <div class="mpc-grid-pads">
+                      <span class="mpc-pad active-cyan"></span>
+                      <span class="mpc-pad active-amber"></span>
+                      <span class="mpc-pad active-pink"></span>
+                      <span class="mpc-pad active-cyan"></span>
+                    </div>
+                  </div>
+                  <span class="app-tile-name">BEAT STORE</span>
+                </button>
+
+                <!-- 7. CONCERTS -->
+                <button class="social-app-tile" onclick="openSocialApp('concerts')" title="Tour Bookings & Venues">
+                  <div class="app-icon-chassis concerts-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                      <path d="M13 5v2"/>
+                      <path d="M13 17v2"/>
+                      <path d="M13 11v2"/>
+                    </svg>
+                  </div>
+                  <span class="app-tile-name">CONCERTS</span>
+                </button>
+
+                <!-- 8. MESSENGER -->
+                <button class="social-app-tile" onclick="openSocialApp('messenger')" title="Artist Direct Messages">
+                  <div class="app-icon-chassis messenger-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                    <span class="msg-unread-pip">3</span>
+                  </div>
+                  <span class="app-tile-name">MESSENGER</span>
+                </button>
+
+                <!-- 9. TUMBLE -->
+                <button class="social-app-tile" onclick="openSocialApp('tumble')" title="VIP Artist Matchmaking">
+                  <div class="app-icon-chassis tumble-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span class="tumble-flame-pip">&#128293;</span>
+                  </div>
+                  <span class="app-tile-name">TUMBLE</span>
+                </button>
+
+                <!-- 10. HOT 100 -->
+                <button class="social-app-tile" onclick="openSocialApp('hot100')" title="Official Hot 100 Industry Charts">
+                  <div class="app-icon-chassis hot100-app-icon">
+                    <div class="hot100-logo-box">
+                      <span class="hot100-brand-the">THE</span>
+                      <span class="hot100-brand-hot">HOT</span>
+                      <span class="hot100-brand-100">100</span>
+                    </div>
+                  </div>
+                  <span class="app-tile-name">HOT 100</span>
+                </button>
+
+                <!-- 11. BEEF -->
+                <button class="social-app-tile" onclick="openSocialApp('beef')" title="Industry Feuds & Diss Radar">
+                  <div class="app-icon-chassis beef-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M14.5 17.5 3 6V3h3l11.5 11.5"/>
+                      <path d="m13 19 6 2 2-6-2-2-6 6z"/>
+                      <path d="M9.5 6.5 18 15"/>
+                    </svg>
+                    <span class="beef-skull-pip">&#9760;</span>
+                  </div>
+                  <span class="app-tile-name">BEEF</span>
+                </button>
+
+                <!-- 12. LIVEE -->
+                <button class="social-app-tile" onclick="openSocialApp('livee')" title="Live Stream Fan Broadcast">
+                  <div class="app-icon-chassis livee-icon">
+                    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="m16 16 6 4V4l-6 4"/>
+                      <rect x="2" y="6" width="14" height="12" rx="2"/>
+                    </svg>
+                    <span class="livee-badge-tag">LIVE</span>
+                  </div>
+                  <span class="app-tile-name">LIVEE</span>
+                </button>
+              </div>
+
+              <!-- WEEKLY CALENDAR ITINERARY WIDGET (Skeuomorphic Desk Planner Strip) -->
+              <div class="social-calendar-widget" id="socialCalendarWidget">
+                
+                <!-- Planner Header Bar -->
+                <div class="calendar-widget-header">
+                  <div class="cal-header-left">
+                    <span class="chassis-screw micro"></span>
+                    <span class="cal-widget-title" id="socialCalWidgetTitle">JUNE WEEK 2</span>
+                  </div>
+                  <div class="cal-header-right">
+                    <span class="cal-widget-range" id="socialCalWidgetRange">JUN 12 - 18, YEAR 2</span>
+                    <span class="chassis-screw micro"></span>
+                  </div>
+                </div>
+
+                <!-- 7-Day Skeuomorphic Parchment Strip Card -->
+                <div class="social-calendar-card" id="socialCalendarDaysStrip">
+                  <!-- MON 12: Ticket + Mic -->
+                  <div class="cal-day-col" onclick="inspectCalDay(0)" title="Monday: Arena Rehearsal & Radio Interview">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">MON</span>
+                      <span class="cal-day-num">12</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <div class="cal-event-icon" title="Concert / Rehearsal">
+                        <svg width="22" height="13" viewBox="0 0 28 16" fill="none">
+                          <rect x="1" y="1" width="26" height="14" rx="2" fill="#fef3c7" stroke="#212E53" stroke-width="1.3"/>
+                          <line x1="7" y1="1" x2="7" y2="15" stroke="#212E53" stroke-width="1" stroke-dasharray="1.5 1.5"/>
+                          <line x1="11" y1="5" x2="23" y2="5" stroke="#212E53" stroke-width="1.2"/>
+                          <line x1="11" y1="8" x2="19" y2="8" stroke="#b45309" stroke-width="1.2"/>
+                          <line x1="11" y1="11" x2="17" y2="11" stroke="#212E53" stroke-width="1"/>
+                          <circle cx="4" cy="8" r="1.5" fill="#b45309"/>
+                        </svg>
+                      </div>
+                      <div class="cal-event-icon" title="Radio Interview">
+                        <svg width="15" height="18" viewBox="0 0 20 24" fill="none">
+                          <rect x="6" y="2" width="8" height="11" rx="4" fill="#334155" stroke="#212E53" stroke-width="1.2"/>
+                          <line x1="8" y1="4.5" x2="12" y2="4.5" stroke="#94a3b8" stroke-width="1"/>
+                          <line x1="8" y1="7.5" x2="12" y2="7.5" stroke="#94a3b8" stroke-width="1"/>
+                          <line x1="8" y1="10.5" x2="12" y2="10.5" stroke="#94a3b8" stroke-width="1"/>
+                          <path d="M4 9 C4 14, 16 14, 16 9" stroke="#212E53" stroke-width="1.4" fill="none"/>
+                          <line x1="10" y1="14" x2="10" y2="19" stroke="#212E53" stroke-width="1.6"/>
+                          <line x1="6" y1="19" x2="14" y2="19" stroke="#212E53" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- TUE 13: Champagne Flutes -->
+                  <div class="cal-day-col" onclick="inspectCalDay(1)" title="Tuesday: Romantic Dinner Date">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">TUE</span>
+                      <span class="cal-day-num">13</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <div class="cal-event-icon" title="Celebrity Date">
+                        <svg width="22" height="20" viewBox="0 0 26 24" fill="none">
+                          <g transform="rotate(12 8 11)">
+                            <path d="M6 2 L10 2 L9 8 Q8 11 5 11 Z" fill="#fef08a" stroke="#212E53" stroke-width="1.1"/>
+                            <line x1="7" y1="11" x2="7" y2="17" stroke="#212E53" stroke-width="1.2"/>
+                            <line x1="4" y1="17" x2="10" y2="17" stroke="#212E53" stroke-width="1.3" stroke-linecap="round"/>
+                          </g>
+                          <g transform="rotate(-12 18 11)">
+                            <path d="M16 2 L20 2 L21 11 Q18 11 17 8 Z" fill="#fef08a" stroke="#212E53" stroke-width="1.1"/>
+                            <line x1="19" y1="11" x2="19" y2="17" stroke="#212E53" stroke-width="1.2"/>
+                            <line x1="16" y1="17" x2="22" y2="17" stroke="#212E53" stroke-width="1.3" stroke-linecap="round"/>
+                          </g>
+                          <circle cx="13" cy="4" r="1.2" fill="#f59e0b"/>
+                          <circle cx="10" cy="2" r="0.8" fill="#CE6A6B"/>
+                          <circle cx="16" cy="2" r="0.8" fill="#CE6A6B"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- WED 14: Ticket -->
+                  <div class="cal-day-col" onclick="inspectCalDay(2)" title="Wednesday: Headline Concert">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">WED</span>
+                      <span class="cal-day-num">14</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <div class="cal-event-icon" title="Headline Concert">
+                        <svg width="22" height="13" viewBox="0 0 28 16" fill="none">
+                          <rect x="1" y="1" width="26" height="14" rx="2" fill="#fef3c7" stroke="#212E53" stroke-width="1.3"/>
+                          <line x1="7" y1="1" x2="7" y2="15" stroke="#212E53" stroke-width="1" stroke-dasharray="1.5 1.5"/>
+                          <line x1="11" y1="5" x2="23" y2="5" stroke="#212E53" stroke-width="1.2"/>
+                          <line x1="11" y1="8" x2="19" y2="8" stroke="#b45309" stroke-width="1.2"/>
+                          <line x1="11" y1="11" x2="17" y2="11" stroke="#212E53" stroke-width="1"/>
+                          <circle cx="4" cy="8" r="1.5" fill="#b45309"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- THU 15: Rocket Ship -->
+                  <div class="cal-day-col" onclick="inspectCalDay(3)" title="Thursday: New Single Drop">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">THU</span>
+                      <span class="cal-day-num">15</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <div class="cal-event-icon" title="New Single Drop">
+                        <svg width="20" height="22" viewBox="0 0 24 26" fill="none">
+                          <path d="M12 2 C16 4, 18 8, 18 13 L15 16 L8 9 L11 6 C11 4, 12 2, 12 2 Z" fill="#f1f5f9" stroke="#212E53" stroke-width="1.2"/>
+                          <circle cx="13.5" cy="9.5" r="1.8" fill="#38bdf8" stroke="#212E53" stroke-width="0.8"/>
+                          <path d="M8 9 L4 11 L6 15 L10 14 Z" fill="#CE6A6B" stroke="#212E53" stroke-width="1"/>
+                          <path d="M15 16 L17 20 L21 18 L19 14 Z" fill="#CE6A6B" stroke="#212E53" stroke-width="1"/>
+                          <path d="M10 15 L8 21 L12 18 L14 23 L13 17 Z" fill="#f59e0b" stroke="#dc2626" stroke-width="0.8"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- FRI 16: Ticket -->
+                  <div class="cal-day-col" onclick="inspectCalDay(4)" title="Friday: Festival Performance">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">FRI</span>
+                      <span class="cal-day-num">16</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <div class="cal-event-icon" title="Festival Performance">
+                        <svg width="22" height="13" viewBox="0 0 28 16" fill="none">
+                          <rect x="1" y="1" width="26" height="14" rx="2" fill="#fef3c7" stroke="#212E53" stroke-width="1.3"/>
+                          <line x1="7" y1="1" x2="7" y2="15" stroke="#212E53" stroke-width="1" stroke-dasharray="1.5 1.5"/>
+                          <line x1="11" y1="5" x2="23" y2="5" stroke="#212E53" stroke-width="1.2"/>
+                          <line x1="11" y1="8" x2="19" y2="8" stroke="#b45309" stroke-width="1.2"/>
+                          <line x1="11" y1="11" x2="17" y2="11" stroke="#212E53" stroke-width="1"/>
+                          <circle cx="4" cy="8" r="1.5" fill="#b45309"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- SAT 17: Rest Day -->
+                  <div class="cal-day-col" onclick="inspectCalDay(5)" title="Saturday: Studio Downtime & Rest">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">SAT</span>
+                      <span class="cal-day-num">17</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <span class="cal-day-empty-pip" title="Rest Day"></span>
+                    </div>
+                  </div>
+
+                  <!-- SUN 18: Microphone -->
+                  <div class="cal-day-col" onclick="inspectCalDay(6)" title="Sunday: Live Podcast Guest">
+                    <div class="cal-day-header">
+                      <span class="cal-day-name">SUN</span>
+                      <span class="cal-day-num">18</span>
+                    </div>
+                    <div class="cal-day-divider"></div>
+                    <div class="cal-day-events">
+                      <div class="cal-event-icon" title="Podcast Guest">
+                        <svg width="15" height="18" viewBox="0 0 20 24" fill="none">
+                          <rect x="6" y="2" width="8" height="11" rx="4" fill="#334155" stroke="#212E53" stroke-width="1.2"/>
+                          <line x1="8" y1="4.5" x2="12" y2="4.5" stroke="#94a3b8" stroke-width="1"/>
+                          <line x1="8" y1="7.5" x2="12" y2="7.5" stroke="#94a3b8" stroke-width="1"/>
+                          <line x1="8" y1="10.5" x2="12" y2="10.5" stroke="#94a3b8" stroke-width="1"/>
+                          <path d="M4 9 C4 14, 16 14, 16 9" stroke="#212E53" stroke-width="1.4" fill="none"/>
+                          <line x1="10" y1="14" x2="10" y2="19" stroke="#212E53" stroke-width="1.6"/>
+                          <line x1="6" y1="19" x2="14" y2="19" stroke="#212E53" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- SOCIAL SUBPAGE: DEDICATED PHASE 2 PLACEHOLDER VIEW -->
+            <div class="analyze-subpage-view" id="socialAppPlaceholderView" style="display: none;">
+              <div class="subpage-topbar">
+                <button class="skeuo-btn app-back-btn" onclick="closeSocialPlaceholder()">
+                  &lsaquo; Back to Socials
+                </button>
+                <span class="subpage-badge" id="socialPlaceholderBadge">APP</span>
+              </div>
+
+              <div class="social-placeholder-card">
+                <div class="social-placeholder-icon-wrap" id="socialPlaceholderIconWrap">
+                  <!-- Dynamically populated -->
+                </div>
+                <h3 class="social-placeholder-title" id="socialPlaceholderTitle">APP NAME</h3>
+                <span class="skeuo-pill coral mini-pill">PHASE 2 DEVELOPMENT</span>
+                <p class="social-placeholder-desc" id="socialPlaceholderDesc">
+                  Description of what this app will allow the user to do in Phase 2.
+                </p>
+
+                <div class="social-feature-checklist" id="socialPlaceholderFeatures">
+                  <!-- Dynamically populated -->
+                </div>
+
+                <div class="social-placeholder-foot">
+                  <span class="led-jewel amber small"></span>
+                  <span>SYSTEM ENGINE LOCKED &bull; READY FOR PHASE 2 EXPANSION</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- =========================================================
+               TAB 5: PROFILE & CAREER EMPIRE
+               ========================================================= -->
+          <div class="app-screen" id="screenProfile">
+            
+            <!-- PROFILE MAIN HUB VIEW -->
+            <div class="profile-hub-container" id="profileMainHub">
+              
+              <!-- ROW 1: LABELS (LEFT) & MEDIA MANAGEMENT (RIGHT) -->
+              <div class="profile-cards-row profile-row-duo profile-row-tall">
+                
+                <!-- 1. LABELS — White parchment contract, gold wax seal, ink signature, fountain pen -->
+                <button class="profile-module-card profile-card-contract" onclick="openProfileModule('labels')" title="Record Labels, Contracts & Deals">
+                  <div class="contract-sheet">
+                    <div class="contract-fold-corner"></div>
+                    <div class="contract-header-row">
+                      <div class="contract-seal-emblem">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" fill="url(#goldSealGrad)" stroke="#b45309" stroke-width="1.2"/>
+                          <circle cx="12" cy="12" r="7.5" fill="none" stroke="#78350f" stroke-dasharray="1.5 1.5" stroke-width="0.8"/>
+                          <path d="M12 5.5 L13.8 9.2 L17.8 9.8 L14.9 12.6 L15.6 16.6 L12 14.7 L8.4 16.6 L9.1 12.6 L6.2 9.8 L10.2 9.2 Z" fill="#78350f"/>
+                          <defs>
+                            <linearGradient id="goldSealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#fef08a"/>
+                              <stop offset="50%" stop-color="#eab308"/>
+                              <stop offset="100%" stop-color="#b45309"/>
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                      </div>
+                      <div class="contract-doc-stamp">
+                        <svg width="36" height="12" viewBox="0 0 40 14" fill="none">
+                          <rect x="1" y="1" width="38" height="12" rx="2" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="2 1"/>
+                          <line x1="5" y1="7" x2="35" y2="7" stroke="#cbd5e1" stroke-width="1"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="contract-lines">
+                      <span class="c-line long"></span>
+                      <span class="c-line mid"></span>
+                      <span class="c-line long"></span>
+                      <span class="c-line mid"></span>
+                      <span class="c-line short"></span>
+                    </div>
+                    <div class="contract-sig-row">
+                      <div class="contract-ink-sig">
+                        <svg width="58" height="18" viewBox="0 0 60 20" fill="none">
+                          <path d="M2 14 Q 10 3, 18 13 T 32 11 T 46 14 Q 52 8, 58 12" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                          <line x1="2" y1="18" x2="58" y2="18" stroke="#64748b" stroke-width="1"/>
+                        </svg>
+                      </div>
+                      <div class="contract-fountain-pen">
+                        <svg width="18" height="22" viewBox="0 0 20 26" fill="none">
+                          <path d="M10 0 L14 10 L10 24 L6 10 Z" fill="url(#penGoldGrad)" stroke="#78350f" stroke-width="0.8"/>
+                          <line x1="10" y1="0" x2="10" y2="18" stroke="#451a03" stroke-width="0.8"/>
+                          <circle cx="10" cy="12" r="1" fill="#451a03"/>
+                          <defs>
+                            <linearGradient id="penGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#fffbeb"/>
+                              <stop offset="60%" stop-color="#d97706"/>
+                              <stop offset="100%" stop-color="#92400e"/>
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="profile-card-nameplate">
+                    <span class="profile-card-title">LABELS</span>
+                  </div>
+                </button>
+
+                <!-- RIGHT COLUMN: MEDIA MANAGEMENT (COMPACT) + LEISURE (48PX COMPACT) -->
+                <div class="profile-row-mgmt-col">
+                  
+                  <!-- 2. MEDIA MANAGEMENT — Compact black contract paper with megaphone -->
+                  <button class="profile-module-card profile-card-management-dark profile-card-mgmt-compact" onclick="openProfileModule('management')" title="Media & Talent Management">
+                    <div class="dark-contract-sheet">
+                      <div class="dark-contract-fold-corner"></div>
+                      <!-- Document lines in dark -->
+                      <div class="dark-contract-lines">
+                        <span class="dc-line long"></span>
+                        <span class="dc-line mid"></span>
+                      </div>
+                      <!-- Tilted megaphone centrepiece (compact) -->
+                      <div class="megaphone-centrepiece compact">
+                        <svg width="44" height="44" viewBox="0 0 100 100" fill="none" style="transform: rotate(-20deg);">
+                          <!-- Megaphone body (bell/horn) -->
+                          <path d="M18 38 L18 62 L58 78 L58 22 Z" fill="url(#megaBodyGrad)" stroke="#e2e8f0" stroke-width="2" stroke-linejoin="round"/>
+                          <!-- Handle/grip -->
+                          <rect x="10" y="40" width="10" height="22" rx="4" fill="url(#megaHandleGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+                          <!-- Handle lines -->
+                          <line x1="12" y1="48" x2="18" y2="48" stroke="#94a3b8" stroke-width="1.2"/>
+                          <line x1="12" y1="52" x2="18" y2="52" stroke="#94a3b8" stroke-width="1.2"/>
+                          <line x1="12" y1="56" x2="18" y2="56" stroke="#94a3b8" stroke-width="1.2"/>
+                          <!-- Sound waves from bell -->
+                          <path d="M62 35 Q 72 50, 62 65" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.8"/>
+                          <path d="M68 28 Q 82 50, 68 72" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
+                          <!-- Mouthpiece cap -->
+                          <rect x="17" y="42" width="6" height="18" rx="2" fill="url(#megaCapGrad)" stroke="#94a3b8" stroke-width="1"/>
+                          <defs>
+                            <linearGradient id="megaBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stop-color="#e2e8f0"/>
+                              <stop offset="40%" stop-color="#f8fafc"/>
+                              <stop offset="80%" stop-color="#cbd5e1"/>
+                              <stop offset="100%" stop-color="#94a3b8"/>
+                            </linearGradient>
+                            <linearGradient id="megaHandleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stop-color="#94a3b8"/>
+                              <stop offset="50%" stop-color="#e2e8f0"/>
+                              <stop offset="100%" stop-color="#64748b"/>
+                            </linearGradient>
+                            <linearGradient id="megaCapGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stop-color="#64748b"/>
+                              <stop offset="100%" stop-color="#e2e8f0"/>
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="profile-card-nameplate dark-nameplate">
+                      <span class="profile-card-title dark-title">MEDIA MANAGEMENT</span>
+                    </div>
+                  </button>
+
+                  <!-- 3. LEISURE — Sunset Beach Artwork Background (Humans on Beach) (height: 48px) -->
+                  <button class="profile-module-card profile-palette-btn profile-btn-leisure" onclick="openProfileModule('leisure')" title="Gambling, Clubbing, Luxury Vacations & VIP Lifestyle">
+                    <div class="profile-btn-content">
+                      <span class="profile-btn-txt leisure-txt">LEISURE</span>
+                    </div>
+                  </button>
+
+                </div>
+
+              </div>
+
+              <!-- ROW 2: CERTIFICATIONS (LEFT) & AWARDS CABINET (RIGHT) -->
+              <div class="profile-cards-row profile-row-duo profile-row-tall">
+                
+                <!-- 3. CERTIFICATIONS — Using authentic reference image with prominent engraved plate -->
+                <button class="profile-module-card profile-card-ref-img profile-card-certifications" onclick="openProfileModule('certifications')" title="Plaque Certifications">
+                  <div class="ref-img-card-frame">
+                    <img src="assets/certifications_wall.jpg" alt="Certifications Plaque" class="ref-img-content cert-plaque-img">
+                    <div class="card-title-overlay cert-plate-overlay">
+                      <span class="plate-screw-rivet top-l"></span>
+                      <span class="plate-screw-rivet top-r"></span>
+                      <span class="card-overlay-txt">CERTIFICATIONS</span>
+                      <span class="plate-screw-rivet bot-l"></span>
+                      <span class="plate-screw-rivet bot-r"></span>
+                    </div>
+                  </div>
+                </button>
+
+                <!-- 4. AWARDS CABINET - Using authentic reference image with gold engraved plate -->
+                <button class="profile-module-card profile-card-ref-img profile-card-awards" onclick="openProfileModule('awards')" title="Awards & Trophy Cabinet">
+                  <div class="ref-img-card-frame">
+                    <img src="assets/awards_room.jpg" alt="Awards Cabinet" class="ref-img-content awards-cabinet-img">
+                    <div class="card-title-overlay awards-plate-overlay">
+                      <span class="plate-screw-rivet top-l"></span>
+                      <span class="plate-screw-rivet top-r"></span>
+                      <span class="card-overlay-txt">AWARDS CABINET</span>
+                      <span class="plate-screw-rivet bot-l"></span>
+                      <span class="plate-screw-rivet bot-r"></span>
+                    </div>
+                  </div>
+                </button>
+
+              </div>
+
+              <!-- Gradient Defs for Icons: 1st #CE6A6B, 2nd #EBACA2, 3rd #FFDFCB -->
+              <svg width="0" height="0" style="position:absolute;pointer-events:none;">
+                <defs>
+                  <linearGradient id="paletteRosePeachGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFDFCB" />
+                    <stop offset="50%" stop-color="#EBACA2" />
+                    <stop offset="100%" stop-color="#CE6A6B" />
+                  </linearGradient>
+                  <linearGradient id="paletteRosePeachGradVert" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFDFCB" />
+                    <stop offset="50%" stop-color="#EBACA2" />
+                    <stop offset="100%" stop-color="#CE6A6B" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <!-- ROW 3: BOTTOM 4 MODULES IN 2 ASYMMETRICAL BALANCED COLUMNS -->
+              <div class="profile-cards-row profile-bottom-columns">
+                
+                <!-- LEFT COLUMN: DEALS (TALL) + YOUR WIKI (COMPACT) -->
+                <div class="profile-bottom-col profile-col-left">
+                  
+                  <!-- DEALS: Elongated beige card with icon, title, offers badge & deals list -->
+                  <button class="profile-module-card profile-card-deals-hub" onclick="openProfileModule('deals')" title="Movie, Concert, Feature & Brand Deals">
+                    <div class="deals-hub-header">
+                      <div class="deals-hub-title-group">
+                        <svg class="deals-title-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <rect x="3" y="7" width="18" height="14" rx="2.5" fill="url(#paletteRosePeachGrad)" stroke="#8e6c58" stroke-width="1"/>
+                          <path d="M8 7V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V7" stroke="#212E53" stroke-width="1.8" stroke-linecap="round"/>
+                          <line x1="3" y1="12" x2="21" y2="12" stroke="#8e6c58" stroke-width="1" stroke-dasharray="2 1.5"/>
+                          <rect x="10.5" y="10.5" width="3" height="3" rx="0.8" fill="#212E53"/>
+                        </svg>
+                        <span class="deals-hub-title">DEALS</span>
+                      </div>
+                      <span class="deals-hub-badge">3 NEW OFFERS</span>
+                    </div>
+
+                    <!-- Recessed Deals Feed / Placeholder -->
+                    <div class="deals-mini-list">
+                      <div class="deals-mini-item">
+                        <div class="deals-item-left">
+                          <span class="deal-status-dot signed"></span>
+                          <span class="deal-name">NIKE GLOBAL</span>
+                        </div>
+                        <span class="deal-tag signed">$150K</span>
+                      </div>
+                      <div class="deals-mini-item">
+                        <div class="deals-item-left">
+                          <span class="deal-status-dot signed"></span>
+                          <span class="deal-name">CYBERPUNK OST</span>
+                        </div>
+                        <span class="deal-tag signed">$65K</span>
+                      </div>
+                      <div class="deals-mini-item">
+                        <div class="deals-item-left">
+                          <span class="deal-status-dot pending"></span>
+                          <span class="deal-name">COACHELLA '25</span>
+                        </div>
+                        <span class="deal-tag pending">OFFER</span>
+                      </div>
+                    </div>
+                  </button>
+
+                  <!-- YOUR WIKI: Compact button (Navy) below DEALS -->
+                  <button class="profile-module-card profile-palette-btn profile-btn-wiki" onclick="openProfileModule('wiki')" title="Artist Wiki, Discography & Records">
+                    <div class="profile-btn-content">
+                      <svg class="profile-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="url(#paletteRosePeachGrad)" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="url(#paletteRosePeachGrad)" stroke="#FFDFCB" stroke-width="0.8"/>
+                        <line x1="9" y1="7" x2="16" y2="7" stroke="#212E53" stroke-width="1.4" stroke-linecap="round"/>
+                        <line x1="9" y1="11" x2="14" y2="11" stroke="#212E53" stroke-width="1.4" stroke-linecap="round"/>
+                      </svg>
+                      <span class="profile-btn-txt">YOUR WIKI</span>
+                    </div>
+                  </button>
+
+                </div>
+
+                <!-- RIGHT COLUMN: SIDE HUSTLE (COMPACT) + YOUR LOVE RELATIONS (TALL) -->
+                <div class="profile-bottom-col profile-col-right">
+                  
+                  <!-- SIDE HUSTLE: Compact button (Teal) at top of right column -->
+                  <button class="profile-module-card profile-palette-btn profile-btn-sidehustle" onclick="openProfileModule('sidehustle')" title="Side Hustle Jobs & Menial Work">
+                    <div class="profile-btn-content">
+                      <svg class="profile-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" fill="url(#paletteRosePeachGrad)" stroke="#FFDFCB" stroke-width="0.8"/>
+                      </svg>
+                      <span class="profile-btn-txt">SIDE HUSTLE</span>
+                    </div>
+                  </button>
+
+                  <!-- YOUR LOVE RELATIONS: Tall card (Coral) below SIDE HUSTLE -->
+                  <button class="profile-module-card profile-palette-btn profile-btn-relations" onclick="openProfileModule('relations')" title="Love Relationships, Family & Crew">
+                    <div class="profile-btn-content vertical-stack">
+                      <svg class="profile-icon-svg relations-heart-svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#paletteRosePeachGradVert)" stroke="#FFDFCB" stroke-width="1.2"/>
+                      </svg>
+                      <span class="profile-btn-txt relations-tall-txt">YOUR LOVE<br>RELATIONS</span>
+                    </div>
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- PROFILE SUBPAGE: DEDICATED PHASE 2 PLACEHOLDER VIEW -->
+            <div class="analyze-subpage-view" id="profileAppPlaceholderView" style="display: none;">
+              <div class="subpage-topbar">
+                <button class="skeuo-btn app-back-btn" onclick="closeProfilePlaceholder()">
+                  &lsaquo; Back to Profile
+                </button>
+                <span class="subpage-badge" id="profilePlaceholderBadge">PROFILE MODULE</span>
+              </div>
+
+              <div class="social-placeholder-card profile-placeholder-card">
+                <div class="social-placeholder-icon-wrap" id="profilePlaceholderIconWrap">
+                  <!-- Dynamically populated -->
+                </div>
+                <h3 class="social-placeholder-title" id="profilePlaceholderTitle">MODULE NAME</h3>
+                <span class="skeuo-pill coral mini-pill">PHASE 2 DEVELOPMENT</span>
+                <p class="social-placeholder-desc" id="profilePlaceholderDesc">
+                  Module description and roadmap details.
+                </p>
+
+                <div class="social-feature-checklist" id="profilePlaceholderFeatures">
+                  <!-- Dynamically populated -->
+                </div>
+
+                <div class="social-placeholder-foot">
+                  <span class="led-jewel amber small"></span>
+                  <span>SYSTEM ENGINE LOCKED &bull; READY FOR PHASE 2 EXPANSION</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- =========================================================
+               HARDWARE SETTINGS SCREEN (ACCESSED VIA HOME TOP BAR)
+               ========================================================= -->
+          <div class="app-screen" id="screenSetting">
+            <!-- Settings Topbar with Back to Home -->
+            <div class="subpage-topbar" style="margin-bottom: 6px;">
+              <button class="skeuo-btn app-back-btn" onclick="closeSettingsSubpage()">
+                &lsaquo; Back to Home
+              </button>
+              <span class="subpage-badge" style="background: #212E53; color: #fff; border-color: #3b4d7c;">HARDWARE SETTINGS</span>
+            </div>
+
+            <!-- Settings Header Banner -->
+            <div class="setting-top-banner">
+              <div class="placeholder-icon-wrap" style="color: var(--c-navy); border-color: #212E53; width: 38px; height: 38px; margin: 0 auto 5px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </div>
+              <h3 style="font-size: 0.92rem; font-weight: 900; color: #ffeedf; text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 4px #000; text-transform: uppercase; letter-spacing: 0.8px; margin: 0;">HARDWARE SETTINGS</h3>
+              <p style="font-size: 0.64rem; color: #f0c9b0; margin: 2px 0 0; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">Studio console acoustics, timber finishes, & simulation toggles</p>
+            </div>
+
+            <!-- HARDWOOD FINISH CUSTOMIZATION MODULE -->
+            <div class="setting-wood-panel">
+              <div class="setting-section-header">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                  <span class="chassis-screw micro"></span>
+                  <span class="setting-section-title">HARDWOOD COLOUR</span>
+                </div>
+                <span class="setting-active-badge" id="activeWoodLabel">Existing Brown</span>
+              </div>
+
+              <div class="wood-swatches-grid">
+                <!-- 1. Existing Brown -->
+                <button class="wood-swatch-card active" data-wood-id="existing-brown" onclick="selectHardwoodTheme('existing-brown')" title="Select Existing Brown Hardwood">
+                  <div class="swatch-preview wood-preview-existing-brown">
+                    <span class="swatch-active-pip">✓</span>
+                  </div>
+                  <span class="swatch-name">Existing Brown</span>
+                </button>
+
+                <!-- 2. Lighter Brown -->
+                <button class="wood-swatch-card" data-wood-id="lighter-brown" onclick="selectHardwoodTheme('lighter-brown')" title="Select Lighter Brown Hardwood">
+                  <div class="swatch-preview wood-preview-lighter-brown">
+                    <span class="swatch-active-pip">✓</span>
+                  </div>
+                  <span class="swatch-name">Lighter Brown</span>
+                </button>
+
+                <!-- 3. Black -->
+                <button class="wood-swatch-card" data-wood-id="black" onclick="selectHardwoodTheme('black')" title="Select Black Hardwood">
+                  <div class="swatch-preview wood-preview-black">
+                    <span class="swatch-active-pip">✓</span>
+                  </div>
+                  <span class="swatch-name">Black</span>
+                </button>
+
+                <!-- 4. Blue -->
+                <button class="wood-swatch-card" data-wood-id="blue" onclick="selectHardwoodTheme('blue')" title="Select Blue Hardwood">
+                  <div class="swatch-preview wood-preview-blue">
+                    <span class="swatch-active-pip">✓</span>
+                  </div>
+                  <span class="swatch-name">Blue</span>
+                </button>
+
+                <!-- 5. Red Wood -->
+                <button class="wood-swatch-card" data-wood-id="red-wood" onclick="selectHardwoodTheme('red-wood')" title="Select Red Wood Hardwood">
+                  <div class="swatch-preview wood-preview-red-wood">
+                    <span class="swatch-active-pip">✓</span>
+                  </div>
+                  <span class="swatch-name">Red Wood</span>
+                </button>
+
+                <!-- 6. Gold Wood -->
+                <button class="wood-swatch-card" data-wood-id="gold-wood" onclick="selectHardwoodTheme('gold-wood')" title="Select Gold Wood Hardwood">
+                  <div class="swatch-preview wood-preview-gold-wood">
+                    <span class="swatch-active-pip">✓</span>
+                  </div>
+                  <span class="swatch-name">Gold Wood</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="width: 100%;">
+              <div class="setting-item">
+                <div>
+                  <h4 style="font-size: 0.82rem; font-weight: 900; color: var(--c-navy); text-shadow: var(--text-shadow-light);">Audio FX & Beats Preview</h4>
+                  <p style="font-size: 0.65rem; color: var(--text-dim);">Enable simulated 808 clicks & audio snips</p>
+                </div>
+                <div class="skeuo-switch on" onclick="toggleSwitch(this)">
+                  <div class="switch-handle"></div>
+                </div>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <h4 style="font-size: 0.82rem; font-weight: 900; color: var(--c-navy); text-shadow: var(--text-shadow-light);">Mechanical Key Click</h4>
+                  <p style="font-size: 0.65rem; color: var(--text-dim);">Heavy tactile feedback on button push</p>
+                </div>
+                <div class="skeuo-switch on" onclick="toggleSwitch(this)">
+                  <div class="switch-handle"></div>
+                </div>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <h4 style="font-size: 0.82rem; font-weight: 900; color: var(--c-navy); text-shadow: var(--text-shadow-light);">Weekly Autosave</h4>
+                  <p style="font-size: 0.65rem; color: var(--text-dim);">Save snapshot at every week rollover</p>
+                </div>
+                <div class="skeuo-switch on" onclick="toggleSwitch(this)">
+                  <div class="switch-handle"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                <button class="skeuo-btn" style="width: 100%;" onclick="showToast('Game save snapshot created!')">
+                  💾 Save Career State
+                </button>
+                <button class="skeuo-btn" style="width: 100%; color: var(--c-coral-dark);" onclick="showToast('Reset prompt cancelled')">
+                  ⚠️ Reset Game Progress
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- =========================================================
+             BOTTOM NAVIGATION BAR (STUDIO TRANSPORT CONTROL BAY)
+             ========================================================= -->
+        <nav class="bottom-nav-bar">
+          
+          <!-- Tab 1: Home -->
+          <button class="nav-tab-btn active" data-tab="home" onclick="switchTab('home')">
+            <span class="tab-jewel"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Home</span>
+          </button>
+
+          <!-- Tab 2: Media -->
+          <button class="nav-tab-btn" data-tab="media" onclick="switchTab('media')">
+            <span class="tab-jewel"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+              <path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z"/>
+            </svg>
+            <span>Media</span>
+          </button>
+
+          <!-- Tab 3: Studio -->
+          <button class="nav-tab-btn" data-tab="studio" onclick="switchTab('studio')">
+            <span class="tab-jewel"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+            <span>Studio</span>
+          </button>
+
+          <!-- Tab 4: Social -->
+          <button class="nav-tab-btn" data-tab="social" onclick="switchTab('social')">
+            <span class="tab-jewel"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Social</span>
+          </button>
+
+          <!-- Tab 5: Profile (Replaces Setting) -->
+          <button class="nav-tab-btn" data-tab="profile" onclick="switchTab('profile')">
+            <span class="tab-jewel"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Profile</span>
+          </button>
+
+        </nav>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: SEND NEW FEATURE OFFER (+)
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="newFeatureOfferModal" onclick="if(event.target===this) closeNewFeatureOfferModal()">
+          <div class="studio-modal-chassis feat-offer-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">SEND FEATURE REQUEST</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeNewFeatureOfferModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body feat-offer-modal-body">
+              <!-- Target Artist -->
+              <div class="feat-form-group">
+                <label class="feat-form-label">TARGET ARTIST</label>
+                <select class="feat-form-select" id="featOfferArtistSelect">
+                  <option value="TRAVIS SCOTT">TRAVIS SCOTT</option>
+                  <option value="DRAKE">DRAKE</option>
+                  <option value="METRO BOOMIN">METRO BOOMIN</option>
+                  <option value="PLAYBOI CARTI">PLAYBOI CARTI</option>
+                  <option value="KENDRICK LAMAR">KENDRICK LAMAR</option>
+                  <option value="21 SAVAGE">21 SAVAGE</option>
+                  <option value="LIL YACHTY">LIL YACHTY</option>
+                  <option value="CENTRAL CEE">CENTRAL CEE</option>
+                  <option value="FUTURE">FUTURE</option>
+                  <option value="DON TOLIVER">DON TOLIVER</option>
+                  <option value="ICE SPICE">ICE SPICE</option>
+                  <option value="J. COLE">J. COLE</option>
+                </select>
+              </div>
+
+              <!-- Unreleased Song -->
+              <div class="feat-form-group">
+                <label class="feat-form-label">CHOOSE UNRELEASED SONG</label>
+                <select class="feat-form-select" id="featOfferSongSelect" onchange="onFeatOfferSongChange()">
+                  <!-- Populated dynamically with player's unreleased songs -->
+                </select>
+                <div class="feat-selected-song-info" id="featOfferSongInfo">
+                  Current Song Quality: <strong id="featOfferSongQ">--</strong>
+                </div>
+              </div>
+
+              <!-- Request Type -->
+              <div class="feat-form-group">
+                <label class="feat-form-label">REQUEST TYPE</label>
+                <div class="feat-type-pills">
+                  <button type="button" class="feat-type-pill active" id="featType_verse" onclick="selectFeatOfferType('verse')">VERSE</button>
+                  <button type="button" class="feat-type-pill" id="featType_beat" onclick="selectFeatOfferType('beat')">BEAT</button>
+                  <button type="button" class="feat-type-pill" id="featType_mix" onclick="selectFeatOfferType('mix')">MIX</button>
+                </div>
+              </div>
+
+              <!-- Feature Fee Offer ($) -->
+              <div class="feat-form-group">
+                <label class="feat-form-label">UPFRONT FEATURE FEE ($)</label>
+                <div class="feat-preset-row">
+                  <button type="button" class="feat-preset-pill" onclick="setFeatOfferFee(25000)">$25K</button>
+                  <button type="button" class="feat-preset-pill" onclick="setFeatOfferFee(50000)">$50K</button>
+                  <button type="button" class="feat-preset-pill active" id="presetFee90" onclick="setFeatOfferFee(90000)">$90K</button>
+                  <button type="button" class="feat-preset-pill" onclick="setFeatOfferFee(150000)">$150K</button>
+                </div>
+                <input type="number" class="feat-form-input" id="featOfferFeeInput" value="90000" min="5000" step="5000">
+              </div>
+
+              <!-- Royalty Split (%) -->
+              <div class="feat-form-group">
+                <label class="feat-form-label">ROYALTY MASTER SPLIT (%)</label>
+                <div class="feat-preset-row">
+                  <button type="button" class="feat-preset-pill" onclick="setFeatOfferSplit(10)">10%</button>
+                  <button type="button" class="feat-preset-pill" onclick="setFeatOfferSplit(15)">15%</button>
+                  <button type="button" class="feat-preset-pill active" id="presetSplit20" onclick="setFeatOfferSplit(20)">20%</button>
+                  <button type="button" class="feat-preset-pill" onclick="setFeatOfferSplit(25)">25%</button>
+                </div>
+                <input type="number" class="feat-form-input" id="featOfferSplitInput" value="20" min="0" max="50" step="5">
+              </div>
+
+              <!-- Action Button -->
+              <button class="skeuo-btn skeuo-btn-coral feat-offer-submit-btn" onclick="submitNewFeatureOffer()">
+                SEND FEATURE REQUEST
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: WEEKLY NEWS WIRE (FULL WEEK NEWS)
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="weeklyNewsModal" onclick="if(event.target===this) closeWeeklyNewsModal()">
+          <div class="studio-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">WEEK 24 &bull; COMPLETE NEWS WIRE</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeWeeklyNewsModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body">
+              <!-- Article 1 -->
+              <div class="modal-news-item">
+                <div class="modal-news-tag coral">CHARTS &bull; RAPRADAR</div>
+                <h4>"Neon Dreams" holds #4 for a third consecutive week as radio rotation spikes 35%</h4>
+                <p>Lil Synapse continues an astonishing independent ascent with playlist placements on RapCaviar and Today's Top Hits driving heavy cross-platform engagement.</p>
+                <div class="modal-news-meta">Published 2h ago &bull; 14K Reads &bull; +1,200 Rep</div>
+              </div>
+              <!-- Article 2 -->
+              <div class="modal-news-item">
+                <div class="modal-news-tag teal">INDUSTRY &bull; BILLBOARD</div>
+                <h4>Apex Records confirms massive $40M buyout of indie distributor SoundWave</h4>
+                <p>The deal establishes new rights structures for streaming catalogs, signaling massive institutional interest in independent master recordings.</p>
+                <div class="modal-news-meta">Published yesterday &bull; 28K Reads</div>
+              </div>
+              <!-- Article 3 -->
+              <div class="modal-news-item">
+                <div class="modal-news-tag peach">STREETS &bull; COMPLEX</div>
+                <h4>Drakeo V responds to subliminal lyric rumors: "I only compete with legends"</h4>
+                <p>Fans speculate tensions flared over billboard placements between the trap star and ascending newcomers, but Drakeo brushed off claims during a live radio segment.</p>
+                <div class="modal-news-meta">Published 3d ago &bull; 42K Reads</div>
+              </div>
+            </div>
+            <div class="studio-modal-foot">
+              <button class="skeuo-btn skeuo-btn-coral" style="width: 100%;" onclick="closeWeeklyNewsModal(); routeToNews();">
+                Explore Full Media Wire &rsaquo;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: ARTIST INBOX
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="inboxModal" onclick="if(event.target===this) closeInboxModal()">
+          <div class="studio-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">STUDIO INBOX &bull; 3 UNREAD</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeInboxModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body">
+              <!-- Message 1 -->
+              <div class="inbox-msg-card unread" onclick="showToast('Opened contract inquiry')">
+                <div class="inbox-msg-header">
+                  <span class="inbox-sender">Apex Records A&R</span>
+                  <span class="inbox-time">10m ago</span>
+                </div>
+                <div class="inbox-msg-subject">Distribution Deal Offer: $250,000 Advance</div>
+                <div class="inbox-msg-preview">We have been tracking "Neon Dreams" velocity. We'd like to schedule a private studio meeting...</div>
+              </div>
+              <!-- Message 2 -->
+              <div class="inbox-msg-card unread" onclick="showToast('Opened producer inquiry')">
+                <div class="inbox-msg-header">
+                  <span class="inbox-sender">MetroBeats Studio</span>
+                  <span class="inbox-time">3h ago</span>
+                </div>
+                <div class="inbox-msg-subject">Pack of 5 Custom 808 Trap Stems</div>
+                <div class="inbox-msg-preview">Sent over exclusive sound design stems tailored for your next studio release session...</div>
+              </div>
+              <!-- Message 3 -->
+              <div class="inbox-msg-card unread" onclick="showToast('Opened royalty notification')">
+                <div class="inbox-msg-header">
+                  <span class="inbox-sender">DSP Clearinghouse</span>
+                  <span class="inbox-time">1d ago</span>
+                </div>
+                <div class="inbox-msg-subject">Q1 Streaming Payout Cleared: $82,400</div>
+                <div class="inbox-msg-preview">Your streaming earnings for global territory rotations have settled into your artist bank balance...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: STUDIO CREATE WIZARD
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="studioCreateModal" onclick="if(event.target===this) closeStudioCreateModal()">
+          <div class="studio-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">STUDIO CREATION SUITE</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeStudioCreateModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body">
+              <div class="modal-creation-opt" onclick="createActionHandler('song')">
+                <div class="creation-opt-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <line x1="12" y1="19" x2="12" y2="22"/>
+                  </svg>
+                </div>
+                <div class="creation-opt-info">
+                  <h4>Record New Song</h4>
+                  <p>Pick tempo, write 16-bar verses, layer vocal harmonies & mix</p>
+                </div>
+                <span class="skeuo-pill coral" style="font-size: 0.62rem;">RECORD</span>
+              </div>
+
+              <div class="modal-creation-opt" onclick="createActionHandler('beat')">
+                <div class="creation-opt-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="12" y1="2" x2="12" y2="6"/>
+                    <line x1="12" y1="18" x2="12" y2="22"/>
+                  </svg>
+                </div>
+                <div class="creation-opt-info">
+                  <h4>Produce Beat / 808s</h4>
+                  <p>Step sequence MPC drum racks, chop samples & layer synths</p>
+                </div>
+                <span class="skeuo-pill teal" style="font-size: 0.62rem;">PRODUCE</span>
+              </div>
+
+              <div class="modal-creation-opt" onclick="createActionHandler('project')">
+                <div class="creation-opt-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </div>
+                <div class="creation-opt-info">
+                  <h4>Start Album / EP Concept</h4>
+                  <p>Assemble tracklists, define album era theme & budget artwork</p>
+                </div>
+                <span class="skeuo-pill peach" style="font-size: 0.62rem;">PROJECT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: RELEASE ITEM CONFIRMATION / ROLLOUT
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="releaseItemModal" onclick="if(event.target===this) closeReleaseItemModal()">
+          <div class="studio-modal-chassis release-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title" id="releaseModalHeading">LAUNCH RELEASE</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeReleaseItemModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body" id="releaseItemModalBody">
+              <!-- Dynamically populated when item clicked -->
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: STUDIO RELEASE PIPELINE
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="studioReleaseModal" onclick="if(event.target===this) closeStudioReleaseModal()">
+          <div class="studio-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">RELEASE PIPELINE</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeStudioReleaseModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body">
+              <div class="modal-creation-opt" onclick="releaseActionHandler('single')">
+                <div class="creation-opt-icon" style="color: var(--c-coral);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="2"/>
+                  </svg>
+                </div>
+                <div class="creation-opt-info">
+                  <h4>Drop Next Single</h4>
+                  <p>Fast-track unreleased master to Spotify, Apple & TikTok</p>
+                </div>
+                <span class="skeuo-pill coral" style="font-size: 0.62rem;">DROP</span>
+              </div>
+
+              <div class="modal-creation-opt" onclick="releaseActionHandler('album')">
+                <div class="creation-opt-icon" style="color: var(--c-teal);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="9" y1="21" x2="9" y2="9"/>
+                  </svg>
+                </div>
+                <div class="creation-opt-info">
+                  <h4>Schedule Full Album Drop</h4>
+                  <p>Lock in rollout campaign, music video teasers & release date</p>
+                </div>
+                <span class="skeuo-pill" style="font-size: 0.62rem;">ROLLOUT</span>
+              </div>
+
+              <div class="modal-creation-opt" onclick="releaseActionHandler('promo')">
+                <div class="creation-opt-icon" style="color: #d97706;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  </svg>
+                </div>
+                <div class="creation-opt-info">
+                  <h4>Radio & DSP Promo Blast</h4>
+                  <p>Send advance promo links to tastemakers and radio DJs</p>
+                </div>
+                <span class="skeuo-pill" style="font-size: 0.62rem;">PROMO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: OFFICIAL HOT 100 PRINTED TRADE CHART
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="hot100ChartModal" onclick="if(event.target===this) closeHot100ChartModal()">
+          <div class="studio-modal-chassis hot100-full-modal-chassis">
+            <!-- Vintage Newspaper Header -->
+            <div class="chart-modal-masthead">
+              <div class="chart-modal-title-group">
+                <span class="masthead-the-lg">THE</span>
+                <span class="masthead-brand-lg">OFFICIAL</span>
+                <span class="masthead-hot-lg">HOT 100</span>
+              </div>
+              <button class="modal-close-icon trade-close-btn" onclick="closeHot100ChartModal()" title="Close">&times;</button>
+            </div>
+
+            <!-- Red Banner Ribbon -->
+            <div class="chart-modal-ribbon-bar">
+              <span class="ribbon-arrow">◄</span>
+              <span class="ribbon-main">No. 1</span>
+              <span class="ribbon-arrow">►</span>
+              <span class="ribbon-desc">1 WEEK AT NO. 1</span>
+            </div>
+
+            <!-- Full Printed Table Stream -->
+            <div class="chart-modal-table-scroll">
+              <table class="trade-chart-table">
+                <thead>
+                  <tr>
+                    <th class="th-tw">THIS<br>WEEK</th>
+                    <th class="th-lw">LAST<br>WEEK</th>
+                    <th class="th-2w">2 WKS<br>AGO</th>
+                    <th class="th-wks">WKS. ON<br>CHART</th>
+                    <th class="th-title-artist">TITLE &bull; ARTIST<br><span class="th-sub">PRODUCER / LABEL</span></th>
+                    <th class="th-peak">PEAK<br>POS.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Rank 1 -->
+                  <tr class="chart-row-no1">
+                    <td class="td-rank"><span class="chart-bullet-circle red">1</span></td>
+                    <td class="td-num">1</td>
+                    <td class="td-num">1</td>
+                    <td class="td-wks">4</td>
+                    <td class="td-meta">
+                      <div class="td-title-line red-title">MIDNIGHT DYNASTY <span class="bullet-star">★</span></div>
+                      <div class="td-artist-line">&#9670; DRAKEO V <span class="td-credits">(REPUBLIC / OVO)</span></div>
+                    </td>
+                    <td class="td-peak">1</td>
+                  </tr>
+
+                  <!-- Rank 2 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-bullet-circle red">2</span></td>
+                    <td class="td-num">3</td>
+                    <td class="td-num">3</td>
+                    <td class="td-wks">10</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">VELVET WAVES <span class="bullet-star">★</span> <span class="bullet-dot">&#9679;</span></div>
+                      <div class="td-artist-line">&#9670; SZARIA <span class="td-credits">(TDE / RCA)</span></div>
+                    </td>
+                    <td class="td-peak">2</td>
+                  </tr>
+
+                  <!-- Rank 3 (Player Track) -->
+                  <tr class="chart-row-player">
+                    <td class="td-rank"><span class="chart-plain-num">3</span></td>
+                    <td class="td-num">2</td>
+                    <td class="td-num">2</td>
+                    <td class="td-wks">13</td>
+                    <td class="td-meta">
+                      <div class="td-title-line player-highlight">NEON DREAMS <span class="bullet-star">★</span> <span class="bullet-tri">&#9650;</span> <span class="you-indicator">YOU</span></div>
+                      <div class="td-artist-line">&#9670; LIL SYNAPSE <span class="td-credits">(SYNAPSE LABS / INDIE)</span></div>
+                    </td>
+                    <td class="td-peak">1</td>
+                  </tr>
+
+                  <!-- Rank 4 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-plain-num">4</span></td>
+                    <td class="td-num">4</td>
+                    <td class="td-num">4</td>
+                    <td class="td-wks">17</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">CONCRETE GARDEN <span class="bullet-star">★</span></div>
+                      <div class="td-artist-line">&#9670; KENNY KNOX <span class="td-credits">(DEF JAM)</span></div>
+                    </td>
+                    <td class="td-peak">4</td>
+                  </tr>
+
+                  <!-- Rank 5 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-bullet-circle red">5</span></td>
+                    <td class="td-num">12</td>
+                    <td class="td-num">24</td>
+                    <td class="td-wks">3</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">SUBZERO <span class="bullet-star">★</span> <span class="bullet-tri">&#9650;</span></div>
+                      <div class="td-artist-line">&#9670; GRIMKIDD <span class="td-credits">(INTERSCOPE)</span></div>
+                    </td>
+                    <td class="td-peak">5</td>
+                  </tr>
+
+                  <!-- Rank 6 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-plain-num">6</span></td>
+                    <td class="td-num">5</td>
+                    <td class="td-num">7</td>
+                    <td class="td-wks">10</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">VANDALIZED HEART <span class="bullet-star">★</span> <span class="bullet-dot">&#9679;</span></div>
+                      <div class="td-artist-line">&#9670; LIL SYNAPSE ft. DON TOLIVER <span class="td-credits">(CACTUS JACK)</span></div>
+                    </td>
+                    <td class="td-peak">5</td>
+                  </tr>
+
+                  <!-- Rank 7 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-plain-num">7</span></td>
+                    <td class="td-num">8</td>
+                    <td class="td-num">10</td>
+                    <td class="td-wks">4</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">FAST CASH SLOW LOVE <span class="bullet-star">★</span></div>
+                      <div class="td-artist-line">&#9670; LIL SYNAPSE <span class="td-credits">(SYNAPSE LABS)</span></div>
+                    </td>
+                    <td class="td-peak">7</td>
+                  </tr>
+
+                  <!-- Rank 8 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-plain-num">8</span></td>
+                    <td class="td-num">6</td>
+                    <td class="td-num">5</td>
+                    <td class="td-wks">9</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">CHROME HEART BOULEVARD <span class="bullet-star">★</span> <span class="bullet-dot">&#9679;</span></div>
+                      <div class="td-artist-line">&#9670; LIL SYNAPSE <span class="td-credits">(SYNAPSE LABS)</span></div>
+                    </td>
+                    <td class="td-peak">3</td>
+                  </tr>
+
+                  <!-- Rank 9 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-plain-num">9</span></td>
+                    <td class="td-num">7</td>
+                    <td class="td-num">6</td>
+                    <td class="td-wks">30</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">MIDNIGHT IN TOKYO <span class="bullet-star">★</span></div>
+                      <div class="td-artist-line">&#9670; LIL SYNAPSE ft. KENZO <span class="td-credits">(SYNAPSE LABS)</span></div>
+                    </td>
+                    <td class="td-peak">2</td>
+                  </tr>
+
+                  <!-- Rank 10 -->
+                  <tr>
+                    <td class="td-rank"><span class="chart-plain-num">10</span></td>
+                    <td class="td-num">9</td>
+                    <td class="td-num">8</td>
+                    <td class="td-wks">15</td>
+                    <td class="td-meta">
+                      <div class="td-title-line">GHOSTWRITER BLUES <span class="bullet-star">★</span></div>
+                      <div class="td-artist-line">&#9670; LIL SYNAPSE <span class="td-credits">(SYNAPSE LABS)</span></div>
+                    </td>
+                    <td class="td-peak">6</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: IMPROVE SKILLS
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="modalImproveSkills" onclick="if(event.target===this) closeImproveSkillsModal()">
+          <div class="studio-modal-chassis skills-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">IMPROVE CORE SKILLS</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeImproveSkillsModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body skills-modal-body">
+              <p class="skills-modal-desc">Book master coaching sessions and studio drills to level up your technical attributes.</p>
+              
+              <div class="skills-train-list">
+                <!-- Training 1: Lyrics -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-lyrics">LYRICS</span>
+                    <strong class="train-item-title">Drill &amp; Metaphor Sparring</strong>
+                    <span class="train-item-meta">+2 Lyrics Mastery &bull; Focus: Wordplay &amp; Flow</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeSkillTraining('lyrics', 2, 2500, 'Lyrics Sparring')">
+                    TRAIN <small>($2,500)</small>
+                  </button>
+                </div>
+
+                <!-- Training 2: Vocals -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-vocals">VOCALS</span>
+                    <strong class="train-item-title">Pitch &amp; Melody Vocal Lab</strong>
+                    <span class="train-item-meta">+2 Vocal Control &bull; Focus: Harmony &amp; Pitch</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeSkillTraining('vocals', 2, 3200, 'Vocal Lab')">
+                    TRAIN <small>($3,200)</small>
+                  </button>
+                </div>
+
+                <!-- Training 3: Prod -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-prod">PROD</span>
+                    <strong class="train-item-title">808 &amp; Groove Masterclass</strong>
+                    <span class="train-item-meta">+2 Beatmaking &bull; Focus: Drum Patterns &amp; Chords</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeSkillTraining('prod', 2, 4000, '808 Masterclass')">
+                    TRAIN <small>($4,000)</small>
+                  </button>
+                </div>
+
+                <!-- Training 4: Mix/Master -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-mix">MIX/MASTER</span>
+                    <strong class="train-item-title">Analog Saturation &amp; Dynamics</strong>
+                    <span class="train-item-meta">+3 Mix Clarity &bull; Focus: EQ &amp; Compression</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeSkillTraining('mix', 3, 3800, 'Mix Engineering')">
+                    TRAIN <small>($3,800)</small>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: UPGRADE STUDIO
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="modalUpgradeStudio" onclick="if(event.target===this) closeUpgradeStudioModal()">
+          <div class="studio-modal-chassis skills-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">UPGRADE STUDIO HARDWARE</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeUpgradeStudioModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body skills-modal-body">
+              <div class="studio-tier-banner">
+                <span class="tier-banner-sub">CURRENT CONSOLE TIER</span>
+                <strong class="tier-banner-main">TIER 3: MASTER PRODUCER SUITE</strong>
+              </div>
+
+              <div class="skills-train-list">
+                <!-- Upgrade 1 -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-amber">ACOUSTICS</span>
+                    <strong class="train-item-title">Diffuser Panels &amp; Floating Floor</strong>
+                    <span class="train-item-meta">+1.5x Vocal Clarity in recording sessions</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeStudioUpgrade('Acoustic Diffusers', 5000)">
+                    BUY <small>($5,000)</small>
+                  </button>
+                </div>
+
+                <!-- Upgrade 2 -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-amber">MIC CHAIN</span>
+                    <strong class="train-item-title">Neumann U87 Vintage Mic Chain</strong>
+                    <span class="train-item-meta">Boosts all unreleased tracks base quality +4</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeStudioUpgrade('Neumann U87 Vocal Chain', 8500)">
+                    BUY <small>($8,500)</small>
+                  </button>
+                </div>
+
+                <!-- Upgrade 3 -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-amber">ANALOG CONSOLE</span>
+                    <strong class="train-item-title">SSL 4000 G+ Bus Compressor</strong>
+                    <span class="train-item-meta">Provides radio-ready glue to final mixes</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeStudioUpgrade('SSL 4000 Bus Compressor', 12000)">
+                    BUY <small>($12,000)</small>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             SKEUOMORPHIC MODAL: GENRE COURSES
+             ========================================================= -->
+        <div class="studio-modal-backdrop" id="modalGenreCourses" onclick="if(event.target===this) closeGenreCoursesModal()">
+          <div class="studio-modal-chassis skills-modal-chassis">
+            <div class="studio-modal-head">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="chassis-screw mini"></span>
+                <span class="modal-head-title">GENRE MASTERCLASSES</span>
+              </div>
+              <button class="modal-close-icon" onclick="closeGenreCoursesModal()" title="Close">&times;</button>
+            </div>
+            <div class="studio-modal-body skills-modal-body">
+              <p class="skills-modal-desc">Enroll in specialized genre courses to increase your top genre skill ratings.</p>
+
+              <div class="skills-train-list">
+                <!-- Course 1: Hip Hop -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-hiphop">HIP HOP</span>
+                    <strong class="train-item-title">Trap &amp; Boom Bap Foundations</strong>
+                    <span class="train-item-meta">+2 Hip Hop Mastery &bull; 808 slides &amp; cadence</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeGenreCourse('hiphop', 2, 3500, 'Hip Hop Masterclass')">
+                    ENROLL <small>($3,500)</small>
+                  </button>
+                </div>
+
+                <!-- Course 2: Pop -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-pop">POP</span>
+                    <strong class="train-item-title">Radio Hook Architecture</strong>
+                    <span class="train-item-meta">+3 Pop Mastery &bull; Catchy top-lines &amp; bridges</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeGenreCourse('pop', 3, 4200, 'Pop Hook Architecture')">
+                    ENROLL <small>($4,200)</small>
+                  </button>
+                </div>
+
+                <!-- Course 3: Jazz -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-jazz">JAZZ</span>
+                    <strong class="train-item-title">Complex Chord Progressions &amp; Neo-Soul</strong>
+                    <span class="train-item-meta">+2 Jazz Mastery &bull; Syncopation &amp; 7th chords</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeGenreCourse('jazz', 2, 4800, 'Jazz &amp; Neo-Soul Lab')">
+                    ENROLL <small>($4,800)</small>
+                  </button>
+                </div>
+
+                <!-- Course 4: Rock -->
+                <div class="skills-train-item">
+                  <div class="train-item-info">
+                    <span class="train-badge badge-rock">ROCK</span>
+                    <strong class="train-item-title">Live Guitars &amp; Grunge Distortion</strong>
+                    <span class="train-item-meta">+3 Rock Mastery &bull; Riffs, amps &amp; drum bleed</span>
+                  </div>
+                  <button class="skeuo-btn train-action-btn" onclick="executeGenreCourse('rock', 3, 3800, 'Grunge &amp; Alt-Rock Lab')">
+                    ENROLL <small>($3,800)</small>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- =========================================================
+             SHAWTIFY: AUTHENTIC SPOTIFY DSP FULL-SCREEN PHONE APP
+             Direct child of .mobile-screen: Edge-to-edge coverage
+             Covers entire display including behind and around the notch
+             ========================================================= -->
+        <div class="spotify-full-screen-app" id="appView_shawtify" style="display: none;">
+          
+          <!-- Top Hardware Status Bar (Behind & Around Notch) -->
+          <div class="spotify-top-hardware-bar">
+            <!-- Circular Floating Back Arrow to Media Page -->
+            <button class="spotify-top-back-btn" id="shawtifyGlobalBackBtn" onclick="handleShawtifyBackNavigation()" title="Back to Media">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+
+            <!-- Hardware Notch Pill (Sits physically over Spotify Dark Header) -->
+            <div class="notch-pill spotify-notch-hardware">
+              <div class="notch-lens"></div>
+              <div class="notch-sensor"></div>
+            </div>
+
+            <!-- Authentic Mobile Top-Right Indicators (Time, WiFi, Battery) -->
+            <div class="spotify-top-status-right">
+              <span class="spotify-phone-time" id="spotifyPhoneClock">9:41</span>
+              <svg width="15" height="11" viewBox="0 0 17 12" fill="#ffffff" class="spotify-status-icon" opacity="0.9">
+                <path d="M1 9h2v3H1V9zm4-3h2v6H5V6zm4-3h2v9H9V3zm4-3h2v12h-2V0z"/>
+              </svg>
+              <svg width="22" height="11" viewBox="0 0 25 12" fill="#ffffff" class="spotify-status-icon" opacity="0.9">
+                <rect x="0.5" y="0.5" width="20" height="11" rx="3" stroke="#ffffff" fill="none"/>
+                <rect x="2.5" y="2.5" width="14" height="7" rx="1.5" fill="#ffffff"/>
+                <path d="M22 4.5v3" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Main Scrollable Content Viewport -->
+          <div class="spotify-main-viewport" id="shawtifyMainViewport">
+            
+            <!-- TAB 1: "YOU" (PLAYER'S SPOTIFY ARTIST PROFILE) -->
+            <div class="spotify-tab-page" id="shawtifyPageYou">
+              <div id="shawtifyYouContent"></div>
+            </div>
+
+            <!-- TAB 2: "INDUSTRY" (SEARCH & ARTIST DIRECTORY) -->
+            <div class="spotify-tab-page" id="shawtifyPageIndustry" style="display: none;">
+              <!-- Industry Search & Artist Directory View -->
+              <div id="shawtifyIndustrySearchContent"></div>
+
+              <!-- Selected Industry Artist Profile Container -->
+              <div id="shawtifyIndustryArtistProfile" style="display: none;"></div>
+            </div>
+
+            <!-- SUBVIEW: ALBUM / PROJECT TRACKLIST VIEW -->
+            <div class="spotify-album-view" id="shawtifyAlbumInspectView" style="display: none;">
+              <div id="shawtifyAlbumInspectContent"></div>
+            </div>
+
+            <!-- SUBVIEW: FULL DISCOGRAPHY VIEW -->
+            <div class="spotify-disco-view" id="shawtifyDiscographyView" style="display: none;">
+              <div id="shawtifyDiscographyContent"></div>
+            </div>
+
+          </div>
+
+          <!-- Spotify Mini-Player (Now Playing Floating Bar) -->
+          <div class="spotify-mini-player" id="spotifyMiniPlayer" style="display: none;">
+            <div class="mini-player-track-info">
+              <img src="album covers/download (10).jpg" id="miniPlayerCover" class="mini-player-cover" alt="Now Playing">
+              <div class="mini-player-text">
+                <span class="mini-player-title" id="miniPlayerTitle">Neon Dreams</span>
+                <span class="mini-player-artist" id="miniPlayerArtist">Lil Synapse</span>
+              </div>
+            </div>
+            <div class="mini-player-controls">
+              <button class="mini-player-btn" onclick="toggleMiniPlayerPlay(event)" title="Play / Pause">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" id="miniPlayerPlayIcon">
+                  <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="mini-player-progress-bar">
+              <div class="mini-player-progress-fill" id="miniPlayerProgress"></div>
+            </div>
+          </div>
+
+          <!-- Spotify Bottom Navigation (Industry & You) -->
+          <div class="spotify-bottom-nav">
+            <button class="spotify-nav-btn" id="shawtifyNavIndustry" onclick="switchShawtifyTab('industry')">
+              <div class="spotify-nav-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+              <span class="spotify-nav-label">Industry</span>
+            </button>
+            <button class="spotify-nav-btn active" id="shawtifyNavYou" onclick="switchShawtifyTab('you')">
+              <div class="spotify-nav-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <span class="spotify-nav-label">You</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -19,6 +19,7 @@ from rapsim_reviews.ecosystem_name_generator import (
     generate_mixtape_name,
     generate_song_name,
 )
+from rapsim_reviews.date_system import assign_release_days, format_week_range, format_release_date
 
 
 ROLE_RELEASE_WEIGHTS = {
@@ -34,7 +35,7 @@ ROLE_RELEASE_WEIGHTS = {
 }
 
 
-@dataclass(frozen=True)
+@dataclass
 class WeeklyRelease:
     release_id: str
     artist_name: str
@@ -46,6 +47,8 @@ class WeeklyRelease:
     week_number: int
     quality: float
     tracks: tuple["ProjectTrack", ...] | None = None
+    day_offset: int = 4
+    release_date: str = ""
 
 
 @dataclass(frozen=True)
@@ -96,6 +99,8 @@ class EcosystemSongRuntime:
     feature_qualities: tuple[tuple[str, float], ...] = ()
     is_growing: bool = False
     project_label: str = "Single"
+    day_offset: int = 4
+    release_date: str = ""
 
 
 @dataclass
@@ -109,6 +114,8 @@ class PendingRelease:
     tracks: list[ProjectTrack]
     week_created: int
     week_release: int
+    day_offset: int = 4
+    release_date: str = ""
 
 
 @dataclass
@@ -1802,13 +1809,14 @@ def simulate_week(week_number: int, roster: list[EcosystemArtistRuntime]) -> lis
         if release is not None:
             releases.append(release)
 
-    print(f"\nWeek {week_number}")
+    assign_release_days(releases, week_number)
+    print(f"\n{format_week_range(week_number)}")
     print(f"Artists dropped: {len(releases)}")
     for release in releases:
         print(
             f"{release.artist_name} released {release.release_type} "
             f"'{release.title}' in genre {release.genre} and theme {release.theme} "
-            f"| review: {release.review}/10 | week {release.week_number}"
+            f"| review: {release.review}/10 | {format_release_date(release)}"
         )
     return releases
 
@@ -1876,6 +1884,7 @@ def step_world(world: EcosystemWorld) -> list[WeeklyRelease]:
             releases.append(release)
             world.release_history.setdefault(release.artist_name, []).append(release)
             world.releases_this_week_by_artist.setdefault(release.artist_name, []).append(release)
+    assign_release_days(releases, world.week_number)
     world.last_week_releases = releases
     _register_released_songs(world, releases)
     _step_ecosystem_streams(world)
@@ -1925,6 +1934,8 @@ def _register_released_songs(world: EcosystemWorld, releases: list[WeeklyRelease
                 feature_qualities=tuple(getattr(t, "feature_qualities", ())),
                 is_growing=bool(is_growing),
                 project_label=str(project_label),
+                day_offset=int(getattr(release, "day_offset", 4)),
+                release_date=str(getattr(release, "release_date", "")),
             )
             world.songs_by_artist.setdefault(release.artist_name, []).append(song_id)
 

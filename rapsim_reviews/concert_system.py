@@ -4,6 +4,7 @@ import random
 import math
 from dataclasses import dataclass, field
 from rapsim_reviews.artist_ecosystem_seed import ARTIST_ECOSYSTEM_SEEDS
+from rapsim_reviews.date_system import format_week_range
 
 # ──────────────────────────────────────────────────────────────────────
 #  DATA STRUCTURES
@@ -1125,7 +1126,7 @@ def display_current_bookings(artist):
         sold = calculate_current_sales(booking, current_wk)
         cap = venue.capacity if venue else 0
         fill_pct = (sold / cap * 100) if cap > 0 else 0.0
-        print(f"[{idx+1}] Week {booking.week} (In {w_left} weeks) at {venue_name}")
+        print(f"[{idx+1}] {format_week_range(booking.week)} (In {w_left} weeks) at {venue_name}")
         print(f"    Capacity: {cap:,} | Tickets Sold: {sold:,} ({fill_pct:.1f}%)")
         print(f"    Duration: {booking.duration_hours:.1f} hours | Setlist: {len(booking.setlist)} songs")
         print(f"    Ticket Prices: Floor: ${booking.ticket_prices['floor']}, Gen: ${booking.ticket_prices['general']}, VIP: ${booking.ticket_prices['vip']}")
@@ -1150,7 +1151,7 @@ def display_sales_analysis(artist):
     for idx, booking in enumerate(artist.concert_history):
         venue = next((v for v in VENUES if v.id == booking.venue_id), None)
         venue_name = venue.name if venue else "Unknown Venue"
-        print(f"[{idx+1}] Week {booking.week} at {venue_name} ({venue.city if venue else ''})")
+        print(f"[{idx+1}] {format_week_range(booking.week)} at {venue_name} ({venue.city if venue else ''})")
         print(f"    Performance Score: {booking.performance_score}/10 | Attendance: {booking.attendance:,} ({booking.capacity_fill_pct*100:.1f}%)")
         print(f"    Duration: {booking.duration_hours:.1f} hours")
         print(f"    Ticket Prices: Floor: ${booking.ticket_prices['floor']}, Gen: ${booking.ticket_prices['general']}, VIP: ${booking.ticket_prices['vip']}")
@@ -1378,7 +1379,7 @@ def book_venue_flow(artist, world):
 
     # Choose week
     current_week = ((artist.year - 1) * 52) + artist.week
-    print(f"\nCurrent Week: {current_week} (Year {artist.year} Week {artist.week})")
+    print(f"\nCurrent Week: {format_week_range(current_week)}")
     print(f"Venue availability: weeks {venue.weekly_availability}")
     try:
         weeks_ahead = int(input("  How many weeks ahead would you like to perform? (1-12): ").strip())
@@ -1400,7 +1401,7 @@ def book_venue_flow(artist, world):
 
     shows_on_week = sum(1 for b in artist.upcoming_concerts if b.week == target_week)
     if shows_on_week >= 3:
-        print(f"\n[ERROR] You cannot book more than 3 shows in a single week. Week {target_week} already has 3 shows booked.")
+        print(f"\n[ERROR] You cannot book more than 3 shows in a single week. {format_week_range(target_week)} already has 3 shows booked.")
         input("Press Enter to go back...")
         return
 
@@ -1410,7 +1411,7 @@ def book_venue_flow(artist, world):
             npc_bookings = sum(1 for b in ov.booking_requests if b.get("accepted") and b.get("week") == target_week)
             player_bookings_here = sum(1 for b in artist.upcoming_concerts if b.week == target_week and getattr(b, "venue_id", None) == ov.id)
             if npc_bookings + player_bookings_here >= 3:
-                print(f"\n[ERROR] Venue '{ov.name}' cannot host more than 3 events in a single week. Week {target_week} already has {npc_bookings + player_bookings_here} events scheduled.")
+                print(f"\n[ERROR] Venue '{ov.name}' cannot host more than 3 events in a single week. {format_week_range(target_week)} already has {npc_bookings + player_bookings_here} events scheduled.")
                 input("Press Enter to go back...")
                 return
 
@@ -1651,7 +1652,7 @@ def book_venue_flow(artist, world):
     print(f"\nConcert Duration: {duration_hours:.2f} hours (Optimal: 2.0 hours -> Ticket sales modifier: {duration_modifier_pct}%)")
     print(f"Total Upfront Cost: ${total_upfront:,.2f} (Hire: ${hire_costs:,.2f} + Promo: ${promo_cost:,.2f})")
     
-    confirm_book = input(f"Confirm booking {venue.name} for week {target_week}? [y/N]: ").strip().lower()
+    confirm_book = input(f"Confirm booking {venue.name} for {format_week_range(target_week)}? [y/N]: ").strip().lower()
     if confirm_book == 'y':
         if artist.money < total_upfront:
             print("[ERROR] Insufficient funds to book this venue with selected promotion.")
@@ -2110,6 +2111,15 @@ def run_concert(booking, venue, artist, all_songs, world=None):
     )
     # Apply promotion boost
     fill_pct *= booking.promotion_boost
+
+    contract = getattr(artist, "label_contract", None)
+    if contract and getattr(contract, "status", "") in ("active", "shelved", "recouped"):
+        from rapsim_reviews.label_system import get_label_by_id
+        lbl = get_label_by_id(contract.label_id)
+        if lbl:
+            gig_boost = lbl.gig_promotion_boost if getattr(contract, "is_priority_artist", True) else (1.0 + (lbl.gig_promotion_boost - 1.0) * 0.15)
+            fill_pct *= gig_boost
+            booking.label_promotion_boost = gig_boost
     
     # Apply opener attendance boost (famous/mid opener boost calculated at booking)
     # If the opener is famous (popularity >= 70) we boost fill percent by +0.25
@@ -2269,6 +2279,17 @@ def run_concert(booking, venue, artist, all_songs, world=None):
     # Calculate revenues
     gross, net, org_cut_val = calculate_concert_revenue(booking, venue, None)
     net -= booking.accidental_cost
+
+    # Label concert & merch cut
+    contract = getattr(artist, "label_contract", None)
+    if contract and getattr(contract, "status", "") in ("active", "shelved", "recouped"):
+        label_cut_pct = float(getattr(contract, "concert_merch_cut", 0.0))
+        if label_cut_pct > 0.0:
+            label_cut_val = gross * label_cut_pct
+            net -= label_cut_val
+            booking.label_cut = label_cut_val
+            from rapsim_reviews.ui_helpers import money_fmt
+            print(f"  [LABEL CUT] Label took {label_cut_pct*100:.1f}% concert cut: -{money_fmt(label_cut_val)}")
 
     booking.gross_revenue = gross
     booking.net_revenue = net

@@ -4,6 +4,7 @@ import random
 from dataclasses import dataclass, field
 from typing import Any
 import builtins
+from rapsim_reviews.date_system import format_week_range
 
 def cli_pause(prompt="Press Enter to continue..."):
     import inspect
@@ -1417,7 +1418,7 @@ def manage_venues_flow(artist):
             else:
                 for r in selected_venue.reviews:
                     stars_str = "★" * int(r["rating"]) + "☆" * (5 - int(r["rating"]))
-                    print(f"  Week {r['week']} | {r['username']} | Rating: {stars_str} ({r['rating']}/5.0)")
+                    print(f"  {format_week_range(r['week'])} | {r['username']} | Rating: {stars_str} ({r['rating']}/5.0)")
                     print(f"    Comment: \"{r['comment']}\"")
                     print("-" * 50)
             cli_pause("\nPress Enter to return...")
@@ -1428,10 +1429,10 @@ def manage_venues_flow(artist):
             if not selected_venue.past_shows_log:
                 print("No performances recorded yet.")
             else:
-                print(f"{'Week':<6} | {'Artist':<18} | {'Attendance':<10} | {'Gross Revenue':<14} | {'Venue Rent+Cut':<15} | {'Controversy':<15}")
-                print("-" * 85)
+                print(f"{'Week':<17} | {'Artist':<18} | {'Attendance':<10} | {'Gross Revenue':<14} | {'Venue Rent+Cut':<15} | {'Controversy':<15}")
+                print("-" * 96)
                 for s in reversed(selected_venue.past_shows_log):
-                    print(f"{s['week']:<6} | {s['artist_name']:<18} | {s['attendance']:<10,} | ${s['gross_revenue']:<13,.2f} | ${s['revenue_to_venue']:<14,.2f} | {s['controversy']:<15}")
+                    print(f"{format_week_range(s['week']):<17} | {s['artist_name']:<18} | {s['attendance']:<10,} | ${s['gross_revenue']:<13,.2f} | ${s['revenue_to_venue']:<14,.2f} | {s['controversy']:<15}")
             cli_pause("\nPress Enter to return...")
             
         elif action_choice == 8:
@@ -1442,7 +1443,7 @@ def manage_venues_flow(artist):
             else:
                 for t in reversed(selected_venue.past_events_history):
                     net_str = f"+${t['net']:,.2f}" if t["net"] >= 0 else f"-${abs(t['net']):,.2f}"
-                    print(f"  Week {t['week']} | {t['type'].upper()}: {t['details']} -> {net_str}")
+                    print(f"  {format_week_range(t['week'])} | {t['type'].upper()}: {t['details']} -> {net_str}")
             cli_pause("\nPress Enter to return...")
             
         else:
@@ -1476,7 +1477,7 @@ def review_bookings_flow(artist):
         print("\nSelect a pending request to review:")
         req_strings = []
         for r in pending_reqs:
-            req_strings.append(f"{r['artist_name']} (Pop: {r['artist_popularity']}) | Week {r['week']} | Offer: ${r['rent_fee']:,} + {r['cut_pct']*100:.0f}% cut")
+            req_strings.append(f"{r['artist_name']} (Pop: {r['artist_popularity']}) | {format_week_range(r['week'])} | Offer: ${r['rent_fee']:,} + {r['cut_pct']*100:.0f}% cut")
         req_strings.append("Back")
         
         req_choice = choose_from_list("Pending Booking Offers:", req_strings, allow_cancel=False)
@@ -1490,7 +1491,7 @@ def review_bookings_flow(artist):
         print(f"==========================================")
         print(f" Requesting Artist: {selected_req['artist_name']}")
         print(f" Artist Popularity: {selected_req['artist_popularity']}/100")
-        print(f" Proposed Show Week: Week {selected_req['week']}")
+        print(f" Proposed Show Week: {format_week_range(selected_req['week'])}")
         print(f" Upfront Base Rent Offer: ${selected_req['rent_fee']:,}")
         print(f" Revenue Ticket Cut Offer: {selected_req['cut_pct']*100:.1f}%")
         print(f"==========================================")
@@ -1505,12 +1506,12 @@ def review_bookings_flow(artist):
             total_events = accepted_for_week + player_shows_here
             
             if total_events >= 3:
-                print(f"\n[ERROR] This venue cannot host more than 3 events in a single week. Week {selected_req['week']} already has {total_events} events scheduled.")
+                print(f"\n[ERROR] This venue cannot host more than 3 events in a single week. {format_week_range(selected_req['week'])} already has {total_events} events scheduled.")
                 cli_pause()
                 continue
                 
             selected_req["accepted"] = True
-            print(f"\n[ACCEPTED] Offer accepted. The event has been scheduled for Week {selected_req['week']}.")
+            print(f"\n[ACCEPTED] Offer accepted. The event has been scheduled for {format_week_range(selected_req['week'])}.")
             cli_pause()
         elif act == 1:
             selected_venue.booking_requests.remove(selected_req)
