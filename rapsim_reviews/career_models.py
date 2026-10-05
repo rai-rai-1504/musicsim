@@ -500,3 +500,48 @@ def _is_growing_artist_name(name: str, world) -> bool:
         return False
     return "growing" in classify_artist_skills(runtime.seed)
 
+
+def _roll_bg_attribute_from_skill(skill_value: float) -> float:
+    # skill_value is 0-100; attribute lives ~1-10 but typically below 9.5.
+    s = float(skill_value) / 10.0
+    lo = max(1.0, s - 2.0)
+    hi = max(lo, s)
+    return round(random.uniform(lo, hi), 1)
+
+
+def _jitter_attribute(value: float, span: float = 0.4, lo: float = 1.0, hi: float = 9.9) -> float:
+    return round(max(lo, min(hi, random.uniform(value - span, value + span))), 1)
+
+
+def _ensure_song_bg_attrs(song: Song, artist_skills: dict) -> None:
+    if getattr(song, "bg_lyrics", None) is None:
+        song.bg_lyrics = _roll_bg_attribute_from_skill(artist_skills.get("lyrics", 25))
+    if getattr(song, "bg_vocals", None) is None:
+        song.bg_vocals = _roll_bg_attribute_from_skill(artist_skills.get("vocals", 25))
+    if getattr(song, "bg_production", None) is None:
+        song.bg_production = _roll_bg_attribute_from_skill(artist_skills.get("production", 25))
+    if getattr(song, "bg_mix", None) is None:
+        song.bg_mix = _roll_bg_attribute_from_skill(artist_skills.get("mix/master", 25))
+
+
+def _apply_producer_bg(song: Song, producer_seed) -> None:
+    if song is None or producer_seed is None:
+        return
+    prod_skill = float(getattr(producer_seed, "skills", {}).get("production", 50))
+    song.bg_production = _roll_bg_attribute_from_skill(prod_skill)
+
+
+def _apply_engineer_bg(song: Song, engineer_seed) -> None:
+    if song is None or engineer_seed is None:
+        return
+    eng_skill = float(getattr(engineer_seed, "skills", {}).get("mix/master", 50))
+    song.bg_mix = _roll_bg_attribute_from_skill(eng_skill)
+
+
+def _ecosystem_release_quality(release) -> float:
+    tracks = list(getattr(release, "tracks", None) or ())
+    if tracks:
+        return sum(float(getattr(track, "quality", getattr(release, "quality", 0.0))) for track in tracks) / len(tracks)
+    return float(getattr(release, "quality", 0.0))
+
+

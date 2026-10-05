@@ -18,6 +18,8 @@ from rapsim_reviews.ui_helpers import (
     _stable_rng_for_label,
 )
 from rapsim_reviews.album_review import MIN_SONGS
+from rapsim_reviews.album_review.base import Album
+from rapsim_reviews.track_review.base import GENRES, THEMES
 from rapsim_reviews.artist_ecosystem_seed import ARTIST_ECOSYSTEM_SEEDS, ARTIST_LOVINGNESS
 from rapsim_reviews.artist_ecosystem_sim import (
     prepare_release_calendar,
@@ -33,12 +35,18 @@ from rapsim_reviews.career_models import (
     _ecosystem_seed_by_name,
     _ecosystem_artist_popularity,
     _ecosystem_artist_reputation,
+    _ensure_song_bg_attrs,
 )
 from rapsim_reviews.sales_system import (
     _ensure_sales_state,
     _world_release_sales,
     _riaa_certification_label,
+    _player_song_sales_snapshot,
+    _player_album_sales_snapshot,
+    _physical_stock_summary,
+    manage_physical_copies_menu,
 )
+from rapsim_reviews.feature_system import send_feature_request_menu
 from rapsim_reviews.romance_system import (
     _artist_lovingness,
     _get_romance_profile,
@@ -113,6 +121,45 @@ def delete_single_entry(artist):
     removed = singles[idx]
     artist.singles.remove(removed)
     print(f"Deleted single entry for '{removed.song.name}'.")
+
+
+def create_album_entry():
+    album_name = prompt_text("Album name: ", "Untitled Album")
+    core_genre = GENRES[choose_from_list("Choose album core genre", GENRES)]
+    core_theme = THEMES[choose_from_list("Choose album core theme", THEMES)]
+    album = Album(album_name, core_genre, core_theme)
+    return AlbumEntry(album=album)
+
+
+def choose_album_draft(artist, allow_create=False):
+    drafts = [entry for entry in artist.albums if not entry.released]
+    if not drafts:
+        if allow_create:
+            create_new = prompt_text("No draft albums. Create one now? (y/n): ", "y")
+            if create_new.lower() == "y":
+                entry = create_album_entry()
+                artist.albums.append(entry)
+                return entry
+        print("No draft albums available.")
+        return None
+
+    options = []
+    if allow_create:
+        options.append("Create a new album draft")
+    for entry in drafts:
+        tag = "Deluxe" if entry.deluxe_of else "Album"
+        options.append(f"{entry.album.name} [{tag}] - {entry.album.song_count()} tracks")
+
+    idx = choose_from_list("Choose album draft", options, allow_cancel=True)
+    if idx is None:
+        return None
+    if allow_create:
+        if idx == 0:
+            entry = create_album_entry()
+            artist.albums.append(entry)
+            return entry
+        return drafts[idx - 1]
+    return drafts[idx]
 
 
 def add_single_to_album(artist):

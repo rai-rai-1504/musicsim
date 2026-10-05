@@ -9,7 +9,7 @@ import random
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
-from rapsim_reviews.date_system import format_week_range
+from rapsim_reviews.date_system import format_week_range, format_release_date
 from rapsim_reviews.ui_helpers import (
     choose_from_list,
     choose_item_from_list,
@@ -21,7 +21,7 @@ from rapsim_reviews.ui_helpers import (
     clamp_popularity,
     _stable_rng_for_label,
 )
-from rapsim_reviews.artist_ecosystem_seed import ARTIST_ECOSYSTEM_SEEDS
+from rapsim_reviews.artist_ecosystem_seed import ARTIST_ECOSYSTEM_SEEDS, ARTIST_FEATURE_TURNAROUND
 from rapsim_reviews.career_models import (
     Artist,
     SongEntry,
@@ -29,6 +29,8 @@ from rapsim_reviews.career_models import (
     FeatureRequest,
     FEATURE_DEADLINE_WEEKS,
     GENRE_SKILL_WEIGHTS,
+    SKILLS,
+    classify_artist_skills,
     _player_week_index,
     _apply_relationship_delta,
     _relationship_score,
@@ -36,11 +38,92 @@ from rapsim_reviews.career_models import (
     _ecosystem_artist_popularity,
     _find_world_runtime,
     _find_artist_any,
+    _ensure_song_bg_attrs,
+    _jitter_attribute,
+    _apply_producer_bg,
+    _apply_engineer_bg,
+)
+from rapsim_reviews.sales_system import (
+    _world_release_sales,
+    _riaa_certification_label,
 )
 from rapsim_reviews.track_review.base import Song
 
 if TYPE_CHECKING:
     from rapsim_reviews.artist_ecosystem_sim import EcosystemWorld
+
+FEATURE_REJECTION_LINES = {
+    "high": [
+        "I'm so sorry, I just can't make this work right now. Don't take it personally.",
+        "I love what you're doing, but I can't commit to this one. Respect always.",
+        "Not right now, but keep sending. You're talented, for real.",
+        "I can't jump on this, but I appreciate you reaching out.",
+        "I wish I could, but it's not the right fit. Much love though.",
+    ],
+    "mid": [
+        "Not this one.",
+        "I'll pass for now.",
+        "I can't do it.",
+        "Not feeling it.",
+        "Maybe another time.",
+    ],
+    "low": [
+        "Nah. Not for me.",
+        "No.",
+        "Stop asking.",
+        "Who is this again?",
+        "Not happening.",
+    ],
+}
+
+FEATURE_REJECT_VERSE_LINES = {
+    "high": [
+        "I'm so sorry bro, I just can't use this verse for technical reasons. Don't take it personally.",
+        "I respect you a lot, but this one isn't fitting the record. Please don't take it the wrong way.",
+        "I hear what you're trying to do, but I can't use it on this track. Much love though.",
+        "This is close, but I can't lock it in. If you want to try once more, go for it.",
+        "I appreciate the work, but it doesn't match what I need. Sorry.",
+    ],
+    "mid": [
+        "Not gonna use this one.",
+        "This isn't it.",
+        "Doesn't fit the track.",
+        "Nah, can't run with this.",
+        "Try again if you want.",
+    ],
+    "low": [
+        "Nah man this is bad.",
+        "This is not going on my song.",
+        "Nope.",
+        "Don't send me this again.",
+        "Stop wasting my time.",
+    ],
+}
+
+FEATURE_ACCEPT_VERSE_LINES = {
+    "high": [
+        "This is hard. I'm putting it in.",
+        "Perfect. This fits exactly.",
+        "Yeah, that's the one. Let's go.",
+        "Fire. You did your thing.",
+        "Locked. Appreciate you.",
+    ],
+    "mid": [
+        "Yeah, this works.",
+        "Cool. I'll use it.",
+        "This fits.",
+        "Alright, let's run it.",
+        "Good. Sending it through.",
+    ],
+    "low": [
+        "Fine. It works.",
+        "Okay. I'll use it.",
+        "Whatever. It's good enough.",
+        "Yeah.",
+        "Aight.",
+    ],
+}
+
 
 def _add_feature_to_title(title: str, feature_name: str) -> str:
     # Insert into existing "ft." list if present, and keep any "(prod. ...)" suffix.
@@ -547,6 +630,7 @@ def view_feature_requests_menu(player_artist):
         return
 
     if req.direction == "inbound" and req.status in {"accepted", "awaiting_verse"} and actions[choice] == "Work on my verse":
+        from rapsim_reviews.career_mode import apply_action_cost, calculate_song_quality
         # Roll verse quality until kept, then send once the player is happy.
         while True:
             apply_action_cost(player_artist, fatigue_cost=8.0, health_risk=0.05)

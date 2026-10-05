@@ -80,6 +80,7 @@ from rapsim_reviews.artist_ecosystem_sim import (
     catchiness_stream_multiplier,
     classify_artist_skills,
     ARTIST_BASE_REPUTATION,
+    apply_feature_to_pending_release,
 )
 from rapsim_reviews.live_module import go_live
 from rapsim_reviews.concert_system import ConcertBooking, concerts_menu, run_concert, VENUES, DEFAULT_PRICE_TEMPLATES

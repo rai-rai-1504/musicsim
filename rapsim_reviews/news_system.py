@@ -6,9 +6,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import math
 import random
+from types import SimpleNamespace
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
+from rapsim_reviews.artist_ecosystem_sim import WeeklyRelease, ProjectTrack, EcosystemSongRuntime
 from rapsim_reviews.date_system import format_release_date, format_week_range
 from rapsim_reviews.ui_helpers import (
     choose_from_list,

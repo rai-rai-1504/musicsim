@@ -146,6 +146,23 @@ def _ecosystem_song_display_review(runtime_song, track=None) -> float:
     return float(getattr(runtime_song, "quality", 0.0))
 
 
+def _virality_sentiment_adjustment(
+    *,
+    virality_triggered: bool,
+    virality_value,
+    virality_weeks_active: int,
+    rng: random.Random,
+) -> float:
+    if not virality_triggered:
+        return 0.0
+    v = max(1.0, min(5.0, float(virality_value or 1.0)))
+    age = max(0, int(virality_weeks_active))
+    age_factor = max(0.35, 1.0 - (age / 14.0))
+    ceiling = (0.08 + ((v - 1.0) / 4.0) * 0.32) * age_factor
+    direction = 1.0 if rng.random() < 0.52 else -1.0
+    return direction * rng.uniform(0.03, ceiling)
+
+
 def _compute_user_rating_snapshot(
     *,
     song_key: str,

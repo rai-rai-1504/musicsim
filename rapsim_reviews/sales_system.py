@@ -5,6 +5,7 @@ and label management contract negotiations.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import math
 import random
 from typing import TYPE_CHECKING
 
@@ -37,6 +38,7 @@ from rapsim_reviews.career_models import (
     _player_week_index,
     _ecosystem_seed_by_name,
     _ecosystem_artist_popularity,
+    _ecosystem_release_quality,
 )
 
 if TYPE_CHECKING:

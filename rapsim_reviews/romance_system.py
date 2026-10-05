@@ -19,8 +19,13 @@ from rapsim_reviews.ui_helpers import (
     prompt_text,
     clamp_meter,
     clamp_popularity,
+    clamp_fatigue,
 )
-from rapsim_reviews.artist_ecosystem_seed import ARTIST_ECOSYSTEM_SEEDS, ARTIST_LOVINGNESS
+from rapsim_reviews.artist_ecosystem_seed import (
+    ARTIST_ECOSYSTEM_SEEDS,
+    ARTIST_LOVINGNESS,
+    ARTIST_ROMANCE_PREFERENCES,
+)
 
 from rapsim_reviews.hidden_character_seeds import (
     HIDDEN_CHARACTER_BY_NAME,
@@ -40,6 +45,7 @@ from rapsim_reviews.career_models import (
     ROMANCE_ACTIVE_STATUSES,
     ROMANCE_PUBLIC_VISIBILITY,
     ROMANCE_STATUS_LABELS,
+    TEST_RELATIONSHIP_LOCK,
     _player_week_index,
     _year_week_from_world_week,
     _apply_relationship_delta,
@@ -57,6 +63,7 @@ from rapsim_reviews.news_system import (
     _apply_popularity_delta_to_actor,
     _apply_reputation_delta_to_actor,
     _recent_controversy_load,
+    _ensure_news_state,
 )
 
 def _is_grammy_media_week(current_week: int) -> bool:
@@ -193,6 +200,7 @@ def _publish_player_romance_event(
 ):
     if world is None:
         return None
+    from rapsim_reviews.twitter_system import _ensure_twitter_state, _generate_romance_tweets
     _ensure_news_state(world)
     _ensure_twitter_state(world)
     _ensure_romance_state(world)
@@ -1155,6 +1163,85 @@ def view_separated_relationships_menu(world: EcosystemWorld | None):
             f"{row['separated_from']:<14} {since} | together {_format_week_span(total)}"
         )
     input("\nPress Enter to go back...")
+
+
+def _relationship_tier(friendliness):
+    if friendliness >= 70:
+        return "friendly"
+    if friendliness >= 45:
+        return "neutral"
+    return "rude"
+
+
+def _friendship_label(score):
+    score = clamp_meter(score)
+    if score <= 10:
+        return "they strongly hate you"
+    if score <= 20:
+        return "he doesn't know you or either hates you"
+    if score <= 30:
+        return "barely knows you or wants to forget you"
+    if score <= 40:
+        return "more like a colleague honestly"
+    if score <= 55:
+        return "he digs you"
+    if score <= 65:
+        return "you are friends"
+    if score <= 75:
+        return "you are good friends"
+    if score <= 85:
+        return "your are good good friends"
+    if score <= 92:
+        return "get a room you two"
+    return "ride or die kinda shit"
+
+
+def _should_respond(friendliness, relationship, kind):
+    base = 0.35 + (friendliness / 200.0) + (relationship / 220.0)
+    if kind in {"money", "date"}:
+        base -= 0.10
+    if kind == "criticize":
+        base -= 0.05
+    return random.random() < max(0.10, min(0.95, base))
+
+
+def _praise_delta(friendliness):
+    delta = 0.5 + (friendliness / 100.0) * 4.5 + random.uniform(-0.5, 0.7)
+    delta = max(0.5, min(5.0, delta))
+    return min(15.0, delta * 3.0)
+
+
+def _crit_delta(friendliness):
+    scale = 0.85 + ((55.0 - friendliness) / 120.0)
+    delta = -random.uniform(2.0, 6.0) * max(0.55, min(1.25, scale))
+    return max(-7.5, min(-1.2, delta))
+
+
+def _relationship_bar(value):
+    return meter_bar("Relationship", value, width=22)
+
+
+def _decay_relationships(artist, week_index):
+    if TEST_RELATIONSHIP_LOCK and getattr(artist, "_relationship_lock", False):
+        for seed in ARTIST_ECOSYSTEM_SEEDS:
+            state = artist.relationships.get(seed.name)
+            if state:
+                state.score = 100.0
+        return
+    for seed in ARTIST_ECOSYSTEM_SEEDS:
+        state = artist.relationships.get(seed.name)
+        if not state:
+            continue
+        gap = week_index - state.last_contact_week
+        if gap <= 3:
+            continue
+        friendliness = int(getattr(seed, "friendliness", 50))
+        decay = random.uniform(0.8, 1.6)
+        if friendliness < 45:
+            decay *= 1.15
+        else:
+            decay *= 0.95
+        state.score = clamp_meter(state.score - decay)
 
 
 def manage_relationships_menu(player_artist, world: EcosystemWorld | None = None):

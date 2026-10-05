@@ -2422,6 +2422,103 @@
               </div>
             </div>
 
+            <!-- =========================================================
+                 PROFILE SUBPAGE: MEDIA MANAGEMENT (BLACK CONTRACT SYSTEM)
+                 ========================================================= -->
+            <div class="profile-labels-subpage-view profile-mgmt-subpage-view" id="profileSubpageManagement" style="display: none;">
+              <!-- Topbar: Back to Profile + Badge -->
+              <div class="subpage-topbar" style="margin-bottom: 6px;">
+                <button class="skeuo-btn app-back-btn" onclick="closeProfileManagementSubpage()" title="Back to Profile">
+                  &lsaquo; Back to Profile
+                </button>
+                <span class="subpage-badge" style="background: #1c1917; color: #fbbf24; border-color: #78350f;">MEDIA MANAGEMENT</span>
+              </div>
+
+              <!-- Dual Switcher: ALL MANAGEMENT | YOUR MANAGEMENT -->
+              <div class="labels-dual-switcher-wrap mgmt-switcher-wrap">
+                <div class="labels-dual-switcher-bar">
+                  <button class="labels-switcher-tab active" id="tabBtnMgmtAll" onclick="switchManagementSection('all')">
+                    ALL MANAGEMENT
+                  </button>
+                  <div class="labels-switcher-divider"></div>
+                  <button class="labels-switcher-tab" id="tabBtnMgmtYour" onclick="switchManagementSection('your')">
+                    YOUR MANAGEMENT
+                  </button>
+                </div>
+                <div class="labels-switcher-underline"></div>
+              </div>
+
+              <!-- SECTION 1: ALL MANAGEMENT (SCROLLABLE BLACK CONTRACTS DIRECTORY) -->
+              <div class="labels-section-content" id="mgmtSectionAll">
+                <!-- Dynamically populated via renderAllManagementContracts() -->
+              </div>
+
+              <!-- SECTION 2: YOUR MANAGEMENT (ACTIVE AGENCY BLACK CONTRACT CARD) -->
+              <div class="labels-section-content" id="mgmtSectionYour" style="display: none;">
+                <!-- Dynamically populated via renderYourManagementContract() -->
+              </div>
+            </div>
+
+            <!-- MODAL 1: FORMAL BLACK CONTRACT INSPECTOR MODAL -->
+            <div class="label-modal-backdrop" id="mgmtContractModal" style="display: none;" onclick="closeManagementContractModal(event)">
+              <div class="label-contract-parchment-sheet mgmt-black-contract-sheet" onclick="event.stopPropagation()">
+                <div class="contract-parchment-header mgmt-black-header">
+                  <div class="contract-parchment-top-row">
+                    <span class="contract-legal-seal-stamp mgmt-silver-stamp">TALENT &amp; MEDIA MANAGEMENT AGREEMENT</span>
+                    <button class="contract-modal-close-btn" style="color: #94a3b8;" onclick="closeManagementContractModal()">&times;</button>
+                  </div>
+                  <div class="contract-parchment-seal-row" id="mgmtContractModalSealRow">
+                    <!-- Dynamic seal & title -->
+                  </div>
+                </div>
+
+                <div class="contract-parchment-body mgmt-black-body" id="mgmtContractModalBodyContent">
+                  <!-- Dynamic clauses -->
+                </div>
+
+                <div class="contract-parchment-footer mgmt-black-footer" id="mgmtContractModalFooterActions">
+                  <!-- Action buttons -->
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL 2: YOUR MANAGEMENT SUB-DRAWER (STAFF & REQUESTS) -->
+            <div class="label-modal-backdrop" id="yourMgmtSubDrawer" style="display: none;" onclick="closeYourManagementSubdrawer(event)">
+              <div class="your-label-subdrawer-card mgmt-subdrawer-card" onclick="event.stopPropagation()">
+                <div class="subdrawer-header mgmt-subdrawer-header">
+                  <div class="subdrawer-header-left">
+                    <span class="subdrawer-icon-wrap" id="mgmtSubdrawerHeaderIcon"></span>
+                    <h3 class="subdrawer-title" id="mgmtSubdrawerHeaderTitle">MANAGEMENT DRAWER</h3>
+                  </div>
+                  <button class="subdrawer-close-btn" onclick="closeYourManagementSubdrawer()">&times;</button>
+                </div>
+
+                <div class="subdrawer-content-scroll mgmt-subdrawer-body" id="mgmtSubdrawerBodyContent">
+                  <!-- Dynamic subdrawer content -->
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL 3: MANAGEMENT HISTORY MODAL -->
+            <div class="label-modal-backdrop" id="mgmtHistoryModal" style="display: none;" onclick="closeManagementHistoryModal(event)">
+              <div class="your-label-subdrawer-card history-card mgmt-subdrawer-card" onclick="event.stopPropagation()">
+                <div class="subdrawer-header mgmt-subdrawer-header">
+                  <div class="subdrawer-header-left">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f1f5f9" stroke-width="2.2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <h3 class="subdrawer-title">MANAGEMENT HISTORY</h3>
+                  </div>
+                  <button class="subdrawer-close-btn" onclick="closeManagementHistoryModal()">&times;</button>
+                </div>
+
+                <div class="subdrawer-content-scroll mgmt-subdrawer-body" id="mgmtHistoryContent">
+                  <!-- Dynamic history list -->
+                </div>
+              </div>
+            </div>
+
             <!-- PROFILE SUBPAGE: DEDICATED PHASE 2 PLACEHOLDER VIEW -->
             <div class="analyze-subpage-view" id="profileAppPlaceholderView" style="display: none;">
               <div class="subpage-topbar">
@@ -3423,6 +3520,574 @@
               <span class="spotify-nav-label">You</span>
             </button>
           </div>
+        </div>
+
+        <!-- =========================================================
+             CALENDAR: FULL-SCREEN CALENDAR & ITINERARY APPLICATION
+             Direct child of .mobile-screen: Edge-to-edge coverage
+             Covers entire display including behind and around the notch
+             ========================================================= -->
+        <div class="calendar-full-screen-app" id="appView_calendar" style="display: none;">
+          
+          <!-- Top Hardware Status Bar (Behind & Around Notch) -->
+          <div class="calendar-top-hardware-bar">
+            <!-- Floating Back Arrow (Red / Terracotta #CE6A6B) -->
+            <button class="calendar-top-back-btn" id="calendarGlobalBackBtn" onclick="handleCalendarBackNavigation()" title="Back to Social">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CE6A6B" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+
+            <!-- Hardware Notch Pill -->
+            <div class="notch-pill calendar-notch-hardware">
+              <div class="notch-lens"></div>
+              <div class="notch-sensor"></div>
+            </div>
+
+            <!-- Mobile Top Indicators (Clock, WiFi, Battery) -->
+            <div class="calendar-top-status-right">
+              <span class="calendar-phone-time" id="calendarPhoneClock">9:41</span>
+              <svg width="15" height="11" viewBox="0 0 17 12" fill="#555555" class="calendar-status-icon">
+                <path d="M1 9h2v3H1V9zm4-3h2v6H5V6zm4-3h2v9H9V3zm4-3h2v12h-2V0z"/>
+              </svg>
+              <svg width="22" height="11" viewBox="0 0 25 12" fill="#555555" class="calendar-status-icon">
+                <rect x="0.5" y="0.5" width="20" height="11" rx="3" stroke="#555555" fill="none"/>
+                <rect x="2.5" y="2.5" width="14" height="7" rx="1.5" fill="#555555"/>
+                <path d="M22 4.5v3" stroke="#555555" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Main Scrollable Viewport -->
+          <div class="calendar-main-viewport" id="calendarMainViewport">
+            
+            <!-- VIEW 1: 4-WEEK OVERVIEW VIEW -->
+            <div class="calendar-view-section" id="calendarOverviewView">
+              
+              <!-- Title Date Range (e.g. JUNE 12 - JULY 9 , YEAR 2) -->
+              <div class="calendar-header-title-wrap">
+                <h1 class="calendar-header-title" id="calendarHeaderDateRange">JUNE 12 - JULY 9 , YEAR 2</h1>
+              </div>
+
+              <!-- 4-Week Grid Card -->
+              <div class="calendar-grid-card">
+                <!-- Days of Week Header (MON - SUN) -->
+                <div class="calendar-days-header-row">
+                  <div class="cal-col-header">MON</div>
+                  <div class="cal-col-header">TUE</div>
+                  <div class="cal-col-header">WED</div>
+                  <div class="cal-col-header">THU</div>
+                  <div class="cal-col-header">FRI</div>
+                  <div class="cal-col-header">SAT</div>
+                  <div class="cal-col-header">SUN</div>
+                </div>
+
+                <!-- 4 Weeks Dynamic Rows Container -->
+                <div class="calendar-4weeks-rows-container" id="calendar4WeeksRowsContainer">
+                  <!-- Dynamically populated via renderCalendar4Weeks() -->
+                </div>
+              </div>
+
+              <!-- 2 Arrow Navigation Bar -->
+              <div class="calendar-nav-bar">
+                <button class="cal-arrow-btn cal-arrow-prev" onclick="navCalendarPrev4Weeks()" title="Previous 4 Weeks">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="#CE6A6B">
+                    <polygon points="18,4 6,12 18,20"/>
+                  </svg>
+                </button>
+                <button class="cal-reset-today-btn" onclick="resetCalendarToCurrent()" title="Jump to Current Week">
+                  CURRENT WEEK
+                </button>
+                <button class="cal-arrow-btn cal-arrow-next" onclick="navCalendarNext4Weeks()" title="Next 4 Weeks">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="#CE6A6B">
+                    <polygon points="6,4 18,12 6,20"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- EVENTS Card (Awards, Festivals) -->
+              <div class="calendar-events-preview-card" onclick="openAllCalendarEventsModal()" title="View All Annual Events">
+                <div class="cal-events-header">
+                  <h3>EVENTS</h3>
+                  <span class="cal-events-view-all">VIEW ALL &rsaquo;</span>
+                </div>
+                <div class="cal-events-list" id="calendarUpcomingEventsList">
+                  <!-- Dynamically populated via renderUpcomingEventsPreview() -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- VIEW 2: WEEK DETAIL VIEW (TAPPING ANY WEEK/DATE) -->
+            <div class="calendar-view-section" id="calendarWeekDetailView" style="display: none;">
+              
+              <!-- Week Detail Top Bar with Back Arrow + Range + Add Button -->
+              <div class="cal-detail-top-bar">
+                <button class="cal-detail-back-btn" onclick="closeCalendarWeekDetail()" title="Back to 4-Week Overview">
+                  &lsaquo; 4-Week View
+                </button>
+                <h2 class="cal-detail-week-title" id="calendarDetailWeekTitle">WEEK 24</h2>
+                <button class="cal-add-event-btn" onclick="openAddCustomEventModal()" title="Mark Custom Event">
+                  <span class="cal-plus-icon">+</span> Event
+                </button>
+              </div>
+
+              <!-- Single Week Interactive Calendar Strip -->
+              <div class="calendar-detail-week-strip" id="calendarDetailWeekStrip">
+                <!-- Dynamically populated -->
+              </div>
+
+              <!-- Section 1: Player's Tasks That Week -->
+              <div class="cal-tasks-section">
+                <div class="cal-section-header">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="cal-section-badge">PLAYER</span>
+                    <h3 class="cal-section-title">YOUR TASKS &amp; SCHEDULE</h3>
+                  </div>
+                  <span class="cal-tasks-count" id="calendarWeekTasksCount">0 TASKS</span>
+                </div>
+                <div class="cal-tasks-list" id="calendarWeekTasksList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Section 2: Industry Drops Planned for This Week (4-Week limit) -->
+              <div class="cal-releases-section">
+                <div class="cal-section-header">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="cal-section-badge industry-badge">INDUSTRY</span>
+                    <h3 class="cal-section-title">NEW RELEASES (BY INDUSTRY)</h3>
+                  </div>
+                  <span class="cal-releases-intel-tag" id="calendarIntelTag">CONFIRMED DROPS</span>
+                </div>
+                <div class="cal-releases-list" id="calendarWeekReleasesList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- MODAL 1: ANNUAL EVENTS & FESTIVALS DIRECTORY MODAL -->
+          <div class="cal-modal-backdrop" id="calendarAllEventsModal" style="display: none;" onclick="closeAllCalendarEventsModal(event)">
+            <div class="cal-modal-sheet" onclick="event.stopPropagation()">
+              <div class="cal-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="cal-modal-trophy">🏆</span>
+                  <h3 class="cal-modal-title">ANNUAL FESTIVALS &amp; AWARDS</h3>
+                </div>
+                <button class="cal-modal-close-btn" onclick="closeAllCalendarEventsModal()">&times;</button>
+              </div>
+              <div class="cal-modal-body" id="calendarAllEventsListContent">
+                <!-- Dynamically populated list of all festivals and awards -->
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 2: MARK CUSTOM EVENT MODAL -->
+          <div class="cal-modal-backdrop" id="calendarAddEventModal" style="display: none;" onclick="closeAddCustomEventModal(event)">
+            <div class="cal-modal-sheet event-form-sheet" onclick="event.stopPropagation()">
+              <div class="cal-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="cal-modal-trophy">📅</span>
+                  <h3 class="cal-modal-title">MARK CUSTOM EVENT</h3>
+                </div>
+                <button class="cal-modal-close-btn" onclick="closeAddCustomEventModal()">&times;</button>
+              </div>
+              <div class="cal-modal-body">
+                <form id="calAddEventForm" onsubmit="handleSaveCustomEvent(event)">
+                  <div class="cal-form-group">
+                    <label>Event Title</label>
+                    <input type="text" id="calEventTitleInput" placeholder="e.g. Secret Album Listening Party" required />
+                  </div>
+                  <div class="cal-form-group">
+                    <label>Event Category / Icon</label>
+                    <select id="calEventTypeSelect">
+                      <option value="release">🚀 Music Release</option>
+                      <option value="concert">🎤 Concert / Performance</option>
+                      <option value="interview">🎙️ Press / Media Interview</option>
+                      <option value="studio">🎵 Studio Recording Session</option>
+                      <option value="video">🎬 Music Video Production</option>
+                      <option value="contract">📄 Business / Contract Review</option>
+                    </select>
+                  </div>
+                  <div class="cal-form-group">
+                    <label>Date Selection</label>
+                    <div class="cal-date-mode-toggle">
+                      <button type="button" class="cal-toggle-pill active" id="btnDateModeSingle" onclick="setCalDateMode('single')">Single Date</button>
+                      <button type="button" class="cal-toggle-pill" id="btnDateModeRange" onclick="setCalDateMode('range')">Date Range</button>
+                    </div>
+                  </div>
+                  <div class="cal-form-row">
+                    <div class="cal-form-group" style="flex: 1;">
+                      <label id="lblCalStartDate">Event Date</label>
+                      <select id="calEventStartDaySelect">
+                        <!-- Populated with that week's days -->
+                      </select>
+                    </div>
+                    <div class="cal-form-group" id="calEndDayGroup" style="flex: 1; display: none;">
+                      <label>End Date</label>
+                      <select id="calEventEndDaySelect">
+                        <!-- Populated with that week's days -->
+                      </select>
+                    </div>
+                  </div>
+                  <div class="cal-form-group">
+                    <label>Notes &amp; Location (Optional)</label>
+                    <input type="text" id="calEventNotesInput" placeholder="e.g. Quad Studios NYC, VIP Guestlist Only" />
+                  </div>
+                  <div class="cal-form-actions">
+                    <button type="submit" class="cal-submit-btn">MARK ON CALENDAR</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- =========================================================
+             BEAT STORE: FULL-SCREEN ONLINE BEAT MARKETPLACE
+             Direct child of .mobile-screen: Edge-to-edge coverage
+             Two Primary Tabs: SELL and BUY
+             Faithfully styled from user sketch (media_1791186145751.png)
+             ========================================================= -->
+        <div class="beatstore-full-screen-app" id="appView_beatstore" style="display: none;">
+          
+          <!-- Top Hardware Status Bar (Behind & Around Notch) -->
+          <div class="beatstore-top-hardware-bar">
+            <!-- Floating Back Arrow (Red #FF2A2A) -->
+            <button class="beatstore-top-back-btn" id="beatstoreGlobalBackBtn" onclick="handleBeatstoreBackNavigation()" title="Back to Social">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF2A2A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+
+            <!-- Hardware Notch Pill -->
+            <div class="notch-pill beatstore-notch-hardware">
+              <div class="notch-lens"></div>
+              <div class="notch-sensor"></div>
+            </div>
+
+            <!-- Mobile Top Indicators (Clock, WiFi, Battery) -->
+            <div class="beatstore-top-status-right">
+              <span class="beatstore-phone-time" id="beatstorePhoneClock">9:41</span>
+              <svg width="15" height="11" viewBox="0 0 17 12" fill="#888888" class="beatstore-status-icon">
+                <path d="M1 9h2v3H1V9zm4-3h2v6H5V6zm4-3h2v9H9V3zm4-3h2v12h-2V0z"/>
+              </svg>
+              <svg width="22" height="11" viewBox="0 0 25 12" fill="#888888" class="beatstore-status-icon">
+                <rect x="0.5" y="0.5" width="20" height="11" rx="3" stroke="#888888" fill="none"/>
+                <rect x="2.5" y="2.5" width="14" height="7" rx="1.5" fill="#888888"/>
+                <path d="M22 4.5v3" stroke="#888888" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Main Scrollable Content Viewport -->
+          <div class="beatstore-main-viewport" id="beatstoreMainViewport">
+            
+            <!-- App Header Row: BEAT STORE (Red Graffiti) + (+) ADD BEATS -->
+            <div class="beatstore-header-row">
+              <h1 class="beatstore-brand-title">BEAT STORE</h1>
+              <button class="beatstore-add-btn" id="beatstoreTopActionBtn" onclick="openBeatstoreAddBeatModal()" title="Add Beats to Store">
+                <span class="beatstore-plus-circle">+</span>
+                <span>ADD BEATS</span>
+              </button>
+            </div>
+
+            <!-- VIEW 1: SELL TAB VIEW -->
+            <div class="beatstore-tab-view" id="beatstoreSellView">
+              
+              <!-- Inventory Card Container -->
+              <div class="beatstore-card-container">
+                <div class="beatstore-card-header">
+                  <h3 class="beatstore-card-title">INVENTORY</h3>
+                  <span class="beatstore-card-meta" id="beatstoreInventoryCount">4 ON SALE</span>
+                </div>
+                
+                <div class="beatstore-beats-list" id="beatstoreInventoryList">
+                  <!-- Dynamically populated via renderBeatstoreInventory() -->
+                </div>
+              </div>
+
+              <!-- 3 White Action Buttons -->
+              <div class="beatstore-action-buttons-group">
+                
+                <!-- 1. NEGOTIATIONS -->
+                <button class="beatstore-white-action-btn" onclick="openBeatstoreInboundNegotiationsModal()">
+                  <div class="beatstore-btn-left">
+                    <div class="beatstore-btn-icon-wrap">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF2A2A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                      </svg>
+                    </div>
+                    <span class="beatstore-btn-text">NEGOTIATIONS</span>
+                  </div>
+                  <span class="beatstore-badge-count" id="beatstoreInboundBadge">3</span>
+                </button>
+
+                <!-- 2. APPLY BULK DISCOUNTS -->
+                <button class="beatstore-white-action-btn" onclick="openBeatstoreBulkDiscountModal()">
+                  <div class="beatstore-btn-left">
+                    <div class="beatstore-btn-icon-wrap">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF2A2A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                      </svg>
+                    </div>
+                    <span class="beatstore-btn-text">APPLY BULK DISCOUNTS</span>
+                  </div>
+                  <span class="beatstore-btn-arrow">&rsaquo;</span>
+                </button>
+
+                <!-- 3. VIEW SALES -->
+                <button class="beatstore-white-action-btn" onclick="openBeatstoreSalesModal()">
+                  <div class="beatstore-btn-left">
+                    <div class="beatstore-btn-icon-wrap">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF2A2A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                        <rect x="2" y="3" width="20" height="14" rx="2" stroke-width="2"/>
+                      </svg>
+                    </div>
+                    <span class="beatstore-btn-text">VIEW SALES</span>
+                  </div>
+                  <span class="beatstore-badge-count" id="beatstoreSalesBadge">5</span>
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- VIEW 2: BUY TAB VIEW -->
+            <div class="beatstore-tab-view" id="beatstoreBuyView" style="display: none;">
+              
+              <!-- Released This Week Drawer -->
+              <div class="beatstore-card-container">
+                <div class="beatstore-card-header">
+                  <h3 class="beatstore-card-title">RELEASED THIS WEEK</h3>
+                  <span class="beatstore-card-meta" id="beatstoreMarketCount">INDUSTRY EXCLUSIVES</span>
+                </div>
+                
+                <div class="beatstore-beats-list" id="beatstoreMarketList">
+                  <!-- Dynamically populated via renderBeatstoreReleasedThisWeek() -->
+                </div>
+              </div>
+
+              <!-- 2 White Action Buttons for Buy -->
+              <div class="beatstore-action-buttons-group">
+                
+                <!-- 1. SEARCH PRODUCERS -->
+                <button class="beatstore-white-action-btn" onclick="openBeatstoreProducerSearchModal()">
+                  <div class="beatstore-btn-left">
+                    <div class="beatstore-btn-icon-wrap">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF2A2A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      </svg>
+                    </div>
+                    <span class="beatstore-btn-text">SEARCH PRODUCERS</span>
+                  </div>
+                  <span class="beatstore-btn-arrow">&rsaquo;</span>
+                </button>
+
+                <!-- 2. PRODUCER NEGOTIATIONS (CHAT LIST) -->
+                <button class="beatstore-white-action-btn" onclick="openBeatstoreOutboundNegotiationsModal()">
+                  <div class="beatstore-btn-left">
+                    <div class="beatstore-btn-icon-wrap">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF2A2A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </div>
+                    <span class="beatstore-btn-text">PRODUCER NEGOTIATIONS</span>
+                  </div>
+                  <span class="beatstore-badge-count" id="beatstoreOutboundBadge">2</span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Bottom Navigation Bar (Sell vs Buy) -->
+          <div class="beatstore-bottom-nav">
+            <button class="beatstore-nav-tab active" id="beatstoreTabSell" onclick="switchBeatstoreTab('sell')">
+              <div class="beatstore-nav-icon-box">
+                <span class="beatstore-dollar-icon">$</span>
+              </div>
+              <span class="beatstore-nav-label">SELL</span>
+            </button>
+
+            <button class="beatstore-nav-tab" id="beatstoreTabBuy" onclick="switchBeatstoreTab('buy')">
+              <div class="beatstore-nav-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+              </div>
+              <span class="beatstore-nav-label">BUY</span>
+            </button>
+          </div>
+
+          <!-- MODALS & DRAWERS FOR BEAT STORE -->
+
+          <!-- 1. ADD BEATS MODAL (Choose from vault / create pack) -->
+          <div class="beatstore-modal-backdrop" id="beatstoreAddBeatModal" style="display: none;" onclick="closeBeatstoreAddBeatModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <h3 class="beatstore-modal-title">PUT BEAT / PACK ON SALE</h3>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreAddBeatModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body">
+                <form id="beatstoreAddBeatForm" onsubmit="handleSaveNewBeatListing(event)">
+                  <div class="beatstore-form-group">
+                    <label>Choose From Studio Vault</label>
+                    <select id="beatstoreVaultSelect" onchange="handleBeatstoreVaultSelectionChange()">
+                      <!-- Populated from vault -->
+                    </select>
+                  </div>
+                  <div class="beatstore-form-group">
+                    <label>Listing Title</label>
+                    <input type="text" id="beatstoreTitleInput" placeholder="e.g. Midnight 808 Trap Anthem" required />
+                  </div>
+                  <div class="beatstore-form-group">
+                    <label>Format</label>
+                    <div class="beatstore-toggle-group">
+                      <button type="button" class="beatstore-pill-btn active" id="btnListingTypeSingle" onclick="setBeatListingType('single')">SINGLE BEAT</button>
+                      <button type="button" class="beatstore-pill-btn" id="btnListingTypePack" onclick="setBeatListingType('pack')">BEAT PACK (5x)</button>
+                    </div>
+                  </div>
+                  <div class="beatstore-form-group">
+                    <label>Asking Price ($ USD)</label>
+                    <input type="number" id="beatstorePriceInput" min="200" max="100000" step="50" value="2000" required />
+                  </div>
+                  <div class="beatstore-form-group">
+                    <label>Genre / Style Tag</label>
+                    <select id="beatstoreGenreSelect">
+                      <option value="Trap">Trap (Dark / Atlanta)</option>
+                      <option value="Drill">Drill (NY / UK 140 BPM)</option>
+                      <option value="Melodic">Melodic Trap &amp; Guitar</option>
+                      <option value="Boom Bap">Boom Bap &amp; Soul Sample</option>
+                      <option value="R&B">Moody R&amp;B / Trap-Soul</option>
+                      <option value="Rage">Hyperpop &amp; Rage Synth</option>
+                    </select>
+                  </div>
+                  <div class="beatstore-form-actions">
+                    <button type="submit" class="beatstore-submit-btn">LIST ON STORE</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. INBOUND NEGOTIATIONS MODAL (Offers from other artists) -->
+          <div class="beatstore-modal-backdrop" id="beatstoreInboundNegotiationsModal" style="display: none;" onclick="closeBeatstoreInboundNegotiationsModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.1rem;">🤝</span>
+                  <h3 class="beatstore-modal-title">INCOMING NEGOTIATIONS</h3>
+                </div>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreInboundNegotiationsModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body" id="beatstoreInboundListContainer">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. BULK DISCOUNTS MODAL -->
+          <div class="beatstore-modal-backdrop" id="beatstoreBulkDiscountModal" style="display: none;" onclick="closeBeatstoreBulkDiscountModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.1rem;">🏷️</span>
+                  <h3 class="beatstore-modal-title">BULK STORE DISCOUNTS</h3>
+                </div>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreBulkDiscountModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body" id="beatstoreBulkDiscountList">
+                <!-- Dynamically populated options -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. VIEW SALES & REVENUE MODAL -->
+          <div class="beatstore-modal-backdrop" id="beatstoreSalesModal" style="display: none;" onclick="closeBeatstoreSalesModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.1rem;">📈</span>
+                  <h3 class="beatstore-modal-title">BEAT SALES &amp; REVENUE</h3>
+                </div>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreSalesModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body" id="beatstoreSalesContent">
+                <!-- Dynamically populated analytics & log -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. SEARCH PRODUCERS MODAL (Buy Tab) -->
+          <div class="beatstore-modal-backdrop" id="beatstoreProducerSearchModal" style="display: none;" onclick="closeBeatstoreProducerSearchModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.1rem;">🎧</span>
+                  <h3 class="beatstore-modal-title">PRODUCER DIRECTORY</h3>
+                </div>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreProducerSearchModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body">
+                <div class="beatstore-search-bar">
+                  <input type="text" id="beatstoreProducerSearchInput" placeholder="Search producers (e.g. Metro, Pierre)..." oninput="handleProducerSearchInput(this.value)" />
+                </div>
+                <div class="beatstore-genre-filter-row" id="beatstoreGenreFilters">
+                  <!-- Genre filter pills -->
+                </div>
+                <div class="beatstore-producers-list" id="beatstoreProducersListContent">
+                  <!-- Populated producer list -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. PRODUCER OUTBOUND NEGOTIATIONS (Chat List Modal) -->
+          <div class="beatstore-modal-backdrop" id="beatstoreOutboundNegotiationsModal" style="display: none;" onclick="closeBeatstoreOutboundNegotiationsModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.1rem;">💬</span>
+                  <h3 class="beatstore-modal-title">PRODUCER NEGOTIATIONS</h3>
+                </div>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreOutboundNegotiationsModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body" id="beatstoreOutboundListContainer">
+                <!-- Chat list of conversations -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. BUY / INSPECT BEAT MODAL -->
+          <div class="beatstore-modal-backdrop" id="beatstoreBuyBeatModal" style="display: none;" onclick="closeBeatstoreBuyBeatModal(event)">
+            <div class="beatstore-modal-sheet" onclick="event.stopPropagation()">
+              <div class="beatstore-modal-header">
+                <h3 class="beatstore-modal-title" id="buyModalTitle">BEAT PREVIEW</h3>
+                <button class="beatstore-modal-close-btn" onclick="closeBeatstoreBuyBeatModal()">&times;</button>
+              </div>
+              <div class="beatstore-modal-body" id="buyModalBody">
+                <!-- Populated with beat details, audio preview, instant buy or make offer -->
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>

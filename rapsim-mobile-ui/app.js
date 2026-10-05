@@ -501,6 +501,12 @@ function updateClock() {
 
   const spotifyClock = document.getElementById("spotifyPhoneClock");
   if (spotifyClock) spotifyClock.textContent = timeStr;
+
+  const calClock = document.getElementById("calendarPhoneClock");
+  if (calClock) calClock.textContent = timeStr;
+
+  const beatstoreClock = document.getElementById("beatstorePhoneClock");
+  if (beatstoreClock) beatstoreClock.textContent = timeStr;
 }
 
 // Frame Toggle for Testing
@@ -3014,6 +3020,14 @@ const SOCIAL_APPS_DATA = {
 
 function openSocialApp(appName) {
   playMechanicalClick();
+  if (appName === "calendar") {
+    openCalendarApp();
+    return;
+  }
+  if (appName === "beatstore") {
+    openBeatstoreApp();
+    return;
+  }
   if (appName === "slander" || appName === "imdb" || appName === "critiq") {
     openAnalyzeApp(appName, "social");
   } else if (appName === "hot100") {
@@ -3271,6 +3285,10 @@ function openProfileModule(moduleKey) {
   playMechanicalClick();
   if (moduleKey === "labels") {
     openProfileLabelsSubpage();
+    return;
+  }
+  if (moduleKey === "management") {
+    openProfileManagementSubpage();
     return;
   }
   const data = PROFILE_MODULES_DATA[moduleKey];
@@ -3784,19 +3802,43 @@ function getWaxSealSVG(size = 44) {
     <svg width="${size}" height="${size}" viewBox="0 0 60 60" fill="none">
       <defs>
         <radialGradient id="waxGrad_${size}" cx="35%" cy="30%" r="65%">
-          <stop offset="0%" stop-color="#b91c1c"/>
-          <stop offset="50%" stop-color="#991b1b"/>
-          <stop offset="85%" stop-color="#7f1d1d"/>
+          <stop offset="0%" stop-color="#dc2626"/>
+          <stop offset="35%" stop-color="#b91c1c"/>
+          <stop offset="70%" stop-color="#991b1b"/>
+          <stop offset="90%" stop-color="#7f1d1d"/>
           <stop offset="100%" stop-color="#450a0a"/>
         </radialGradient>
+        <radialGradient id="innerBed_${size}" cx="40%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#991b1b"/>
+          <stop offset="70%" stop-color="#781717"/>
+          <stop offset="100%" stop-color="#450a0a"/>
+        </radialGradient>
+        <filter id="waxShadow_${size}" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.45"/>
+        </filter>
       </defs>
-      <path d="M30 3 C36 3, 39 6, 44 7 C49 8, 53 12, 56 17 C59 22, 57 26, 58 31 C59 36, 57 41, 54 46 C51 51, 47 54, 42 56 C37 58, 33 57, 30 57 C27 57, 23 58, 18 56 C13 54, 9 51, 6 46 C3 41, 1 36, 2 31 C3 26, 1 22, 4 17 C7 12, 11 8, 16 7 C21 6, 24 3, 30 3 Z" fill="url(#waxGrad_${size})" filter="drop-shadow(0 3px 4px rgba(0,0,0,0.45))"/>
-      <circle cx="30" cy="30" r="18" fill="none" stroke="#520e0e" stroke-width="1.6" stroke-dasharray="3.5 2"/>
-      <circle cx="30" cy="30" r="14" fill="#781717"/>
-      <circle cx="30" cy="30" r="10" stroke="#991b1b" stroke-width="1.2" fill="none"/>
-      <circle cx="30" cy="30" r="6" stroke="#991b1b" stroke-width="1" fill="none"/>
-      <circle cx="30" cy="30" r="3" fill="#450a0a"/>
-      <path d="M18 20 C22 14, 38 14, 42 20" stroke="#fca5a5" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.45"/>
+      <!-- Molten wax outer irregular scalloped edge -->
+      <path d="M30 3 C36 2, 40 5, 45 7 C50 9, 54 13, 56 18 C58 23, 57 27, 58 32 C59 37, 57 42, 54 47 C51 52, 46 54, 41 57 C36 60, 31 58, 28 58 C24 58, 19 59, 15 57 C10 55, 6 51, 4 46 C2 41, 1 36, 2 31 C3 26, 1 21, 4 16 C7 11, 12 7, 17 6 C22 5, 25 3, 30 3 Z" fill="url(#waxGrad_${size})" filter="url(#waxShadow_${size})"/>
+      
+      <!-- Wax bevel highlight & rim -->
+      <path d="M22 6 C30 4, 42 6, 48 12 C52 16, 54 22, 54 28" stroke="#fca5a5" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
+      <path d="M12 48 C16 53, 24 56, 32 55" stroke="#450a0a" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.7"/>
+
+      <!-- Concentric inner seal ridge -->
+      <circle cx="30" cy="30" r="18.5" fill="none" stroke="#450a0a" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.8"/>
+      <circle cx="30" cy="30" r="17.5" fill="none" stroke="#fca5a5" stroke-width="0.8" opacity="0.3"/>
+      
+      <!-- Embossed inner bed -->
+      <circle cx="30" cy="30" r="14.5" fill="url(#innerBed_${size})"/>
+      
+      <!-- Embossed vinyl record / label crest rings -->
+      <circle cx="30" cy="30" r="11" stroke="#450a0a" stroke-width="1.2" fill="none"/>
+      <circle cx="30" cy="30" r="11" stroke="#fca5a5" stroke-width="0.6" stroke-dasharray="8 6" fill="none" opacity="0.35"/>
+      <circle cx="30" cy="30" r="7.5" stroke="#450a0a" stroke-width="1" fill="none"/>
+      <circle cx="30" cy="30" r="4" fill="#3b0707" stroke="#b91c1c" stroke-width="0.8"/>
+      
+      <!-- Specular gloss glint -->
+      <ellipse cx="23" cy="20" rx="4" ry="2" transform="rotate(-30 23 20)" fill="#ffffff" opacity="0.25"/>
     </svg>
   `;
 }
@@ -4601,7 +4643,13 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (["shawtify", "imdb", "critiq", "slander"].includes(hash)) {
     switchTab("media");
     openAnalyzeApp(hash);
-  } else if (["calendar", "news", "beatstore", "concerts", "messenger", "tumble", "beef", "livee"].includes(hash)) {
+  } else if (hash === "calendar") {
+    switchTab("social");
+    openCalendarApp();
+  } else if (hash === "beatstore") {
+    switchTab("social");
+    openBeatstoreApp();
+  } else if (["news", "concerts", "messenger", "tumble", "beef", "livee"].includes(hash)) {
     switchTab("social");
     openSocialPlaceholder(hash);
   } else if (["labels", "management", "certifications", "awards", "deals", "sidehustle", "relations", "wiki", "leisure"].includes(hash)) {
@@ -5820,3 +5868,3197 @@ function openMiniPlayerFull() {
   playMechanicalClick();
   showToast("NOW PLAYING FULL VIEW");
 }
+
+
+// ==========================================================================
+// PROFILE SUBPAGE: MEDIA MANAGEMENT ENGINE (BLACK CONTRACT PAPER SYSTEM)
+// ==========================================================================
+
+const MANAGEMENT_DATA = [
+  {
+    id: "mgmt-amplify",
+    name: "Amplify Collective",
+    tier: "Boutique PR & Digital Agency",
+    territory: "Digital & Grassroots",
+    yearlyCost: 12000,
+    yearlyCostDisplay: "$12,000.00 / YR",
+    weeklyPopularity: "+8-13%",
+    prestige: 52,
+    minPopularity: 15,
+    description: "A nimble independent boutique firm specializing in underground hype, grassroots playlist pitching, and early-stage social media resonance.",
+    clauses: [
+      "Press Outreach: 15 independent blog placements per month",
+      "Digital Playlisting: Weekly pitching to verified curator ecosystems",
+      "Social Hype: Organic sound seeding across TikTok & Reels",
+      "Crisis Response: Standard 48-hour email guidance"
+    ],
+    plans: {
+      month: { weeks: 4, cost: 1000, display: "$1,000.00 / MO" },
+      six_month: { weeks: 26, cost: 6000, display: "$6,000.00 / 6-MO" },
+      year: { weeks: 52, cost: 12000, display: "$12,000.00 / YR" }
+    }
+  },
+  {
+    id: "mgmt-narrative",
+    name: "The Narrative Arc",
+    tier: "Mid-Tier Specialist PR & Brand Strategy",
+    territory: "National Media & Tastemakers",
+    yearlyCost: 35000,
+    yearlyCostDisplay: "$35,000.00 / YR",
+    weeklyPopularity: "+13-18%",
+    prestige: 70,
+    minPopularity: 35,
+    description: "Strategic narrative architects curating high-impact profiles, digital magazine covers, and tastemaker podcast appearances.",
+    clauses: [
+      "Editorial Features: Pitching to FADER, Complex, and XXL",
+      "Radio Campaigning: Regional urban & college radio tastemaker runs",
+      "Brand Positioning: High-fashion lookbook & red carpet consulting",
+      "Dedicated Publicist: Direct 24/7 hotline with senior representative"
+    ],
+    plans: {
+      month: { weeks: 4, cost: 2950, display: "$2,950.00 / MO" },
+      six_month: { weeks: 26, cost: 17500, display: "$17,500.00 / 6-MO" },
+      year: { weeks: 52, cost: 35000, display: "$35,000.00 / YR" }
+    }
+  },
+  {
+    id: "mgmt-momentum",
+    name: "Momentum Media",
+    tier: "Major Independent Powerhouse",
+    territory: "US National & Digital Broadcast",
+    yearlyCost: 90000,
+    yearlyCostDisplay: "$90,000.00 / YR",
+    weeklyPopularity: "+22-30%",
+    prestige: 82,
+    minPopularity: 55,
+    description: "High-octane talent agency with direct lines to morning show syndicates, viral TikTok campaign directors, and festival talent buyers.",
+    clauses: [
+      "Tier-1 Broadcast: Guaranteed Breakfast Club / Hot 97 interviews",
+      "Viral Acceleration: Multi-influencer audio syndication networks",
+      "DSP Spotlight: Top-tier editorial playlist priority pitching",
+      "Legal Defense: Full crisis suppression & swift DMCA strikes"
+    ],
+    plans: {
+      month: { weeks: 4, cost: 7500, display: "$7,500.00 / MO" },
+      six_month: { weeks: 26, cost: 45000, display: "$45,000.00 / 6-MO" },
+      year: { weeks: 52, cost: 90000, display: "$90,000.00 / YR" }
+    }
+  },
+  {
+    id: "mgmt-catalyst",
+    name: "Catalyst Comms",
+    tier: "Global Elite Public Relations",
+    territory: "Global Multi-Platform",
+    yearlyCost: 220000,
+    yearlyCostDisplay: "$220,000.00 / YR",
+    weeklyPopularity: "+34-42%",
+    prestige: 92,
+    minPopularity: 72,
+    description: "Premier communications firm steering international arena rollouts, late-night television bookings, and Fortune 500 endorsement negotiations.",
+    clauses: [
+      "Global TV Circuits: Fallon, Kimmel, and BBC Live Lounge bookings",
+      "Magazine Covers: Rolling Stone, GQ, and Billboard cover features",
+      "Corporate Endorsements: Luxury brand sponsorships & campaigns",
+      "VIP Crisis Room: Rapid 15-minute emergency narrative control"
+    ],
+    plans: {
+      month: { weeks: 4, cost: 18500, display: "$18,500.00 / MO" },
+      six_month: { weeks: 26, cost: 110000, display: "$110,000.00 / 6-MO" },
+      year: { weeks: 52, cost: 220000, display: "$220,000.00 / YR" }
+    }
+  },
+  {
+    id: "mgmt-verve",
+    name: "Verve Public Relations",
+    tier: "Worldwide Sovereign Agency & Legacy Firm",
+    territory: "Worldwide Sovereign Tier",
+    yearlyCost: 550000,
+    yearlyCostDisplay: "$550,000.00 / YR",
+    weeklyPopularity: "+46-56%",
+    prestige: 99,
+    minPopularity: 85,
+    description: "The apex titan of global entertainment representation. Reserved for charting icons, stadium headliners, and cultural powerhouses.",
+    clauses: [
+      "Stadium & Festival Priority: Direct Coachella / Glastonbury curations",
+      "Grammy & Met Gala Campaigning: Academy voting influence & red carpet priority",
+      "Worldwide Syndication: Global multi-territory media blockouts",
+      "Bespoke Chief of Staff: Round-the-clock dedicated 5-person executive retainer"
+    ],
+    plans: {
+      month: { weeks: 4, cost: 46000, display: "$46,000.00 / MO" },
+      six_month: { weeks: 26, cost: 275000, display: "$275,000.00 / 6-MO" },
+      year: { weeks: 52, cost: 550000, display: "$550,000.00 / YR" }
+    }
+  }
+];
+
+// Active State for Media Management
+let currentMgmtSection = "all";
+let currentSignedMgmtId = "mgmt-narrative";
+
+let yourManagementState = {
+  agencyId: "mgmt-narrative",
+  agencyName: "The Narrative Arc",
+  prestige: 70,
+  planType: "year",
+  planValueDisplay: "$35,000.00 / YEAR",
+  planCost: 35000,
+  totalWeeks: 52,
+  weeksRemaining: 28,
+  weeklyPopularity: "+13-18%"
+};
+
+let mgmtStaffRelationships = {
+  "mgmt-st-elena": 72,
+  "mgmt-st-darius": 65,
+  "mgmt-st-chloe": 80,
+  "mgmt-st-julian": 58
+};
+
+const MANAGEMENT_STAFF_DATA = [
+  {
+    id: "mgmt-st-elena",
+    name: "Elena Rostova",
+    role: "PR Director & Chief Strategist",
+    avatarLetter: "E",
+    quote: "We've locked in two major editorial features for next week. Keep giving me undeniable music.",
+    reputationBenefit: "Benefit: +15% Pitch Approval on High-Tier Digital Magazines"
+  },
+  {
+    id: "mgmt-st-darius",
+    name: "Darius Cole",
+    role: "Senior Publicist & Radio Liaison",
+    avatarLetter: "D",
+    quote: "Power 105.1 and Shade 45 are spinning your record. Let's push for the evening prime-time slot.",
+    reputationBenefit: "Benefit: Radio Airplay Spin Multiplier (+25% Weekly Audience Reach)"
+  },
+  {
+    id: "mgmt-st-chloe",
+    name: "Chloe Vance",
+    role: "Crisis PR & Reputation Handler",
+    avatarLetter: "C",
+    quote: "The internet never forgets, but with surgical framing, we turn controversies into brand momentum.",
+    reputationBenefit: "Benefit: 100% Protection from Viral Scandal & Social Cancellation"
+  },
+  {
+    id: "mgmt-st-julian",
+    name: "Julian Cruz",
+    role: "DSP & Playlist PR Lead",
+    avatarLetter: "J",
+    quote: "Top 50 Rap editorial rotation is within reach if we sustain this digital streaming surge.",
+    reputationBenefit: "Benefit: Direct Playlist Pitching Priority on Shawtify & Apple Music"
+  }
+];
+
+// SVG Helpers for Management (Silver/Chrome Aesthetics)
+function getSilverAgencySealSVG(size = 44) {
+  return `
+    <svg width="${size}" height="${size}" viewBox="0 0 60 60" fill="none" class="mgmt-silver-seal-svg">
+      <defs>
+        <radialGradient id="silverGrad_${size}" cx="38%" cy="32%" r="65%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="35%" stop-color="#cbd5e1"/>
+          <stop offset="70%" stop-color="#64748b"/>
+          <stop offset="100%" stop-color="#334155"/>
+        </radialGradient>
+        <radialGradient id="silverBed_${size}" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#475569"/>
+          <stop offset="60%" stop-color="#1e293b"/>
+          <stop offset="100%" stop-color="#0f172a"/>
+        </radialGradient>
+        <filter id="silverShadow_${size}" x="-10%" y="-10%" width="125%" height="125%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.8"/>
+        </filter>
+      </defs>
+      <!-- Outer scalloped silver seal edge -->
+      <path d="M30 3 C36 2, 40 5, 45 7 C50 9, 54 13, 56 18 C58 23, 57 27, 58 32 C59 37, 57 42, 54 47 C51 52, 46 54, 41 57 C36 60, 31 58, 28 58 C24 58, 19 59, 15 57 C10 55, 6 51, 4 46 C2 41, 1 36, 2 31 C3 26, 1 21, 4 16 C7 11, 12 7, 17 6 C22 5, 25 3, 30 3 Z" fill="url(#silverGrad_${size})" filter="url(#silverShadow_${size})"/>
+      <!-- Silver rim highlights -->
+      <path d="M22 6 C30 4, 42 6, 48 12 C52 16, 54 22, 54 28" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+      <circle cx="30" cy="30" r="18.5" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="3 2"/>
+      <circle cx="30" cy="30" r="14.5" fill="url(#silverBed_${size})"/>
+      <!-- Embossed megaphone & star emblem -->
+      <polygon points="30,19 32.5,25 39,25.5 34,29.5 35.5,36 30,32.5 24.5,36 26,29.5 21,25.5 27.5,25" fill="#f8fafc" stroke="#94a3b8" stroke-width="0.8"/>
+      <!-- Specular gloss glint -->
+      <ellipse cx="23" cy="20" rx="4" ry="2" transform="rotate(-30 23 20)" fill="#ffffff" opacity="0.45"/>
+    </svg>
+  `;
+}
+
+function getSilverFountainPenSigSVG() {
+  return `
+    <svg width="44" height="34" viewBox="0 0 52 40" fill="none">
+      <path d="M4 35 Q 16 26, 26 34 T 44 31" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M12 33 Q 18 20, 24 32" stroke="#d97706" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <path d="M26 31 Q 32 18, 38 29" stroke="#fef08a" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+      <g transform="translate(24, 2) rotate(42)">
+        <path d="M0 0 L7 0 L7 17 L3.5 25 L0 17 Z" fill="#334155"/>
+        <path d="M1.2 17 L5.8 17 L3.5 25 Z" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+        <line x1="3.5" y1="17" x2="3.5" y2="23" stroke="#78350f" stroke-width="0.6"/>
+        <rect x="0" y="0" width="7" height="4" fill="#cbd5e1"/>
+        <line x1="2" y1="4" x2="2" y2="15" stroke="#475569" stroke-width="1"/>
+      </g>
+    </svg>
+  `;
+}
+
+function getSilverContractDocSVG() {
+  return `
+    <svg width="30" height="34" viewBox="0 0 34 38" fill="none">
+      <path d="M4 3 L22 3 L29 10 L29 35 A 2 2 0 0 1 27 37 L4 37 A 2 2 0 0 1 2 35 L2 5 A 2 2 0 0 1 4 3 Z" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M22 3 L22 10 L29 10 Z" fill="#475569" stroke="#94a3b8" stroke-width="1.6"/>
+      <line x1="6" y1="13" x2="19" y2="13" stroke="#cbd5e1" stroke-width="1.6"/>
+      <line x1="6" y1="18" x2="25" y2="18" stroke="#cbd5e1" stroke-width="1.6"/>
+      <line x1="6" y1="23" x2="18" y2="23" stroke="#cbd5e1" stroke-width="1.6"/>
+      <circle cx="21" cy="27" r="5.5" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+      <line x1="25.5" y1="31.5" x2="31" y2="37" stroke="#fbbf24" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="21" cy="27" r="3" fill="#fbbf24" opacity="0.4"/>
+    </svg>
+  `;
+}
+
+function getMgmtStaffIconSVG() {
+  return `
+    <svg width="28" height="28" viewBox="0 0 36 34" fill="none">
+      <circle cx="18" cy="11" r="5" stroke="#fbbf24" stroke-width="2" fill="none"/>
+      <path d="M9 27 C9 20, 27 20, 27 27" stroke="#fbbf24" stroke-width="2" fill="none"/>
+      <circle cx="8.5" cy="13" r="3.8" stroke="#d97706" stroke-width="1.8" fill="none"/>
+      <path d="M2 28 C2 23, 13 23, 13 28" stroke="#d97706" stroke-width="1.8" fill="none"/>
+      <circle cx="27.5" cy="13" r="3.8" stroke="#d97706" stroke-width="1.8" fill="none"/>
+      <path d="M23 28 C23 23, 34 23, 34 28" stroke="#d97706" stroke-width="1.8" fill="none"/>
+    </svg>
+  `;
+}
+
+function getMgmtRequestsIconSVG() {
+  return `
+    <svg width="28" height="28" viewBox="0 0 36 34" fill="none">
+      <path d="M6 14 L18 8 L30 14 L18 20 Z" stroke="#fbbf24" stroke-width="2" fill="rgba(251, 191, 36, 0.18)"/>
+      <path d="M6 20 L18 26 L30 20" stroke="#d97706" stroke-width="2" fill="none"/>
+      <path d="M12 23 L18 26 L24 23" stroke="#fef08a" stroke-width="1.8" fill="none"/>
+    </svg>
+  `;
+}
+
+function getMgmtHistoryIconSVG() {
+  return `
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="12" stroke="#94a3b8" stroke-width="2.4"/>
+      <polyline points="16,10 16,16 21,16" stroke="#f1f5f9" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M9 9 L4 13 L10 14" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `;
+}
+
+// Media Management Subpage Open & Close
+function openProfileManagementSubpage(initialSection = "all") {
+  playMechanicalClick();
+  const hub = document.getElementById("profileMainHub");
+  const subpage = document.getElementById("profileSubpageManagement");
+  if (!subpage) return;
+
+  if (hub) hub.style.display = "none";
+  subpage.style.display = "flex";
+  subpage.scrollTop = 0;
+
+  switchManagementSection(initialSection);
+}
+
+function closeProfileManagementSubpage() {
+  playMechanicalClick();
+  const hub = document.getElementById("profileMainHub");
+  const subpage = document.getElementById("profileSubpageManagement");
+  if (subpage) subpage.style.display = "none";
+  if (hub) hub.style.display = "flex";
+}
+
+function switchManagementSection(section) {
+  playMechanicalClick();
+  currentMgmtSection = section;
+
+  const btnAll = document.getElementById("tabBtnMgmtAll");
+  const btnYour = document.getElementById("tabBtnMgmtYour");
+  const secAll = document.getElementById("mgmtSectionAll");
+  const secYour = document.getElementById("mgmtSectionYour");
+
+  if (section === "all") {
+    if (btnAll) btnAll.classList.add("active");
+    if (btnYour) btnYour.classList.remove("active");
+    if (secAll) secAll.style.display = "flex";
+    if (secYour) secYour.style.display = "none";
+    renderAllManagementContracts();
+  } else {
+    if (btnAll) btnAll.classList.remove("active");
+    if (btnYour) btnYour.classList.add("active");
+    if (secAll) secAll.style.display = "none";
+    if (secYour) secYour.style.display = "flex";
+    renderYourManagementContract();
+  }
+}
+
+// 1. Render ALL MANAGEMENT (The 5 Black Contract Pages)
+// (Removed min popularity and prestige data fields as requested)
+function renderAllManagementContracts() {
+  const container = document.getElementById("mgmtSectionAll");
+  if (!container) return;
+
+  container.innerHTML = MANAGEMENT_DATA.map(agency => `
+    <div class="mgmt-contract-card" onclick="openManagementContractModal('${agency.id}')">
+      <!-- Silver Agency Seal Stamp -->
+      <div class="mgmt-silver-seal">
+        ${getSilverAgencySealSVG(44)}
+      </div>
+
+      <!-- Agency Title -->
+      <h2 class="mgmt-contract-title">${agency.name}</h2>
+
+      <!-- Contract Conditions Grid with left-aligned values -->
+      <div class="mgmt-contract-meta-grid">
+        <div class="mgmt-meta-row">
+          <span class="mgmt-meta-key">YEARLY RETAINER :</span>
+          <span class="mgmt-meta-val">${agency.yearlyCostDisplay}</span>
+        </div>
+        <div class="mgmt-meta-row">
+          <span class="mgmt-meta-key">WEEKLY POPULARITY :</span>
+          <span class="mgmt-meta-val" style="color: #fbbf24; font-weight: 900;">${agency.weeklyPopularity}</span>
+        </div>
+        <div class="mgmt-meta-row">
+          <span class="mgmt-meta-key">TERMS AVAILABLE :</span>
+          <span class="mgmt-meta-val">MONTH / 6-MONTH / YEAR</span>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Retainer Cost Pill (Green Box) + Gold Pen Signature -->
+      <div class="mgmt-contract-bottom-row">
+        <div class="mgmt-advance-group">
+          <span class="mgmt-advance-label">PLAN :</span>
+          <div class="mgmt-cost-pill">${agency.yearlyCostDisplay}</div>
+        </div>
+        <div class="mgmt-silver-signature">
+          ${getSilverFountainPenSigSVG()}
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// 2. Render YOUR MANAGEMENT (Active Black Contract Card)
+// (Removed prestige data field as requested)
+function renderYourManagementContract() {
+  const container = document.getElementById("mgmtSectionYour");
+  if (!container) return;
+
+  const agency = MANAGEMENT_DATA.find(a => a.id === yourManagementState.agencyId) || MANAGEMENT_DATA[1];
+
+  container.innerHTML = `
+    <div class="your-mgmt-black-card">
+      <!-- Top Right Seals & Inspection Button -->
+      <div class="your-mgmt-top-seals">
+        <div class="mgmt-silver-seal">
+          ${getSilverAgencySealSVG(44)}
+        </div>
+        <button class="your-mgmt-contract-doc-btn" onclick="openManagementContractModal('${agency.id}')" title="Inspect Complete Retainer Agreement">
+          ${getSilverContractDocSVG()}
+        </button>
+      </div>
+
+      <!-- Agency Title -->
+      <h1 class="your-mgmt-title">${agency.name}</h1>
+
+      <!-- Stats Cluster -->
+      <div class="your-mgmt-stats-box">
+        <!-- Prominent Current Plan Value Pill in Green Box -->
+        <div class="your-mgmt-plan-pill">
+          CURRENT PLAN : ${yourManagementState.planValueDisplay}
+        </div>
+        <div class="your-mgmt-meta-item">
+          <span>ACTIVE TERM : ${yourManagementState.totalWeeks === 52 ? '1 YEAR CONTRACT' : (yourManagementState.totalWeeks === 26 ? '6 MONTH CONTRACT' : '1 MONTH CONTRACT')}</span>
+        </div>
+        <div class="your-mgmt-meta-item">
+          <span>WEEKS REMAINING : ${yourManagementState.weeksRemaining}/${yourManagementState.totalWeeks} WEEKS</span>
+        </div>
+        <div class="your-mgmt-meta-item">
+          <span>WEEKLY POPULARITY :</span>
+          <span style="color: #fbbf24; font-weight: 900;">${yourManagementState.weeklyPopularity}</span>
+        </div>
+      </div>
+
+      <!-- Exactly 2 Action Buttons: MANAGEMENT STAFF and REQUESTS -->
+      <div class="your-mgmt-action-buttons">
+        <button class="your-mgmt-action-btn" onclick="openYourManagementSubdrawer('staff')">
+          <div class="your-mgmt-btn-icon">${getMgmtStaffIconSVG()}</div>
+          <span class="your-mgmt-btn-label">MANAGEMENT STAFF</span>
+        </button>
+
+        <button class="your-mgmt-action-btn" onclick="openYourManagementSubdrawer('requests')">
+          <div class="your-mgmt-btn-icon">${getMgmtRequestsIconSVG()}</div>
+          <span class="your-mgmt-btn-label">REQUESTS</span>
+        </button>
+      </div>
+
+      <!-- History Button -->
+      <div class="your-mgmt-history-wrap">
+        <button class="your-mgmt-history-btn" onclick="openManagementHistoryModal()" title="Management Representation Archive">
+          ${getMgmtHistoryIconSVG()}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// 3. Complete Formal Black Contract Inspector Modal
+function openManagementContractModal(agencyId) {
+  playMechanicalClick();
+  const agency = MANAGEMENT_DATA.find(a => a.id === agencyId) || MANAGEMENT_DATA[1];
+  if (!agency) return;
+
+  const modal = document.getElementById("mgmtContractModal");
+  const sealRow = document.getElementById("mgmtContractModalSealRow");
+  const bodyContent = document.getElementById("mgmtContractModalBodyContent");
+  const footerActions = document.getElementById("mgmtContractModalFooterActions");
+  if (!modal || !sealRow || !bodyContent || !footerActions) return;
+
+  const isCurrent = agency.id === yourManagementState.agencyId;
+
+  sealRow.innerHTML = `
+    <div class="contract-modal-seal-badge">
+      ${getSilverAgencySealSVG(48)}
+    </div>
+    <div class="contract-modal-title-block">
+      <h2 style="color: #f8fafc;">${agency.name}</h2>
+      <span style="color: #fbbf24; font-weight: 700;">${agency.tier} &bull; ${agency.territory}</span>
+    </div>
+  `;
+
+  bodyContent.innerHTML = `
+    <!-- Agency Summary -->
+    <p style="margin: 0; font-size: 0.74rem; color: #94a3b8; font-style: italic;">
+      ${agency.description}
+    </p>
+
+    <!-- Clause 1: Terms & Performance Acceleration -->
+    <div class="contract-clause-box mgmt-clause-box">
+      <div class="contract-clause-title mgmt-clause-title">
+        <span>§ 1. REPRESENTATION & PERFORMANCE ACCELERATION</span>
+      </div>
+      <div class="contract-clause-grid">
+        <div class="contract-clause-item">
+          <span class="c-lbl">Weekly Popularity Boost</span>
+          <span class="c-val" style="color: #fbbf24;">${agency.weeklyPopularity}</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">Territory Scope</span>
+          <span class="c-val">${agency.territory}</span>
+        </div>
+        <div class="contract-clause-item" style="grid-column: 1 / -1;">
+          <span class="c-lbl">Agency Category</span>
+          <span class="c-val">${agency.tier}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clause 2: Retainer Plans & Payment Options -->
+    <div class="contract-clause-box mgmt-clause-box">
+      <div class="contract-clause-title mgmt-clause-title">
+        <span>§ 2. RETAINER OPTIONS (MONTH / 6-MONTH / 1-YEAR)</span>
+      </div>
+      <div class="contract-clause-grid">
+        <div class="contract-clause-item">
+          <span class="c-lbl">1-Month Retainer</span>
+          <span class="c-val">${agency.plans.month.display} (4 Weeks)</span>
+        </div>
+        <div class="contract-clause-item">
+          <span class="c-lbl">6-Month Retainer</span>
+          <span class="c-val">${agency.plans.six_month.display} (26 Weeks)</span>
+        </div>
+        <div class="contract-clause-item" style="grid-column: 1 / -1;">
+          <span class="c-lbl">1-Year Standard Retainer</span>
+          <span class="c-val" style="color: #fbbf24; font-size: 0.85rem;">${agency.plans.year.display} (52 Weeks)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clause 3: Deliverables & Media Guarantees -->
+    <div class="contract-clause-box mgmt-clause-box">
+      <div class="contract-clause-title mgmt-clause-title">
+        <span>§ 3. MANAGEMENT DELIVERABLES & MEDIA ACCESS</span>
+      </div>
+      <div class="contract-promise-list">
+        ${agency.clauses.map(c => `
+          <div class="contract-promise-row">
+            <span class="bullet" style="color: #fbbf24;">✓</span>
+            <span style="color: #cbd5e1;">${c}</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  if (isCurrent) {
+    footerActions.innerHTML = `
+      <button class="contract-btn-sign" style="background: #b45309; border-color: #d97706; color: #ffffff;" onclick="showToast('THIS IS YOUR CURRENTLY ACTIVE MANAGEMENT AGENCY')">
+        ACTIVE AGENCY (RETAINED)
+      </button>
+      <button class="contract-btn-close" onclick="closeManagementContractModal()">CLOSE</button>
+    `;
+  } else {
+    footerActions.innerHTML = `
+      <button class="contract-btn-sign" style="background: #15803d; border-color: #16a34a;" onclick="signManagementDeal('${agency.id}', 'year')">
+        RETAIN AGENCY (${agency.plans.year.display})
+      </button>
+      <button class="contract-btn-close" onclick="closeManagementContractModal()">CLOSE</button>
+    `;
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeManagementContractModal(e) {
+  if (e && e.target && e.target.id !== "mgmtContractModal" && !e.target.classList.contains("contract-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("mgmtContractModal");
+  if (modal) modal.style.display = "none";
+}
+
+function signManagementDeal(agencyId, planKey = "year") {
+  playMechanicalClick();
+  const agency = MANAGEMENT_DATA.find(a => a.id === agencyId);
+  if (!agency) return;
+
+  const plan = agency.plans[planKey] || agency.plans.year;
+
+  currentSignedMgmtId = agency.id;
+  yourManagementState = {
+    agencyId: agency.id,
+    agencyName: agency.name,
+    prestige: agency.prestige,
+    planType: planKey,
+    planValueDisplay: plan.display,
+    planCost: plan.cost,
+    totalWeeks: plan.weeks,
+    weeksRemaining: plan.weeks,
+    weeklyPopularity: agency.weeklyPopularity
+  };
+
+  closeManagementContractModal();
+  showToast(`RETAINED ${agency.name.toUpperCase()} (${plan.display})`);
+  switchManagementSection("your");
+}
+
+// 4. Interactive Management Sub-Drawer (Staff & Requests)
+function openYourManagementSubdrawer(drawerType) {
+  playMechanicalClick();
+  const drawer = document.getElementById("yourMgmtSubDrawer");
+  const iconEl = document.getElementById("mgmtSubdrawerHeaderIcon");
+  const titleEl = document.getElementById("mgmtSubdrawerHeaderTitle");
+  const contentEl = document.getElementById("mgmtSubdrawerBodyContent");
+  if (!drawer || !iconEl || !titleEl || !contentEl) return;
+
+  const agency = MANAGEMENT_DATA.find(a => a.id === yourManagementState.agencyId) || MANAGEMENT_DATA[1];
+
+  if (drawerType === "staff") {
+    iconEl.innerHTML = getMgmtStaffIconSVG();
+    titleEl.textContent = `${agency.name.toUpperCase()} PERSONNEL`;
+    contentEl.innerHTML = `
+      <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">
+        Collaborate with your agency handlers. Deep relationships maximize broadcast bookings, radio rotation, and crisis immunity!
+      </div>
+
+      ${MANAGEMENT_STAFF_DATA.map(st => {
+        const currentRel = mgmtStaffRelationships[st.id] || 70;
+        return `
+        <div class="subdrawer-staff-card" id="mgmtStaffCard_${st.id}">
+          <div class="staff-card-top">
+            <div class="staff-avatar-box">${st.avatarLetter}</div>
+            <div class="staff-info-box" style="flex: 1;">
+              <h4>${st.name}</h4>
+              <span class="role">${st.role}</span>
+              <div class="staff-rel-meter-row">
+                <span>Relationship</span>
+                <span id="mgmtStaffRelScore_${st.id}">${currentRel}/100</span>
+              </div>
+              <div class="staff-rel-bar">
+                <div class="staff-rel-bar-fill" id="mgmtStaffRelBar_${st.id}" style="width: ${currentRel}%; background: linear-gradient(90deg, #d97706, #fbbf24);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-quote">
+            "${st.quote}"
+          </div>
+
+          <div style="font-size: 0.67rem; color: #fbbf24; font-weight: 700;">
+            ${st.reputationBenefit}
+          </div>
+
+          <div class="staff-actions-row">
+            <button class="staff-action-btn" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569;" onclick="interactWithMgmtStaff('${st.id}', 'chat')">
+              STRATEGY CALL (+4)
+            </button>
+            <button class="staff-action-btn" style="background: #334155; color: #fbbf24; border: 1px solid #78350f;" onclick="interactWithMgmtStaff('${st.id}', 'gift')">
+              SEND GIFT (-$3,500, +10)
+            </button>
+          </div>
+        </div>
+      `;}).join("")}
+    `;
+  }
+  else if (drawerType === "requests") {
+    iconEl.innerHTML = getMgmtRequestsIconSVG();
+    titleEl.textContent = "MANAGEMENT PETITIONS & CAMPAIGNS";
+    contentEl.innerHTML = `
+      <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">
+        Commission specialized agency initiatives to accelerate career momentum or defuse public crises.
+      </div>
+
+      <!-- 1. Viral Press Blitz -->
+      <div class="subdrawer-request-card">
+        <h4>VIRAL PRESS & DIGITAL BLITZ</h4>
+        <p>Execute coordinated 72-hour media blitz across 35+ top hip-hop blogs and high-engagement social meme curators.</p>
+        <div class="request-card-foot">
+          <span class="request-cost-badge" style="color: #fbbf24; background: #451a03; border: 1px solid #78350f;">COST: $8,500</span>
+          <button class="request-submit-btn" style="background: #d97706;" onclick="submitManagementRequest('blitz')">LAUNCH BLITZ</button>
+        </div>
+      </div>
+
+      <!-- 2. Crisis PR Suppression -->
+      <div class="subdrawer-request-card">
+        <h4>CRISIS PR SUPPRESSION UNIT</h4>
+        <p>Deploy emergency narrative handlers to scrub negative tabloids, issue legal DMCA cease-and-desists, and clear public slander.</p>
+        <div class="request-card-foot">
+          <span class="request-cost-badge" style="color: #f87171; background: #450a0a;">COST: $15,000</span>
+          <button class="request-submit-btn" style="background: #dc2626;" onclick="submitManagementRequest('crisis')">DEPLOY SQUAD</button>
+        </div>
+      </div>
+
+      <!-- 3. Tier-1 Interview Booking -->
+      <div class="subdrawer-request-card">
+        <h4>TIER-1 INTERVIEW BOOKING</h4>
+        <p>Secure a 45-minute live morning show sit-down with The Breakfast Club, Hot 97, or Apple Music's Zane Lowe.</p>
+        <div class="request-card-foot">
+          <span class="request-cost-badge" style="color: #fef08a; background: #3b1d03; border: 1px solid #854d0e;">COST: $25,000</span>
+          <button class="request-submit-btn" style="background: #b45309;" onclick="submitManagementRequest('interview')">BOOK INTERVIEW</button>
+        </div>
+      </div>
+
+      <!-- 4. Retainer Plan Term Switch -->
+      <div class="subdrawer-request-card">
+        <h4>SWITCH RETAINER TERM</h4>
+        <p>Renegotiate current billing cycle with ${agency.name}. Choose Month (4 Wks), 6-Months (26 Wks), or 1-Year (52 Wks).</p>
+        <div class="request-card-foot">
+          <span style="font-size: 0.72rem; font-weight: 800; color: #94a3b8;">FLEXIBLE BILLING</span>
+          <button class="request-submit-btn" style="background: #b45309;" onclick="submitManagementRequest('switch_term')">SWITCH TERM</button>
+        </div>
+      </div>
+
+      <!-- 5. Terminate Management Representation -->
+      <div class="subdrawer-request-card">
+        <h4>TERMINATE REPRESENTATION</h4>
+        <p>Sever representation agreement immediately. Pay standard contract severance fee to release agency commitments and become self-managed.</p>
+        <div class="request-card-foot">
+          <span class="request-cost-badge" style="color: #f87171; background: #450a0a;">BUYOUT: $10,000</span>
+          <button class="request-submit-btn" style="background: #991b1b;" onclick="submitManagementRequest('terminate')">TERMINATE DEAL</button>
+        </div>
+      </div>
+    `;
+  }
+
+  drawer.style.display = "flex";
+}
+
+function closeYourManagementSubdrawer(e) {
+  if (e && e.target && e.target.id !== "yourMgmtSubDrawer" && !e.target.classList.contains("subdrawer-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const drawer = document.getElementById("yourMgmtSubDrawer");
+  if (drawer) drawer.style.display = "none";
+}
+
+// 5. Staff Interaction Handler
+function interactWithMgmtStaff(staffId, action) {
+  playMechanicalClick();
+  const current = mgmtStaffRelationships[staffId] || 70;
+  const staff = MANAGEMENT_STAFF_DATA.find(s => s.id === staffId);
+  const staffName = staff ? staff.name : "Staff";
+
+  if (action === "chat") {
+    const next = Math.min(100, current + 4);
+    mgmtStaffRelationships[staffId] = next;
+    const scoreEl = document.getElementById(`mgmtStaffRelScore_${staffId}`);
+    const barEl = document.getElementById(`mgmtStaffRelBar_${staffId}`);
+    if (scoreEl) scoreEl.textContent = `${next}/100`;
+    if (barEl) barEl.style.width = `${next}%`;
+    showToast(`CALL WITH ${staffName.toUpperCase()}: +4 RELATIONSHIP (${next}/100)`);
+  } else if (action === "gift") {
+    const next = Math.min(100, current + 10);
+    mgmtStaffRelationships[staffId] = next;
+    const scoreEl = document.getElementById(`mgmtStaffRelScore_${staffId}`);
+    const barEl = document.getElementById(`mgmtStaffRelBar_${staffId}`);
+    if (scoreEl) scoreEl.textContent = `${next}/100`;
+    if (barEl) barEl.style.width = `${next}%`;
+    showToast(`GIFT SENT TO ${staffName.toUpperCase()}: -$3,500 (+10 REL)`);
+  }
+}
+
+// 6. Management Requests Handler
+function submitManagementRequest(reqType) {
+  playMechanicalClick();
+  if (reqType === "blitz") {
+    showToast("VIRAL PRESS BLITZ COMMISSIONED: +12% WEEKLY HYPE BOOST");
+  } else if (reqType === "crisis") {
+    showToast("CRISIS PR SQUAD DEPLOYED: NEGATIVE PRESS NEUTRALIZED");
+  } else if (reqType === "interview") {
+    showToast("INTERVIEW SECURED: LIVE ON THE BREAKFAST CLUB NEXT WEEK");
+  } else if (reqType === "switch_term") {
+    const nextTerm = yourManagementState.totalWeeks === 52 ? "six_month" : (yourManagementState.totalWeeks === 26 ? "month" : "year");
+    const agency = MANAGEMENT_DATA.find(a => a.id === yourManagementState.agencyId) || MANAGEMENT_DATA[1];
+    const plan = agency.plans[nextTerm];
+    yourManagementState.planType = nextTerm;
+    yourManagementState.planValueDisplay = plan.display;
+    yourManagementState.planCost = plan.cost;
+    yourManagementState.totalWeeks = plan.weeks;
+    yourManagementState.weeksRemaining = plan.weeks;
+    showToast(`SWITCHED RETAINER TERM TO: ${plan.display}`);
+    renderYourManagementContract();
+    closeYourManagementSubdrawer();
+  } else if (reqType === "terminate") {
+    showToast("REPRESENTATION TERMINATED: YOU ARE CURRENTLY SELF-MANAGED");
+    yourManagementState.agencyName = "Independent Self-Management";
+    yourManagementState.planValueDisplay = "$0.00 (DIY)";
+    yourManagementState.weeksRemaining = 0;
+    yourManagementState.weeklyPopularity = "+0-2%";
+    renderYourManagementContract();
+    closeYourManagementSubdrawer();
+  }
+}
+
+// 7. Management History Modal
+function openManagementHistoryModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("mgmtHistoryModal");
+  const content = document.getElementById("mgmtHistoryContent");
+  if (!modal || !content) return;
+
+  const agency = MANAGEMENT_DATA.find(a => a.id === yourManagementState.agencyId) || MANAGEMENT_DATA[1];
+
+  content.innerHTML = `
+    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">
+      Chronological record of all media agency agreements and PR representations.
+    </div>
+
+    <!-- Active Retainer -->
+    <div class="history-contract-entry active">
+      <span class="history-active-tag" style="background: #451a03; color: #fbbf24; border: 1px solid #78350f;">CURRENTLY ACTIVE</span>
+      <h4 style="margin: 0; font-size: 0.88rem; font-weight: 900; color: #f8fafc;">${agency.name}</h4>
+      <span style="font-size: 0.7rem; color: #fbbf24; font-weight: 700;">Year 2 – Present &bull; ${yourManagementState.planValueDisplay}</span>
+      <p style="margin: 4px 0 0 0; font-size: 0.72rem; color: #cbd5e1;">
+        Retained ${agency.name} for talent branding and media acceleration. ${yourManagementState.weeksRemaining} of ${yourManagementState.totalWeeks} weeks remaining.
+      </p>
+    </div>
+
+    <!-- Era 1: Amplify Collective -->
+    <div class="history-contract-entry">
+      <h4 style="margin: 0; font-size: 0.88rem; font-weight: 900; color: #f8fafc;">AMPLIFY COLLECTIVE</h4>
+      <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 700;">Year 1 &bull; 1-Year Retainer Completed &bull; $12,000.00 / YR</span>
+      <p style="margin: 4px 0 0 0; font-size: 0.72rem; color: #94a3b8;">
+        Grassroots PR campaign concluded with 42 blog write-ups and initial TikTok audio syndication. Artist popularity surged from 12 to 38.
+      </p>
+    </div>
+
+    <!-- Era 0: DIY Self-Management -->
+    <div class="history-contract-entry">
+      <h4 style="margin: 0; font-size: 0.88rem; font-weight: 900; color: #f8fafc;">INDEPENDENT DIY PR</h4>
+      <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 700;">Early Career &bull; Self-Managed</span>
+      <p style="margin: 4px 0 0 0; font-size: 0.72rem; color: #94a3b8;">
+        Initial cold outreach to local blogs and SoundCloud tastemakers. No retainer fees paid.
+      </p>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+}
+
+function closeManagementHistoryModal(e) {
+  if (e && e.target && e.target.id !== "mgmtHistoryModal" && !e.target.classList.contains("subdrawer-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("mgmtHistoryModal");
+  if (modal) modal.style.display = "none";
+}
+
+/* ==========================================================================
+   CALENDAR FULL-SCREEN APP & ITINERARY SUITE (ENGINE IMPLEMENTATION)
+   Faithfully modeled on user reference sketch (media_1791145109525.png)
+   - 4-Week Overview Grid with Month Pills (June above 12, July above 1)
+   - Multi-day Event Banners running across days (e.g. • VMAs •)
+   - 2-Arrow Navigation (Jan 1, Year 1 to Infinity)
+   - Events Preview Card & Annual Directory Modal (Awards & Festivals)
+   - Week Detail View: Your Tasks + New Releases (Industry)
+   - 4-Week Industry Intelligence Restriction (Current Week + 4)
+   - Custom Event Marker (+ button) for single date or date range
+   - Edge-to-edge hardware status bar & red back navigation arrow
+   ========================================================================== */
+
+// Calendar State
+let currentCalStartWeek = 24; // Defaults to careerWeek (24)
+let selectedDetailWeek = 24;
+let calCustomDateMode = "single";
+
+// Custom Player Scheduled Events
+let customPlayerEvents = [
+  {
+    id: "c-ev-1",
+    title: "Secret Album Listening Party",
+    type: "release",
+    weekNum: 24,
+    startDayIndex: 3, // Thursday June 15
+    endDayIndex: 3,
+    notes: "Quad Studios NYC • VIP & Tastemakers Only"
+  },
+  {
+    id: "c-ev-2",
+    title: "Vogue Summer Cover Photo Shoot",
+    type: "interview",
+    weekNum: 25,
+    startDayIndex: 1, // Tuesday June 20
+    endDayIndex: 1,
+    notes: "Milk Studios Manhattan • Editorial Interview"
+  }
+];
+
+// Annual Festivals & Award Shows Database (Chronological by Week of Year 1-52)
+const ANNUAL_INDUSTRY_EVENTS = [
+  {
+    id: "ev-grammys",
+    name: "The 67th Grammy Awards",
+    shortName: "Grammys",
+    type: "award",
+    weekOfYear: 5,
+    durationDays: 1,
+    startDayOfWeek: 6, // Sunday
+    location: "Crypto.com Arena",
+    prestige: 100,
+    description: "The music industry's highest honor. Four general field categories plus Best Rap Album and Rap Song.",
+    requirements: "Eligible for recordings released during tracking cycle. Min 50M streams & critical acclaim.",
+    rewards: "Iconic Gold Gramophone, +50% Global Fame, +35% Streaming Multiplier"
+  },
+  {
+    id: "ev-brits",
+    name: "The BRIT Awards",
+    shortName: "BRITs",
+    type: "award",
+    weekOfYear: 8,
+    durationDays: 1,
+    startDayOfWeek: 5, // Saturday
+    location: "The O2 Arena",
+    prestige: 88,
+    description: "The UK's flagship annual music ceremony celebrating domestic and international chart-toppers.",
+    requirements: "Top 10 UK Official Singles Chart placement or international crossover breakthrough.",
+    rewards: "BRIT Statuette, +25% European Airplay, +15% Global Prestige"
+  },
+  {
+    id: "ev-coachella",
+    name: "Coachella Valley Music & Arts Festival",
+    shortName: "Coachella",
+    type: "festival",
+    weekOfYear: 15,
+    durationDays: 3,
+    startDayOfWeek: 4, // Friday (Fri - Sun)
+    location: "Empire Polo Club",
+    prestige: 98,
+    description: "The world's premier cultural and live performance spectacle in the Colorado Desert.",
+    requirements: "Headliner or Sub-Headliner status, min 40M monthly listeners or viral impact.",
+    rewards: "$1.5M - $3.5M Performance Retainer, Worldwide Livestream syndication, Viral Twitter trending"
+  },
+  {
+    id: "ev-bbma",
+    name: "Billboard Music Awards",
+    shortName: "BBMAs",
+    type: "award",
+    weekOfYear: 21,
+    durationDays: 1,
+    startDayOfWeek: 6, // Sunday
+    location: "MGM Grand",
+    prestige: 92,
+    description: "Honoring the year's top chart performers based on real streaming data, radio airplay, and physical sales.",
+    requirements: "Billboard Hot 100 or Billboard 200 charting track within the last 52 weeks.",
+    rewards: "Billboard Trophy, +20% Streaming Revenue Surge, +18% Industry Buzz"
+  },
+  {
+    id: "ev-summerjam",
+    name: "Hot 97 Summer Jam NYC",
+    shortName: "Summer Jam",
+    type: "festival",
+    weekOfYear: 24,
+    durationDays: 1,
+    startDayOfWeek: 4, // Friday (June 16)
+    location: "MetLife Stadium",
+    prestige: 90,
+    description: "The sacred historic hip-hop stadium festival hosted by New York's iconic Hot 97.",
+    requirements: "East Coast / Global rap prominence, undeniable club anthem of the summer.",
+    rewards: "$650,000 Performance Retainer, Hip-hop legend credibility, Radio heavy rotation"
+  },
+  {
+    id: "ev-govball",
+    name: "Governors Ball Music Festival",
+    shortName: "Gov Ball",
+    type: "festival",
+    weekOfYear: 25,
+    durationDays: 3,
+    startDayOfWeek: 4, // Friday through Sunday (June 23-25)
+    location: "Flushing Meadows",
+    prestige: 89,
+    description: "New York City's crown summer music festival featuring major multi-genre stadium headliners.",
+    requirements: "Top 20 Billboard hit, strong Tri-State fan demographic.",
+    rewards: "$800,000 Retainer, NYC streetwear cultural influence, +12% Fan Demographics"
+  },
+  {
+    id: "ev-glasto",
+    name: "Glastonbury Contemporary Arts Festival",
+    shortName: "Glastonbury",
+    type: "festival",
+    weekOfYear: 26,
+    durationDays: 5,
+    startDayOfWeek: 2, // Wednesday through Sunday (June 28 - July 2)
+    location: "Worthy Farm",
+    prestige: 99,
+    description: "The holy grail of global open-air performing arts festivals with 210,000 attendees at the Pyramid Stage.",
+    requirements: "Historic cultural relevance, critically acclaimed discography.",
+    rewards: "Pyramid Stage Legend status, BBC Worldwide Broadcast, +45% European Tour Demand"
+  },
+  {
+    id: "ev-vma-sketch",
+    name: "MTV Video Music Awards (VMAs)",
+    shortName: "VMAs",
+    type: "award",
+    weekOfYear: 27,
+    durationDays: 3,
+    startDayOfWeek: 4, // Friday through Sunday (July 7-9)
+    location: "Prudential Center",
+    prestige: 95,
+    description: "The wildest, most viral night in pop and hip-hop culture. Moonman trophies awarded for visionary music videos.",
+    requirements: "Official Music Video released during current cycle, min 15M streams.",
+    rewards: "MTV Moonman Trophy, Historic Red Carpet Moment, +40% Viral Index"
+  },
+  {
+    id: "ev-bet",
+    name: "BET Awards",
+    shortName: "BET Awards",
+    type: "award",
+    weekOfYear: 28,
+    durationDays: 1,
+    startDayOfWeek: 6, // Sunday (July 16)
+    location: "Peacock Theater",
+    prestige: 94,
+    description: "Celebrating Black excellence and culture across hip-hop, R&B, sports, and entertainment.",
+    requirements: "Active cultural engagement, leading urban radio hit, min 25M streams.",
+    rewards: "BET Award Trophy, Culture Hero badge, Urban Radio Multiplier"
+  },
+  {
+    id: "ev-rollingloud",
+    name: "Rolling Loud Miami",
+    shortName: "Rolling Loud",
+    type: "festival",
+    weekOfYear: 30,
+    durationDays: 3,
+    startDayOfWeek: 4, // Friday through Sunday
+    location: "Hard Rock Stadium",
+    prestige: 96,
+    description: "The largest dedicated hip-hop festival on planet earth featuring over 100+ rap superstars.",
+    requirements: "High-energy catalog, mosh pit anthems, platinum certification.",
+    rewards: "$1,200,000 Headliner Fee, Viral festival clips, +30% Merch Sales"
+  },
+  {
+    id: "ev-lolla",
+    name: "Lollapalooza Chicago",
+    shortName: "Lollapalooza",
+    type: "festival",
+    weekOfYear: 31,
+    durationDays: 4,
+    startDayOfWeek: 3, // Thursday through Sunday
+    location: "Grant Park",
+    prestige: 95,
+    description: "Iconic 4-day festival across 8 stages on the shores of Lake Michigan with 400,000 attendees.",
+    requirements: "Nationwide arena-level audience draw, major crossover appeal.",
+    rewards: "$1,000,000 Fee, Midwest fanbase expansion, Hulu Live headliner stream"
+  },
+  {
+    id: "ev-vma-fall",
+    name: "MTV Video Music Awards (Fall Broadcast)",
+    shortName: "VMAs",
+    type: "award",
+    weekOfYear: 37,
+    durationDays: 3,
+    startDayOfWeek: 4, // Friday through Sunday
+    location: "UBS Arena",
+    prestige: 95,
+    description: "The historic fall VMAs gala, world premiere performances, and Moonman presentations.",
+    requirements: "Visionary music video production, high fan voting volume.",
+    rewards: "MTV Moonman Trophy, +45% Streaming Jump"
+  },
+  {
+    id: "ev-bethiphop",
+    name: "BET Hip Hop Awards",
+    shortName: "BET Hip Hop",
+    type: "award",
+    weekOfYear: 41,
+    durationDays: 1,
+    startDayOfWeek: 1, // Tuesday
+    location: "Cobb Energy Centre",
+    prestige: 91,
+    description: "The legendary gathering of lyricists, producers, and cypher champions in the rap capital Atlanta.",
+    requirements: "Lyric of the Year or Impact Track nomination, street credibility.",
+    rewards: "BET Hip Hop Trophy, Cypher Hall of Fame inclusion, +20% Rap Core Fanbase"
+  },
+  {
+    id: "ev-ama",
+    name: "American Music Awards (AMAs)",
+    shortName: "AMAs",
+    type: "award",
+    weekOfYear: 46,
+    durationDays: 1,
+    startDayOfWeek: 6, // Sunday
+    location: "Microsoft Theater",
+    prestige: 90,
+    description: "The world's largest fan-voted awards show honoring commercial hits and favorite hip-hop artists.",
+    requirements: "High fan voting engagement, Billboard commercial performance.",
+    rewards: "AMA Pyramid Trophy, Prime-time ABC broadcast exposure, +25% Brand Deals"
+  },
+  {
+    id: "ev-campfloggnaw",
+    name: "Camp Flog Gnaw Carnival",
+    shortName: "Flog Gnaw",
+    type: "festival",
+    weekOfYear: 49,
+    durationDays: 2,
+    startDayOfWeek: 5, // Saturday - Sunday
+    location: "Dodger Stadium",
+    prestige: 93,
+    description: "Tyler, The Creator's beloved carnival and music festival celebrating alternative and creative hip-hop.",
+    requirements: "Artistic innovation, dedicated cult fanbase, genre-bending catalog.",
+    rewards: "$900,000 Fee, Cult streetwear credibility, Golf Wang collab potential"
+  }
+];
+
+// Industry Releases Database (Curated & Procedural)
+const UPCOMING_INDUSTRY_RELEASES = {
+  24: [
+    {
+      artist: "Drake",
+      title: "ICEMAN (Single)",
+      type: "Single",
+      label: "OVO Sound / Republic",
+      dayName: "FRI",
+      dayNum: 16,
+      cover: "album covers/Tyler Durden.jpg",
+      buzz: "🔥 Mega Hit Anticipated",
+      details: "First single from Drake's upcoming summer rollout. Heavy radio backing expected."
+    },
+    {
+      artist: "Travis Scott & Playboi Carti",
+      title: "FE!N PART 2",
+      type: "Single",
+      label: "Cactus Jack / Epic",
+      dayName: "FRI",
+      dayNum: 16,
+      cover: "album covers/download (5).jpg",
+      buzz: "⚡ Viral Club Banger",
+      details: "High-energy festival anthem teased across European arena dates."
+    }
+  ],
+  25: [
+    {
+      artist: "Kendrick Lamar",
+      title: "NOT LIKE THEM",
+      type: "Single",
+      label: "pgLang / Interscope",
+      dayName: "FRI",
+      dayNum: 23,
+      cover: "album covers/download (6).jpg",
+      buzz: "👑 Critical Juggernaut",
+      details: "Sudden surprise release following West Coast stadium celebration."
+    },
+    {
+      artist: "Metro Boomin x Future",
+      title: "WE STILL DON'T TRUST YOU (Deluxe)",
+      type: "Deluxe Album",
+      label: "Boominati / Epic",
+      dayName: "FRI",
+      dayNum: 23,
+      cover: "album covers/download (7).jpg",
+      buzz: "🔥 Chart Contender",
+      details: "5 unreleased bonus tracks featuring 21 Savage and Young Nudy."
+    }
+  ],
+  26: [
+    {
+      artist: "21 Savage",
+      title: "SLAUGHTER HOUSE NYC",
+      type: "Single",
+      label: "Slaughter Gang / Epic",
+      dayName: "FRI",
+      dayNum: 30,
+      cover: "album covers/download (2).jpg",
+      buzz: "🗡️ Trap Heavyweight",
+      details: "Dark Atlanta trap anthem produced by Metro Boomin & Southside."
+    },
+    {
+      artist: "SZA",
+      title: "LANA (Deluxe Edition)",
+      type: "Album",
+      label: "Top Dawg / RCA",
+      dayName: "FRI",
+      dayNum: 30,
+      cover: "album covers/Music artwork for Frank Ocean - _.jpg",
+      buzz: "💫 Streaming Monster",
+      details: "Long-awaited deluxe expansion with 8 vault tracks and acoustic interludes."
+    }
+  ],
+  27: [
+    {
+      artist: "Lil Baby",
+      title: "WHAM ERA",
+      type: "Studio Album",
+      label: "Quality Control / Motown",
+      dayName: "FRI",
+      dayNum: 7,
+      cover: "album covers/download (4).jpg",
+      buzz: "🚀 Summer Stadium Tour",
+      details: "18-track fourth solo album featuring Gunna, Lil Durk, and Future."
+    },
+    {
+      artist: "Gunna",
+      title: "ONE OF WUN II",
+      type: "Single",
+      label: "YSL / 300 Entertainment",
+      dayName: "FRI",
+      dayNum: 7,
+      cover: "album covers/download (8).jpg",
+      buzz: "🌊 Melodic Drip",
+      details: "Smooth summer acoustic guitar trap beat produced by Turbo."
+    }
+  ],
+  28: [
+    {
+      artist: "A$AP Rocky",
+      title: "DON'T BE DUMB",
+      type: "Studio Album",
+      label: "AWGE / RCA",
+      dayName: "FRI",
+      dayNum: 14,
+      cover: "album covers/download (3).jpg",
+      buzz: "🎬 High Fashion Visuals",
+      details: "German Expressionism inspired rollout featuring Tyler, The Creator and Westside Gunn."
+    }
+  ]
+};
+
+// Procedural generator for industry drops in later simulated weeks
+function getIndustryReleasesForWeek(weekNum) {
+  if (UPCOMING_INDUSTRY_RELEASES[weekNum]) {
+    return UPCOMING_INDUSTRY_RELEASES[weekNum];
+  }
+  const artistsPool = [
+    { name: "Drake", label: "OVO / Republic", buzz: "🔥 Global Hit" },
+    { name: "Kendrick Lamar", label: "pgLang / Interscope", buzz: "👑 Critical Acclaim" },
+    { name: "Future", label: "Freebandz / Epic", buzz: "⚡ Trap Anthem" },
+    { name: "Travis Scott", label: "Cactus Jack / Epic", buzz: "🚀 Raging Banger" },
+    { name: "Playboi Carti", label: "Opium / Interscope", buzz: "🧛 Cult Frenzy" },
+    { name: "21 Savage", label: "Slaughter Gang / Epic", buzz: "🗡️ Street Record" },
+    { name: "SZA", label: "TDE / RCA", buzz: "💫 Streaming Juggernaut" }
+  ];
+  const wInfo = getWeekCalendarInfo(weekNum);
+  const a1 = artistsPool[Math.abs(weekNum * 3) % artistsPool.length];
+  const a2 = artistsPool[Math.abs(weekNum * 7 + 1) % artistsPool.length];
+  return [
+    {
+      artist: a1.name,
+      title: `Drop ${weekNum} (Single)`,
+      type: "Single",
+      label: a1.label,
+      dayName: "FRI",
+      dayNum: wInfo.days[4].dayOfMonth,
+      cover: getRandomAlbumCover(),
+      buzz: a1.buzz,
+      details: `Scheduled Friday drop targeting Hot 100 top 10 debut.`
+    },
+    {
+      artist: a2.name,
+      title: `Session ${weekNum} EP`,
+      type: "EP",
+      label: a2.label,
+      dayName: "FRI",
+      dayNum: wInfo.days[4].dayOfMonth,
+      cover: getRandomAlbumCover(),
+      buzz: a2.buzz,
+      details: `Surprise 4-track release with heavy social media campaign.`
+    }
+  ];
+}
+
+// Open Calendar Application (Full-Screen)
+function openCalendarApp() {
+  playMechanicalClick();
+
+  // 1. Hide console bottom nav
+  const mainBottomNav = document.querySelector(".bottom-nav-bar");
+  if (mainBottomNav) mainBottomNav.style.display = "none";
+
+  // 2. Hide social main hub
+  const socialHub = document.getElementById("socialMainHub");
+  if (socialHub) socialHub.style.display = "none";
+
+  // 3. Synchronize phone clock in top bar
+  updateClock();
+
+  // 4. Show calendar full-screen container
+  const app = document.getElementById("appView_calendar");
+  if (app) app.style.display = "flex";
+
+  // 5. Reset to current career week and overview
+  currentCalStartWeek = careerWeek;
+  renderCalendar4Weeks();
+  renderUpcomingEventsPreview();
+
+  // Ensure overview is visible, detail view hidden
+  const overview = document.getElementById("calendarOverviewView");
+  const detail = document.getElementById("calendarWeekDetailView");
+  if (overview) overview.style.display = "flex";
+  if (detail) detail.style.display = "none";
+
+  const viewport = document.getElementById("calendarMainViewport");
+  if (viewport) viewport.scrollTop = 0;
+}
+
+// Close Calendar Application
+function closeCalendarApp() {
+  playMechanicalClick();
+
+  // 1. Hide calendar view
+  const app = document.getElementById("appView_calendar");
+  if (app) app.style.display = "none";
+
+  // 2. Close any open calendar modals
+  closeAllCalendarEventsModal();
+  closeAddCustomEventModal();
+
+  // 3. Restore console bottom nav
+  const mainBottomNav = document.querySelector(".bottom-nav-bar");
+  if (mainBottomNav) mainBottomNav.style.display = "flex";
+
+  // 4. Restore social main hub
+  const socialHub = document.getElementById("socialMainHub");
+  if (socialHub) socialHub.style.display = "flex";
+
+  // 5. Return to Social Tab
+  switchTab("social");
+}
+
+// Global Hardware Back Navigation (Top Left Red Arrow)
+function handleCalendarBackNavigation() {
+  playMechanicalClick();
+  const detailView = document.getElementById("calendarWeekDetailView");
+  if (detailView && detailView.style.display !== "none") {
+    closeCalendarWeekDetail();
+  } else {
+    closeCalendarApp();
+  }
+}
+
+// Render 4-Week Grid & Header Range
+function renderCalendar4Weeks() {
+  const container = document.getElementById("calendar4WeeksRowsContainer");
+  const headerTitle = document.getElementById("calendarHeaderDateRange");
+  if (!container || !headerTitle) return;
+
+  const startInfo = getWeekCalendarInfo(currentCalStartWeek);
+  const endInfo = getWeekCalendarInfo(currentCalStartWeek + 3);
+
+  // Format Header Title (e.g. JUNE 12 - JULY 9 , YEAR 2)
+  let titleStr = "";
+  if (startInfo.monday.year === endInfo.sunday.year) {
+    titleStr = `${startInfo.monday.monthFullName} ${startInfo.monday.dayOfMonth} - ${endInfo.sunday.monthFullName} ${endInfo.sunday.dayOfMonth} , YEAR ${startInfo.monday.year}`;
+  } else {
+    titleStr = `${startInfo.monday.monthFullName} ${startInfo.monday.dayOfMonth}, YEAR ${startInfo.monday.year} - ${endInfo.sunday.monthFullName} ${endInfo.sunday.dayOfMonth}, YEAR ${endInfo.sunday.year}`;
+  }
+  headerTitle.textContent = titleStr.toUpperCase();
+
+  let rowsHtml = "";
+
+  for (let w = 0; w < 4; w++) {
+    const weekNum = currentCalStartWeek + w;
+    const weekInfo = getWeekCalendarInfo(weekNum);
+    const isCurrentWeek = weekNum === careerWeek;
+
+    // Check multi-day annual events & custom events for this week
+    const weekAnnualEvents = ANNUAL_INDUSTRY_EVENTS.filter(ev => {
+      // Annual events repeat each 52 weeks
+      const modWeek = ((weekNum - 1) % 52) + 1;
+      return ev.weekOfYear === modWeek && ev.durationDays > 1;
+    });
+
+    const weekMultiCustom = customPlayerEvents.filter(ev => ev.weekNum === weekNum && ev.endDayIndex > ev.startDayIndex);
+
+    let multiBannersHtml = "";
+    weekAnnualEvents.forEach(ev => {
+      const startDay = ev.startDayOfWeek || 4; // default Friday
+      const spanDays = Math.min(ev.durationDays, 7 - startDay);
+      const leftPct = (100 / 7) * startDay;
+      const widthPct = (100 / 7) * spanDays;
+      multiBannersHtml += `
+        <div class="cal-multi-event-banner" style="left: calc(${leftPct}% + 2px); width: calc(${widthPct}% - 4px);" title="${ev.name}">
+          &bull; ${ev.shortName} &bull;
+        </div>
+      `;
+    });
+
+    weekMultiCustom.forEach(ev => {
+      const leftPct = (100 / 7) * ev.startDayIndex;
+      const widthPct = (100 / 7) * (ev.endDayIndex - ev.startDayIndex + 1);
+      multiBannersHtml += `
+        <div class="cal-multi-event-banner" style="left: calc(${leftPct}% + 2px); width: calc(${widthPct}% - 4px); background: #3B82F6;" title="${ev.title}">
+          &bull; ${ev.title} &bull;
+        </div>
+      `;
+    });
+
+    let daysHtml = "";
+    for (let d = 0; d < 7; d++) {
+      const day = weekInfo.days[d];
+      const isToday = isCurrentWeek && d === 0; // Monday of current game week
+
+      // Month Tag Rule:
+      // 1. First week Monday (w === 0 && d === 0): ALWAYS has month pill (e.g. JUNE)
+      // 2. Day of month === 1: ALWAYS has month pill (e.g. JULY)
+      let monthTagHtml = "";
+      const hasMonthTag = (w === 0 && d === 0) || (day.dayOfMonth === 1);
+      if (hasMonthTag) {
+        monthTagHtml = `<span class="cal-month-pill">${day.monthFullName}</span>`;
+      }
+
+      // Collect task icons for this day
+      const itin = getDayItinerary(weekNum, d);
+      const customOnDay = customPlayerEvents.filter(ev => ev.weekNum === weekNum && d >= ev.startDayIndex && d <= ev.endDayIndex);
+
+      let iconsList = [];
+      if (itin.events.includes("release")) iconsList.push("🚀");
+      if (itin.events.includes("ticket")) iconsList.push("🎤");
+      if (itin.events.includes("mic")) iconsList.push("🎙️");
+      if (itin.events.includes("date")) iconsList.push("🥂");
+
+      // Label contract expiry milestone check
+      if (typeof yourLabelState !== "undefined" && yourLabelState && yourLabelState.weeksLeft) {
+        if (weekNum === careerWeek + yourLabelState.weeksLeft && d === 0) {
+          iconsList.push("📄");
+        }
+      }
+
+      customOnDay.forEach(c => {
+        if (c.type === "release") iconsList.push("🚀");
+        else if (c.type === "concert") iconsList.push("🎤");
+        else if (c.type === "interview") iconsList.push("🎙️");
+        else if (c.type === "studio") iconsList.push("🎵");
+        else if (c.type === "video") iconsList.push("🎬");
+        else if (c.type === "contract") iconsList.push("📄");
+        else iconsList.push("📌");
+      });
+
+      // Deduplicate icons to keep clean UI
+      iconsList = [...new Set(iconsList)].slice(0, 3);
+
+      const taskIconsHtml = iconsList.map(ic => `<span class="cal-task-mini-icon">${ic}</span>`).join("");
+
+      daysHtml += `
+        <div class="cal-day-cell ${hasMonthTag ? "has-month-tag" : ""} ${isToday ? "is-today" : ""}"
+             onclick="event.stopPropagation(); openCalendarWeekDetail(${weekNum}, ${d});"
+             title="Open Week ${weekNum} Detail (${day.dayName} ${day.dayOfMonth})">
+          ${monthTagHtml}
+          <span class="cal-day-number">${day.dayOfMonth}</span>
+          <div class="cal-day-task-icons">
+            ${taskIconsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    rowsHtml += `
+      <div class="cal-week-row ${isCurrentWeek ? "is-current-week" : ""}"
+           onclick="openCalendarWeekDetail(${weekNum})"
+           title="Tap to inspect Week ${weekNum}">
+        ${daysHtml}
+        ${multiBannersHtml}
+      </div>
+    `;
+  }
+
+  container.innerHTML = rowsHtml;
+
+  // Update Navigation Prev button disabled state (Week 1 = Jan 1, Year 1)
+  const prevBtn = document.querySelector(".cal-arrow-prev");
+  if (prevBtn) {
+    prevBtn.disabled = (currentCalStartWeek <= 1);
+  }
+}
+
+// 2-Arrow Navigation Functions
+function navCalendarPrev4Weeks() {
+  playMechanicalClick();
+  if (currentCalStartWeek > 1) {
+    currentCalStartWeek = Math.max(1, currentCalStartWeek - 4);
+    renderCalendar4Weeks();
+    renderUpcomingEventsPreview();
+  }
+}
+
+function navCalendarNext4Weeks() {
+  playMechanicalClick();
+  currentCalStartWeek += 4;
+  renderCalendar4Weeks();
+  renderUpcomingEventsPreview();
+}
+
+function resetCalendarToCurrent() {
+  playMechanicalClick();
+  currentCalStartWeek = careerWeek;
+  renderCalendar4Weeks();
+  renderUpcomingEventsPreview();
+  showToast(`JUMPED TO CURRENT WEEK ${careerWeek}`);
+}
+
+// Compute Real Date Range String for Annual Events (e.g. JUNE 23 - 25, JULY 7 - 9, JUNE 16)
+function getEventDateRangeString(ev, targetYear = 2) {
+  const yr = targetYear || 2;
+  const startDayOffset = (yr - 1) * 365 + (ev.weekOfYear - 1) * 7 + 1 + (typeof ev.startDayOfWeek === "number" ? ev.startDayOfWeek : 4);
+  const startDate = getCalendarDate(startDayOffset);
+
+  if (!ev.durationDays || ev.durationDays <= 1) {
+    return `${startDate.monthFullName} ${startDate.dayOfMonth}`;
+  } else {
+    const endDayOffset = startDayOffset + ev.durationDays - 1;
+    const endDate = getCalendarDate(endDayOffset);
+    if (startDate.monthName === endDate.monthName) {
+      return `${startDate.monthFullName} ${startDate.dayOfMonth} - ${endDate.dayOfMonth}`;
+    } else {
+      return `${startDate.monthFullName} ${startDate.dayOfMonth} - ${endDate.monthFullName} ${endDate.dayOfMonth}`;
+    }
+  }
+}
+
+// Render Upcoming Events Preview Card (Festivals & Awards with real date ranges)
+function renderUpcomingEventsPreview() {
+  const container = document.getElementById("calendarUpcomingEventsList");
+  if (!container) return;
+
+  const baseWeek = currentCalStartWeek || careerWeek;
+  const currentModWeek = ((baseWeek - 1) % 52) + 1;
+  const currentCareerYear = Math.floor((baseWeek - 1) / 52) + 1;
+
+  // Get next 3 upcoming events relative to currentModWeek
+  const sorted = [...ANNUAL_INDUSTRY_EVENTS].sort((a, b) => {
+    const diffA = (a.weekOfYear - currentModWeek + 52) % 52;
+    const diffB = (b.weekOfYear - currentModWeek + 52) % 52;
+    return diffA - diffB;
+  });
+
+  const previewItems = sorted.slice(0, 3);
+  let html = "";
+  previewItems.forEach(ev => {
+    const icon = ev.type === "award" ? "🏆" : "🎪";
+    const badgeCls = ev.type === "award" ? "badge-award" : "badge-festival";
+    const badgeTxt = ev.type === "award" ? "AWARDS" : "FESTIVAL";
+    const evYear = ev.weekOfYear < currentModWeek ? currentCareerYear + 1 : currentCareerYear;
+    const dateRangeStr = getEventDateRangeString(ev, evYear);
+
+    html += `
+      <div class="cal-event-preview-item">
+        <div class="cal-event-prev-left">
+          <span class="cal-event-prev-icon">${icon}</span>
+          <div class="cal-event-prev-info">
+            <h4>${ev.name}</h4>
+            <span>${dateRangeStr} &bull; ${ev.location}</span>
+          </div>
+        </div>
+        <span class="cal-event-prev-badge ${badgeCls}">${badgeTxt}</span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// Open Week Detail View (when user taps any week or date cell)
+function openCalendarWeekDetail(weekNum, dayIndex = 0) {
+  playMechanicalClick();
+  selectedDetailWeek = weekNum;
+
+  const overview = document.getElementById("calendarOverviewView");
+  const detail = document.getElementById("calendarWeekDetailView");
+  if (overview) overview.style.display = "none";
+  if (detail) detail.style.display = "flex";
+
+  renderCalendarWeekDetail(dayIndex);
+
+  const viewport = document.getElementById("calendarMainViewport");
+  if (viewport) viewport.scrollTop = 0;
+}
+
+// Close Week Detail View (Return to 4-Week Overview)
+function closeCalendarWeekDetail() {
+  playMechanicalClick();
+  const overview = document.getElementById("calendarOverviewView");
+  const detail = document.getElementById("calendarWeekDetailView");
+  if (detail) detail.style.display = "none";
+  if (overview) overview.style.display = "flex";
+
+  // Re-render overview to reflect any newly added custom events
+  renderCalendar4Weeks();
+}
+
+// Render Week Detail View Content
+function renderCalendarWeekDetail(activeDayIndex = 0) {
+  const weekInfo = getWeekCalendarInfo(selectedDetailWeek);
+
+  // 1. Header Title (e.g. WEEK 24 • JUNE 12 - 18, YEAR 2)
+  const titleEl = document.getElementById("calendarDetailWeekTitle");
+  if (titleEl) {
+    titleEl.textContent = `WEEK ${selectedDetailWeek} • ${weekInfo.rangeString.toUpperCase()}`;
+  }
+
+  // 2. 7-Day Calendar Strip at Top
+  const stripEl = document.getElementById("calendarDetailWeekStrip");
+  if (stripEl) {
+    let stripHtml = "";
+    for (let d = 0; d < 7; d++) {
+      const day = weekInfo.days[d];
+      const isActive = d === activeDayIndex;
+      const itin = getDayItinerary(selectedDetailWeek, d);
+      const customOnDay = customPlayerEvents.filter(ev => ev.weekNum === selectedDetailWeek && d >= ev.startDayIndex && d <= ev.endDayIndex);
+
+      let icons = [];
+      if (itin.events.includes("release")) icons.push("🚀");
+      if (itin.events.includes("ticket")) icons.push("🎤");
+      if (itin.events.includes("mic")) icons.push("🎙️");
+      customOnDay.forEach(c => {
+        if (c.type === "release") icons.push("🚀");
+        else if (c.type === "concert") icons.push("🎤");
+        else if (c.type === "interview") icons.push("🎙️");
+        else if (c.type === "studio") icons.push("🎵");
+        else icons.push("📌");
+      });
+      icons = [...new Set(icons)].slice(0, 2);
+
+      stripHtml += `
+        <div class="cal-strip-day ${isActive ? "active-day" : ""}" onclick="renderCalendarWeekDetail(${d})">
+          <span class="cal-strip-day-name">${day.dayName}</span>
+          <span class="cal-strip-day-num">${day.dayOfMonth}</span>
+          <div class="cal-strip-icons">
+            ${icons.map(ic => `<span style="font-size:0.64rem;">${ic}</span>`).join("")}
+          </div>
+        </div>
+      `;
+    }
+    stripEl.innerHTML = stripHtml;
+  }
+
+  // 3. Section 1: Player's Tasks That Week
+  const tasksListEl = document.getElementById("calendarWeekTasksList");
+  const tasksCountEl = document.getElementById("calendarWeekTasksCount");
+  if (tasksListEl) {
+    let tasks = [];
+
+    // Procedural/career itinerary events
+    for (let d = 0; d < 7; d++) {
+      const itin = getDayItinerary(selectedDetailWeek, d);
+      const day = weekInfo.days[d];
+      if (itin.events.length > 0 || itin.title !== "Rest Day") {
+        let icon = "🎵";
+        if (itin.events.includes("release")) icon = "🚀";
+        else if (itin.events.includes("ticket")) icon = "🎤";
+        else if (itin.events.includes("mic")) icon = "🎙️";
+        else if (itin.events.includes("date")) icon = "🥂";
+
+        tasks.push({
+          title: itin.title,
+          dayLabel: `${day.dayName} ${day.monthName} ${day.dayOfMonth}`,
+          icon: icon,
+          notes: `Official RapSim Career Schedule & Itinerary`,
+          isCustom: false
+        });
+      }
+    }
+
+    // Label contract expiration milestone check
+    if (typeof yourLabelState !== "undefined" && yourLabelState && yourLabelState.weeksLeft) {
+      if (selectedDetailWeek === careerWeek + yourLabelState.weeksLeft) {
+        tasks.push({
+          title: `${yourLabelState.labelName} Contract Expiration`,
+          dayLabel: `MON ${weekInfo.monday.monthName} ${weekInfo.monday.dayOfMonth}`,
+          icon: "📄",
+          notes: `Contract term reaches completion. Review renewal terms or enter free agency!`,
+          isCustom: false
+        });
+      }
+    }
+
+    // Custom Player Events
+    const weekCustom = customPlayerEvents.filter(ev => ev.weekNum === selectedDetailWeek);
+    weekCustom.forEach(c => {
+      const sIdx = (typeof c.startDayIndex === "number" && !isNaN(c.startDayIndex)) ? Math.max(0, Math.min(6, c.startDayIndex)) : 0;
+      const eIdx = (typeof c.endDayIndex === "number" && !isNaN(c.endDayIndex)) ? Math.max(sIdx, Math.min(6, c.endDayIndex)) : sIdx;
+      const startDay = weekInfo.days[sIdx];
+      const endDay = weekInfo.days[eIdx];
+      let dayTxt = `${startDay.dayName} ${startDay.monthName} ${startDay.dayOfMonth}`;
+      if (eIdx > sIdx) {
+        dayTxt = `${startDay.dayName} ${startDay.dayOfMonth} - ${endDay.dayName} ${endDay.dayOfMonth}`;
+      }
+      let icon = "📌";
+      if (c.type === "release") icon = "🚀";
+      else if (c.type === "concert") icon = "🎤";
+      else if (c.type === "interview") icon = "🎙️";
+      else if (c.type === "studio") icon = "🎵";
+      else if (c.type === "video") icon = "🎬";
+      else if (c.type === "contract") icon = "📄";
+
+      tasks.unshift({
+        title: c.title,
+        dayLabel: dayTxt,
+        icon: icon,
+        notes: c.notes || "Custom Marked Event",
+        isCustom: true
+      });
+    });
+
+    if (tasksCountEl) tasksCountEl.textContent = `${tasks.length} TASKS`;
+
+    if (tasks.length === 0) {
+      tasksListEl.innerHTML = `
+        <div class="cal-task-item-card" style="justify-content: center; color: #64748B; font-size: 0.72rem; padding: 16px;">
+          No scheduled obligations this week. Rest or head into the studio!
+        </div>
+      `;
+    } else {
+      tasksListEl.innerHTML = tasks.map(t => `
+        <div class="cal-task-item-card">
+          <div class="cal-task-card-left">
+            <div class="cal-task-avatar-icon">${t.icon}</div>
+            <div class="cal-task-details">
+              <h4>${t.title}</h4>
+              <p>${t.notes}</p>
+            </div>
+          </div>
+          <span class="cal-task-day-pill">${t.dayLabel}</span>
+        </div>
+      `).join("");
+    }
+  }
+
+  // 4. Section 2: Industry Drops (Restricted to Current Week + 4)
+  const releasesListEl = document.getElementById("calendarWeekReleasesList");
+  const intelTagEl = document.getElementById("calendarIntelTag");
+  if (releasesListEl) {
+    const maxIntelWeek = careerWeek + 4;
+
+    if (selectedDetailWeek > maxIntelWeek) {
+      // Classified Confidential State
+      if (intelTagEl) intelTagEl.textContent = "CLASSIFIED";
+      releasesListEl.innerHTML = `
+        <div class="cal-classified-locked-card">
+          <span class="cal-lock-icon">🔒</span>
+          <h4>INDUSTRY INTELLIGENCE RESTRICTED</h4>
+          <p>
+            Major record labels keep rollout calendars confidential beyond 4 weeks in advance (Week ${maxIntelWeek}).
+            Upcoming drops for Week ${selectedDetailWeek} will decrypt as the rollout draws nearer.
+          </p>
+        </div>
+      `;
+    } else {
+      // Confirmed Intelligence Drops State
+      if (intelTagEl) intelTagEl.textContent = "CONFIRMED DROPS";
+      const releases = getIndustryReleasesForWeek(selectedDetailWeek);
+
+      if (releases.length === 0) {
+        releasesListEl.innerHTML = `
+          <div class="cal-task-item-card" style="justify-content: center; color: #64748B; font-size: 0.72rem; padding: 16px;">
+            No major label releases slated for this week. Prime window for your music!
+          </div>
+        `;
+      } else {
+        releasesListEl.innerHTML = releases.map(r => `
+          <div class="cal-release-item-card">
+            <div class="cal-release-left">
+              <img src="${r.cover}" class="cal-release-thumb" alt="${r.title}" />
+              <div class="cal-release-meta">
+                <h4>${r.artist} - "${r.title}"</h4>
+                <p>${r.label} &bull; ${r.dayName} ${r.dayNum}</p>
+              </div>
+            </div>
+            <span class="cal-release-buzz-badge">${r.buzz}</span>
+          </div>
+        `).join("");
+      }
+    }
+  }
+}
+
+// Modal 1: Annual Events & Festivals Directory Modal
+function openAllCalendarEventsModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("calendarAllEventsModal");
+  const content = document.getElementById("calendarAllEventsListContent");
+  if (!modal || !content) return;
+
+  const sortedEvents = [...ANNUAL_INDUSTRY_EVENTS].sort((a, b) => a.weekOfYear - b.weekOfYear);
+
+  let html = "";
+  sortedEvents.forEach(ev => {
+    const isAward = ev.type === "award";
+    const icon = isAward ? "🏆" : "🎪";
+    const badgeCls = isAward ? "badge-award" : "badge-festival";
+    const badgeTxt = isAward ? "AWARD SHOW" : "FESTIVAL";
+    const dateRangeStr = getEventDateRangeString(ev, 2);
+    html += `
+      <div class="cal-dir-item">
+        <div class="cal-dir-top">
+          <div class="cal-dir-title-box">
+            <span style="font-size: 1.1rem;">${icon}</span>
+            <h4>${ev.name}</h4>
+          </div>
+          <span class="cal-event-prev-badge ${badgeCls}">${badgeTxt}</span>
+        </div>
+        <span class="cal-dir-dates">${dateRangeStr} &bull; ${ev.durationDays} ${ev.durationDays === 1 ? "DAY" : "DAYS"} &bull; PRESTIGE ${ev.prestige}/100</span>
+        <p class="cal-dir-desc">${ev.description}</p>
+        <div class="cal-dir-foot">
+          <span class="cal-dir-loc">📍 ${ev.location}</span>
+          <span class="cal-dir-reward">${ev.rewards}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  content.innerHTML = html;
+  modal.style.display = "flex";
+}
+
+function closeAllCalendarEventsModal(e) {
+  if (e && e.target && e.target.id !== "calendarAllEventsModal" && !e.target.classList.contains("cal-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("calendarAllEventsModal");
+  if (modal) modal.style.display = "none";
+}
+
+// Modal 2: Add Custom Event Modal
+function openAddCustomEventModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("calendarAddEventModal");
+  if (!modal) return;
+
+  // Populate Day Selectors with selectedDetailWeek's 7 days
+  const weekInfo = getWeekCalendarInfo(selectedDetailWeek);
+  const startSelect = document.getElementById("calEventStartDaySelect");
+  const endSelect = document.getElementById("calEventEndDaySelect");
+
+  if (startSelect && endSelect) {
+    let opts = "";
+    weekInfo.days.forEach(d => {
+      opts += `<option value="${d.dayIndex}">${d.dayName} (${d.monthName} ${d.dayOfMonth})</option>`;
+    });
+    startSelect.innerHTML = opts;
+    endSelect.innerHTML = opts;
+  }
+
+  // Reset Form
+  const titleInput = document.getElementById("calEventTitleInput");
+  const notesInput = document.getElementById("calEventNotesInput");
+  if (titleInput) titleInput.value = "";
+  if (notesInput) notesInput.value = "";
+
+  setCalDateMode("single");
+  modal.style.display = "flex";
+}
+
+function closeAddCustomEventModal(e) {
+  if (e && e.target && e.target.id !== "calendarAddEventModal" && !e.target.classList.contains("cal-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("calendarAddEventModal");
+  if (modal) modal.style.display = "none";
+}
+
+function setCalDateMode(mode) {
+  calCustomDateMode = mode;
+  const singleBtn = document.getElementById("btnDateModeSingle");
+  const rangeBtn = document.getElementById("btnDateModeRange");
+  const endGroup = document.getElementById("calEndDayGroup");
+  const lblStart = document.getElementById("lblCalStartDate");
+
+  if (mode === "single") {
+    if (singleBtn) singleBtn.classList.add("active");
+    if (rangeBtn) rangeBtn.classList.remove("active");
+    if (endGroup) endGroup.style.display = "none";
+    if (lblStart) lblStart.textContent = "Event Date";
+  } else {
+    if (singleBtn) singleBtn.classList.remove("active");
+    if (rangeBtn) rangeBtn.classList.add("active");
+    if (endGroup) endGroup.style.display = "flex";
+    if (lblStart) lblStart.textContent = "Start Date";
+  }
+}
+
+function handleSaveCustomEvent(event) {
+  if (event) event.preventDefault();
+  playMechanicalClick();
+
+  const titleInput = document.getElementById("calEventTitleInput");
+  const typeSelect = document.getElementById("calEventTypeSelect");
+  const startSelect = document.getElementById("calEventStartDaySelect");
+  const endSelect = document.getElementById("calEventEndDaySelect");
+  const notesInput = document.getElementById("calEventNotesInput");
+
+  const title = titleInput ? titleInput.value.trim() : "";
+  if (!title) {
+    showToast("Please enter an event title!");
+    return;
+  }
+
+  const type = typeSelect ? typeSelect.value : "release";
+  const rawStart = parseInt(startSelect && startSelect.value !== "" ? startSelect.value : 0, 10);
+  const startDay = isNaN(rawStart) ? 0 : Math.max(0, Math.min(6, rawStart));
+  let endDay = startDay;
+  if (calCustomDateMode === "range" && endSelect) {
+    const rawEnd = parseInt(endSelect.value !== "" ? endSelect.value : startDay, 10);
+    endDay = isNaN(rawEnd) ? startDay : Math.max(startDay, Math.min(6, rawEnd));
+  }
+  const notes = notesInput ? notesInput.value.trim() : "";
+
+  customPlayerEvents.push({
+    id: "c-ev-" + Date.now(),
+    title: title,
+    type: type,
+    weekNum: selectedDetailWeek,
+    startDayIndex: startDay,
+    endDayIndex: endDay,
+    notes: notes
+  });
+
+  closeAddCustomEventModal();
+  renderCalendarWeekDetail();
+  renderCalendar4Weeks();
+  showToast(`MARKED "${title.toUpperCase()}" ON CALENDAR!`);
+}
+
+// =============================================================================
+// BEAT STORE ENGINE (ONLINE BEAT MARKETPLACE)
+// Modeled directly on user sketch (media_1791186145751.png)
+// Features: SELL & BUY Tabs, Vault Inventory, Inbound/Outbound Negotiations,
+// Bulk Discounts, Sales Analytics, Producer Directory, and Instant Beat Purchasing.
+// =============================================================================
+
+let activeBeatstoreTab = "sell";
+let activeBeatListingType = "single";
+let selectedBeatstoreGenreFilter = "ALL";
+let inspectingBuyBeatId = null;
+let beatstoreAudioPlaying = false;
+
+// 1. Initial Player Beat Inventory (Matches sketch)
+let playerBeatInventory = [
+  {
+    id: "beat-p1",
+    title: "MIDNIGHT 808",
+    type: "SINGLE",
+    price: 2000,
+    genre: "Trap",
+    cover: "album covers/download (2).jpg",
+    vaultRefId: "cat-s1",
+    bpm: 140,
+    key: "F# Minor",
+    plays: 1240,
+    likes: 86
+  },
+  {
+    id: "beat-p2",
+    title: "CHOPPER DRILL PACK",
+    type: "PACK",
+    price: 25000,
+    genre: "Drill",
+    cover: "album covers/download (5).jpg",
+    vaultRefId: "cat-s2",
+    bpm: 144,
+    key: "D Minor",
+    plays: 3820,
+    likes: 312
+  },
+  {
+    id: "beat-p3",
+    title: "NEON SYNTH RUNNER",
+    type: "SINGLE",
+    price: 1250,
+    genre: "Melodic",
+    cover: "album covers/download (3).jpg",
+    vaultRefId: "cat-s3",
+    bpm: 128,
+    key: "G# Minor",
+    plays: 940,
+    likes: 72
+  },
+  {
+    id: "beat-p4",
+    title: "ATLANTA TRAP VAULT",
+    type: "PACK",
+    price: 14000,
+    genre: "Trap",
+    cover: "album covers/download (8).jpg",
+    vaultRefId: "cat-s4",
+    bpm: 135,
+    key: "C Minor",
+    plays: 2110,
+    likes: 184
+  }
+];
+
+// 2. Inbound Negotiations (Offers from other artists to buy player's beats)
+let inboundNegotiationsList = [
+  {
+    id: "inb-1",
+    artistName: "Lil Yachty",
+    artistAvatar: "album covers/download (3).jpg",
+    beatId: "beat-p1",
+    beatTitle: "MIDNIGHT 808",
+    listPrice: 2000,
+    offerPrice: 1750,
+    status: "pending",
+    message: "Yo bro, this 808 slides crazy! Can you do $1,750 for exclusive rights? Need it for the upcoming mixtape tonight."
+  },
+  {
+    id: "inb-2",
+    artistName: "Trippie Redd",
+    artistAvatar: "album covers/download (4).jpg",
+    beatId: "beat-p2",
+    beatTitle: "CHOPPER DRILL PACK",
+    listPrice: 25000,
+    offerPrice: 21000,
+    status: "pending",
+    message: "These 5 drill tracks are heat. Lock me in for $21,000 all-in cash right now and send the stems."
+  },
+  {
+    id: "inb-3",
+    artistName: "BabyTron",
+    artistAvatar: "album covers/download (5).jpg",
+    beatId: "beat-p3",
+    beatTitle: "NEON SYNTH RUNNER",
+    listPrice: 1250,
+    offerPrice: 1100,
+    status: "pending",
+    message: "I got a fast verse for this synth tempo. $1,100 instant transfer if we sign exclusive right now."
+  }
+];
+
+// 3. Bulk Discount Promotions
+let bulkDiscountRules = [
+  {
+    id: "bulk-1",
+    title: "Buy 2 Singles, Get 1 Free",
+    description: "Applies 33% discount when artists purchase 3 single beat licenses simultaneously.",
+    discountPercent: 33,
+    active: true
+  },
+  {
+    id: "bulk-2",
+    title: "Producer Pack Summer Sale",
+    description: "15% off any Multi-Beat Pack ($10,000+ purchases).",
+    discountPercent: 15,
+    active: false
+  },
+  {
+    id: "bulk-3",
+    title: "VIP Exclusive Tier Discount",
+    description: "20% loyalty incentive for return artists who bought previous beats.",
+    discountPercent: 20,
+    active: true
+  }
+];
+
+// 4. Beat Sales History & Transaction Log
+let beatSalesHistory = [
+  {
+    id: "sale-1",
+    buyerName: "Ken Carson",
+    beatTitle: "RAGE OVERDRIVE V2",
+    type: "SINGLE",
+    price: 3500,
+    date: "2 days ago",
+    revenueShare: 3500
+  },
+  {
+    id: "sale-2",
+    buyerName: "Destroy Lonely",
+    beatTitle: "OBSIDIAN SYNTH PACK",
+    type: "PACK",
+    price: 18000,
+    date: "4 days ago",
+    revenueShare: 18000
+  },
+  {
+    id: "sale-3",
+    buyerName: "Gunna",
+    beatTitle: "DRIPPY MELODIES VOL 1",
+    type: "PACK",
+    price: 22000,
+    date: "1 week ago",
+    revenueShare: 22000
+  },
+  {
+    id: "sale-4",
+    buyerName: "Yeat",
+    beatTitle: "BELL TOLLING TRAP",
+    type: "SINGLE",
+    price: 4500,
+    date: "1 week ago",
+    revenueShare: 4500
+  },
+  {
+    id: "sale-5",
+    buyerName: "Playboi Carti",
+    beatTitle: "VAMP GUITAR PACK",
+    type: "PACK",
+    price: 30000,
+    date: "2 weeks ago",
+    revenueShare: 30000
+  }
+];
+
+// 5. Industry Released Beats This Week (BUY TAB)
+let industryBeatsReleasedThisWeek = [
+  {
+    id: "ind-1",
+    title: "HEROES & VILLAINS 808",
+    producerName: "Metro Boomin",
+    producerAvatar: "album covers/Tyler Durden.jpg",
+    type: "SINGLE",
+    price: 12500,
+    genre: "Trap",
+    cover: "album covers/download (2).jpg",
+    bpm: 138,
+    key: "C Minor",
+    tags: ["Dark", "Cinematic", "Heavy Brass"],
+    description: "Signature Metro orchestral brass & booming 808 rumble, arranged for festival trap records."
+  },
+  {
+    id: "ind-2",
+    title: "THE LIFE OF PI'ERRE PACK",
+    producerName: "Pierre Bourne",
+    producerAvatar: "album covers/download (6).jpg",
+    type: "PACK",
+    price: 28000,
+    genre: "Melodic",
+    cover: "album covers/download (4).jpg",
+    bpm: 150,
+    key: "F# Major",
+    tags: ["Dreamy", "8-Bit", "Bouncy"],
+    description: "5 multi-track melodic floaters with trademark flute leads, punchy claps, and 808 slides."
+  },
+  {
+    id: "ind-3",
+    title: "808 MAFIA SIEGE",
+    producerName: "Southside",
+    producerAvatar: "album covers/download (7).jpg",
+    type: "SINGLE",
+    price: 9500,
+    genre: "Trap",
+    cover: "album covers/download (6).jpg",
+    bpm: 140,
+    key: "D# Minor",
+    tags: ["Aggressive", "Sirens", "Grimy"],
+    description: "Sizzling high-hat rolls, war horns, and earth-shattering distortion built for violent drill-trap."
+  },
+  {
+    id: "ind-4",
+    title: "FUTURE RAGE DIMENSION",
+    producerName: "BNYX",
+    producerAvatar: "album covers/download (8).jpg",
+    type: "SINGLE",
+    price: 8000,
+    genre: "Rage",
+    cover: "album covers/download (7).jpg",
+    bpm: 148,
+    key: "A Minor",
+    tags: ["Hyperpop", "Saw Synth", "Distortion"],
+    description: "Cutting-edge EDM-trap hybrid synths layered with glitch vocal chops and hyper-velocity drums."
+  },
+  {
+    id: "ind-5",
+    title: "CRAFT VINYL SAMPLES VOL 3",
+    producerName: "The Alchemist",
+    producerAvatar: "album covers/How to Recreate Surreal Chessboard with Flying Fish (6 Easy Art Steps).jpg",
+    type: "PACK",
+    price: 32000,
+    genre: "Boom Bap",
+    cover: "album covers/download (9).jpg",
+    bpm: 88,
+    key: "E Minor",
+    tags: ["Soul Loop", "Dusty", "Drumless"],
+    description: "Rare 1970s Italian psych-rock sample flips chopped with tape saturation. Pure underground royalty."
+  },
+  {
+    id: "ind-6",
+    title: "MEMPHIS 6-SHOOTER",
+    producerName: "Tay Keith",
+    producerAvatar: "album covers/download (9).jpg",
+    type: "SINGLE",
+    price: 7500,
+    genre: "Trap",
+    cover: "album covers/download (10).jpg",
+    bpm: 142,
+    key: "G Minor",
+    tags: ["Piano Stomp", "Memphis", "Anthem"],
+    description: "Dark minor piano chords, iconic snare rolls, and bouncy 808 bounce primed for street anthems."
+  }
+];
+
+// 6. Producer Directory (Search Producers Modal)
+let beatstoreProducersDirectory = [
+  {
+    id: "prod-metro",
+    name: "Metro Boomin",
+    avatar: "album covers/Tyler Durden.jpg",
+    genre: "Trap",
+    reputation: 99,
+    beatsCount: 14,
+    startingPrice: 12000,
+    bio: "Multi-platinum executive producer behind Savage Mode and Heroes & Villains."
+  },
+  {
+    id: "prod-pierre",
+    name: "Pierre Bourne",
+    avatar: "album covers/download (6).jpg",
+    genre: "Melodic",
+    reputation: 94,
+    beatsCount: 9,
+    startingPrice: 15000,
+    bio: "Pioneer of bubblegum melody trap and soundscape wizard for Playboi Carti and Lil Uzi."
+  },
+  {
+    id: "prod-southside",
+    name: "Southside",
+    avatar: "album covers/download (7).jpg",
+    genre: "Trap",
+    reputation: 96,
+    beatsCount: 18,
+    startingPrice: 9000,
+    bio: "808 Mafia general and architect of the modern street trap sound."
+  },
+  {
+    id: "prod-bnyx",
+    name: "BNYX",
+    avatar: "album covers/download (8).jpg",
+    genre: "Rage",
+    reputation: 91,
+    beatsCount: 11,
+    startingPrice: 7500,
+    bio: "Working on Dying hitmaker behind Yeat and Drake's latest high-energy productions."
+  },
+  {
+    id: "prod-alchemist",
+    name: "The Alchemist",
+    avatar: "album covers/How to Recreate Surreal Chessboard with Flying Fish (6 Easy Art Steps).jpg",
+    genre: "Boom Bap",
+    reputation: 98,
+    beatsCount: 6,
+    startingPrice: 25000,
+    bio: "Grammy-nominated sample maestro crafting cinematic boom-bap opuses."
+  },
+  {
+    id: "prod-taykeith",
+    name: "Tay Keith",
+    avatar: "album covers/download (9).jpg",
+    genre: "Trap",
+    reputation: 93,
+    beatsCount: 12,
+    startingPrice: 7000,
+    bio: "Memphis legend turning piano melodies into Billboard #1 records."
+  },
+  {
+    id: "prod-mikedean",
+    name: "Mike Dean",
+    avatar: "album covers/Music artwork for Frank Ocean - _.jpg",
+    genre: "Melodic",
+    reputation: 99,
+    beatsCount: 4,
+    startingPrice: 35000,
+    bio: "Synth god and mixing legend behind Travis Scott, Kanye West, and The Weeknd."
+  },
+  {
+    id: "prod-f1lthy",
+    name: "F1LTHY",
+    avatar: "album covers/download (10).jpg",
+    genre: "Rage",
+    reputation: 92,
+    beatsCount: 8,
+    startingPrice: 8500,
+    bio: "Working on Dying co-founder responsible for Whole Lotta Red's heavy distortion rage."
+  }
+];
+
+// 7. Outbound Negotiations with Producers (Chat List Modal)
+let outboundProducerNegotiations = [
+  {
+    id: "outb-1",
+    producerName: "Metro Boomin",
+    producerAvatar: "album covers/Tyler Durden.jpg",
+    beatTitle: "HEROES & VILLAINS 808",
+    beatId: "ind-1",
+    listPrice: 12500,
+    playerOffer: 9000,
+    status: "counter_received",
+    lastMessage: "I see your $9,000 offer. Meet me in the middle at $10,500 and I'll include the drum stems too.",
+    counterPrice: 10500,
+    date: "1 hour ago"
+  },
+  {
+    id: "outb-2",
+    producerName: "Pierre Bourne",
+    producerAvatar: "album covers/download (6).jpg",
+    beatTitle: "THE LIFE OF PI'ERRE PACK",
+    beatId: "ind-2",
+    listPrice: 28000,
+    playerOffer: 24000,
+    status: "pending",
+    lastMessage: "Your offer of $24,000 was sent to Pierre's management. Awaiting review.",
+    counterPrice: null,
+    date: "3 hours ago"
+  }
+];
+
+// --- Core Navigation & Lifecycle ---
+
+function openBeatstoreApp(initialTab = "sell") {
+  playMechanicalClick();
+
+  // 1. Hide console bottom navigation bar
+  const bottomNav = document.querySelector(".bottom-nav-bar");
+  if (bottomNav) bottomNav.style.display = "none";
+
+  // 2. Hide Social Hub and Placeholders
+  const socialHub = document.getElementById("socialMainHub");
+  if (socialHub) socialHub.style.display = "none";
+  const placeholder = document.getElementById("socialAppPlaceholderView");
+  if (placeholder) placeholder.style.display = "none";
+
+  // 3. Sync Phone Clock in Top Hardware Bar
+  updateClock();
+
+  // 4. Show Full-Screen Beat Store container
+  const app = document.getElementById("appView_beatstore");
+  if (app) app.style.display = "flex";
+
+  // 5. Activate Requested Tab
+  switchBeatstoreTab(initialTab);
+
+  // 6. Populate and Render
+  renderBeatstoreInventory();
+  renderBeatstoreReleasedThisWeek();
+  populateBeatstoreVaultSelect();
+}
+
+function closeBeatstoreApp() {
+  playMechanicalClick();
+
+  // 1. Close all beatstore modals if open
+  const modalIds = [
+    "beatstoreAddBeatModal",
+    "beatstoreInboundNegotiationsModal",
+    "beatstoreBulkDiscountModal",
+    "beatstoreSalesModal",
+    "beatstoreProducerSearchModal",
+    "beatstoreOutboundNegotiationsModal",
+    "beatstoreBuyBeatModal"
+  ];
+  modalIds.forEach(id => {
+    const m = document.getElementById(id);
+    if (m) m.style.display = "none";
+  });
+
+  // 2. Hide Beat Store container
+  const app = document.getElementById("appView_beatstore");
+  if (app) app.style.display = "none";
+
+  // 3. Restore Console Bottom Navigation Bar
+  const bottomNav = document.querySelector(".bottom-nav-bar");
+  if (bottomNav) bottomNav.style.display = "flex";
+
+  // 4. Restore Social Hub and switch to Social tab
+  const socialHub = document.getElementById("socialMainHub");
+  if (socialHub) socialHub.style.display = "flex";
+  switchTab("social");
+}
+
+function handleBeatstoreBackNavigation() {
+  playMechanicalClick();
+
+  // Check if any modal is open
+  const modalIds = [
+    "beatstoreBuyBeatModal",
+    "beatstoreOutboundNegotiationsModal",
+    "beatstoreProducerSearchModal",
+    "beatstoreSalesModal",
+    "beatstoreBulkDiscountModal",
+    "beatstoreInboundNegotiationsModal",
+    "beatstoreAddBeatModal"
+  ];
+
+  for (let i = 0; i < modalIds.length; i++) {
+    const modal = document.getElementById(modalIds[i]);
+    if (modal && modal.style.display === "flex") {
+      modal.style.display = "none";
+      return;
+    }
+  }
+
+  // If no modals open, return cleanly to Social
+  closeBeatstoreApp();
+}
+
+function switchBeatstoreTab(tabName) {
+  playMechanicalClick();
+  activeBeatstoreTab = tabName;
+
+  const tabSell = document.getElementById("beatstoreTabSell");
+  const tabBuy = document.getElementById("beatstoreTabBuy");
+  const viewSell = document.getElementById("beatstoreSellView");
+  const viewBuy = document.getElementById("beatstoreBuyView");
+  const topActionBtn = document.getElementById("beatstoreTopActionBtn");
+  const viewport = document.getElementById("beatstoreMainViewport");
+
+  if (tabName === "sell") {
+    if (tabSell) tabSell.classList.add("active");
+    if (tabBuy) tabBuy.classList.remove("active");
+    if (viewSell) viewSell.style.display = "flex";
+    if (viewBuy) viewBuy.style.display = "none";
+
+    if (topActionBtn) {
+      topActionBtn.style.display = "flex";
+      topActionBtn.innerHTML = `<span class="beatstore-plus-circle">+</span><span>ADD BEATS</span>`;
+      topActionBtn.onclick = openBeatstoreAddBeatModal;
+      topActionBtn.title = "Add Beats to Store";
+    }
+    renderBeatstoreInventory();
+  } else {
+    if (tabBuy) tabBuy.classList.add("active");
+    if (tabSell) tabSell.classList.remove("active");
+    if (viewBuy) viewBuy.style.display = "flex";
+    if (viewSell) viewSell.style.display = "none";
+
+    // Remove "producers" button from top right in buy section
+    if (topActionBtn) {
+      topActionBtn.style.display = "none";
+    }
+    renderBeatstoreReleasedThisWeek();
+  }
+
+  if (viewport) viewport.scrollTop = 0;
+}
+
+// --- SELL Tab: Inventory Rendering & Actions ---
+
+function renderBeatstoreInventory() {
+  const container = document.getElementById("beatstoreInventoryList");
+  const countEl = document.getElementById("beatstoreInventoryCount");
+  const inboundBadge = document.getElementById("beatstoreInboundBadge");
+  const salesBadge = document.getElementById("beatstoreSalesBadge");
+
+  if (countEl) {
+    countEl.textContent = `${playerBeatInventory.length} ON SALE`;
+  }
+
+  // Badges
+  const pendingInbound = inboundNegotiationsList.filter(n => n.status === "pending").length;
+  if (inboundBadge) {
+    inboundBadge.textContent = pendingInbound;
+    inboundBadge.style.display = pendingInbound > 0 ? "flex" : "none";
+  }
+
+  if (salesBadge) {
+    salesBadge.textContent = beatSalesHistory.length;
+    salesBadge.style.display = beatSalesHistory.length > 0 ? "flex" : "none";
+  }
+
+  if (!container) return;
+
+  if (playerBeatInventory.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 10px; color: #78716C;">
+        <p style="font-size: 0.82rem; margin-bottom: 8px;">No beats currently listed on your store.</p>
+        <button class="beatstore-submit-btn" style="width: auto; padding: 6px 14px; font-size: 0.72rem; margin: 0 auto;" onclick="openBeatstoreAddBeatModal()">
+          + PUT FIRST BEAT ON SALE
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  let html = "";
+  playerBeatInventory.forEach(beat => {
+    html += `
+      <div class="beatstore-beat-row" onclick="inspectPlayerBeatListing('${beat.id}')">
+        <div class="beat-row-left">
+          <img src="${beat.cover}" class="beat-thumb" alt="${beat.title}" onerror="this.src='album covers/download (2).jpg'">
+          <span class="beat-title">${beat.title}</span>
+        </div>
+        <span class="beat-type-badge">${beat.type}</span>
+        <span class="beat-price-pill">$${beat.price.toLocaleString()}</span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function inspectPlayerBeatListing(beatId) {
+  playMechanicalClick();
+  const beat = playerBeatInventory.find(b => b.id === beatId);
+  if (!beat) return;
+
+  showToast(`"${beat.title}" • ${beat.type} • $${beat.price.toLocaleString()} (${beat.plays} streams)`);
+}
+
+// 1. Inbound Negotiations Modal
+function openBeatstoreInboundNegotiationsModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreInboundNegotiationsModal");
+  const container = document.getElementById("beatstoreInboundListContainer");
+  if (!modal || !container) return;
+
+  if (inboundNegotiationsList.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 20px; color: #94A3B8;">
+        <p>No active negotiations at the moment.</p>
+      </div>
+    `;
+  } else {
+    let html = "";
+    inboundNegotiationsList.forEach(neg => {
+      const isPending = neg.status === "pending";
+      const isAccepted = neg.status === "accepted";
+      const isDeclined = neg.status === "declined";
+
+      const discountPct = Math.round(((neg.listPrice - neg.offerPrice) / neg.listPrice) * 100);
+
+      html += `
+        <div style="background: #151821; border: 1.2px solid ${isPending ? '#FF2A2A' : '#2D3342'}; border-radius: 12px; padding: 12px; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="${neg.artistAvatar}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.2px solid #FF2A2A;" onerror="this.src='album covers/download (3).jpg'">
+              <div>
+                <h4 style="margin: 0; font-size: 0.82rem; font-weight: 900; color: #FFFFFF;">${neg.artistName}</h4>
+                <span style="font-size: 0.62rem; color: #94A3B8;">WANTS: ${neg.beatTitle}</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.85rem; font-weight: 900; color: #34D399;">$${neg.offerPrice.toLocaleString()}</span>
+              <div style="font-size: 0.60rem; color: #EF4444;">List: $${neg.listPrice.toLocaleString()} (-${discountPct}%)</div>
+            </div>
+          </div>
+
+          <p style="font-size: 0.70rem; color: #CBD5E1; margin: 0 0 10px 0; background: #0F1118; padding: 8px 10px; border-radius: 8px; border-left: 3px solid #FF2A2A; font-style: italic;">
+            "${neg.message}"
+          </p>
+
+          ${isPending ? `
+            <div style="display: flex; gap: 8px;">
+              <button class="beatstore-submit-btn" style="flex: 2; padding: 7px 10px; font-size: 0.72rem; background: #16A34A;" onclick="acceptInboundNegotiation('${neg.id}')">
+                ACCEPT (+$${neg.offerPrice.toLocaleString()})
+              </button>
+              <button class="beatstore-submit-btn" style="flex: 1; padding: 7px 10px; font-size: 0.72rem; background: #2D3342; color: #F1F5F9;" onclick="declineInboundNegotiation('${neg.id}')">
+                DECLINE
+              </button>
+            </div>
+          ` : isAccepted ? `
+            <div style="background: rgba(34, 197, 94, 0.15); border: 1px solid #22C55E; color: #4ADE80; font-size: 0.68rem; font-weight: 800; padding: 6px; border-radius: 6px; text-align: center;">
+              ✓ DEAL ACCEPTED & PAID (+$${neg.offerPrice.toLocaleString()})
+            </div>
+          ` : `
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #F87171; font-size: 0.68rem; font-weight: 800; padding: 6px; border-radius: 6px; text-align: center;">
+              ✕ OFFER DECLINED
+            </div>
+          `}
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeBeatstoreInboundNegotiationsModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreInboundNegotiationsModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreInboundNegotiationsModal");
+  if (modal) modal.style.display = "none";
+}
+
+function acceptInboundNegotiation(negId) {
+  playMechanicalClick();
+  const neg = inboundNegotiationsList.find(n => n.id === negId);
+  if (!neg || neg.status !== "pending") return;
+
+  // Add Money
+  careerMoney += neg.offerPrice;
+  const statusMoney = document.getElementById("statusMoney");
+  if (statusMoney) statusMoney.textContent = `$${careerMoney.toLocaleString()}`;
+
+  // Log Sale
+  beatSalesHistory.unshift({
+    id: "sale-" + Date.now(),
+    buyerName: neg.artistName,
+    beatTitle: neg.beatTitle,
+    type: "SINGLE",
+    price: neg.offerPrice,
+    date: "Just now",
+    revenueShare: neg.offerPrice
+  });
+
+  neg.status = "accepted";
+  showToast(`ACCEPTED $${neg.offerPrice.toLocaleString()} FROM ${neg.artistName.toUpperCase()}!`);
+  openBeatstoreInboundNegotiationsModal();
+  renderBeatstoreInventory();
+}
+
+function declineInboundNegotiation(negId) {
+  playMechanicalClick();
+  const neg = inboundNegotiationsList.find(n => n.id === negId);
+  if (!neg || neg.status !== "pending") return;
+
+  neg.status = "declined";
+  showToast(`DECLINED OFFER FROM ${neg.artistName.toUpperCase()}`);
+  openBeatstoreInboundNegotiationsModal();
+  renderBeatstoreInventory();
+}
+
+// 2. Bulk Discounts Modal
+function openBeatstoreBulkDiscountModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreBulkDiscountModal");
+  const container = document.getElementById("beatstoreBulkDiscountList");
+  if (!modal || !container) return;
+
+  let html = "";
+  bulkDiscountRules.forEach(rule => {
+    html += `
+      <div style="background: #151821; border: 1.2px solid ${rule.active ? '#FF2A2A' : '#2D3342'}; border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="flex: 1; padding-right: 12px;">
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+            <h4 style="margin: 0; font-size: 0.82rem; font-weight: 900; color: #FFFFFF;">${rule.title}</h4>
+            <span style="background: #FF2A2A; color: #FFFFFF; font-size: 0.60rem; font-weight: 900; padding: 1px 6px; border-radius: 4px;">-${rule.discountPercent}%</span>
+          </div>
+          <p style="font-size: 0.68rem; color: #94A3B8; margin: 0;">${rule.description}</p>
+        </div>
+        <button class="beatstore-pill-btn ${rule.active ? 'active' : ''}" style="height: 32px; padding: 0 12px; font-size: 0.70rem;" onclick="toggleBulkDiscount('${rule.id}')">
+          ${rule.active ? 'ACTIVE' : 'OFF'}
+        </button>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+  modal.style.display = "flex";
+}
+
+function closeBeatstoreBulkDiscountModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreBulkDiscountModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreBulkDiscountModal");
+  if (modal) modal.style.display = "none";
+}
+
+function toggleBulkDiscount(ruleId) {
+  playMechanicalClick();
+  const rule = bulkDiscountRules.find(r => r.id === ruleId);
+  if (!rule) return;
+
+  rule.active = !rule.active;
+  showToast(`${rule.title.toUpperCase()}: ${rule.active ? 'ENABLED' : 'DISABLED'}`);
+  openBeatstoreBulkDiscountModal();
+}
+
+// 3. View Sales Modal
+function openBeatstoreSalesModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreSalesModal");
+  const container = document.getElementById("beatstoreSalesContent");
+  if (!modal || !container) return;
+
+  const totalRevenue = beatSalesHistory.reduce((sum, s) => sum + s.price, 0);
+  const totalSalesCount = beatSalesHistory.length;
+  const avgPrice = totalSalesCount > 0 ? Math.round(totalRevenue / totalSalesCount) : 0;
+
+  let html = `
+    <!-- Top Stats Row -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px;">
+      <div style="background: #151821; border: 1.2px solid #2D3342; border-radius: 8px; padding: 8px; text-align: center;">
+        <span style="font-size: 0.58rem; color: #94A3B8; font-weight: 800;">TOTAL GROSS</span>
+        <h3 style="margin: 2px 0 0 0; font-size: 0.90rem; font-weight: 900; color: #34D399;">$${totalRevenue.toLocaleString()}</h3>
+      </div>
+      <div style="background: #151821; border: 1.2px solid #2D3342; border-radius: 8px; padding: 8px; text-align: center;">
+        <span style="font-size: 0.58rem; color: #94A3B8; font-weight: 800;">LICENSES SOLD</span>
+        <h3 style="margin: 2px 0 0 0; font-size: 0.90rem; font-weight: 900; color: #FF2A2A;">${totalSalesCount}</h3>
+      </div>
+      <div style="background: #151821; border: 1.2px solid #2D3342; border-radius: 8px; padding: 8px; text-align: center;">
+        <span style="font-size: 0.58rem; color: #94A3B8; font-weight: 800;">AVG TICKET</span>
+        <h3 style="margin: 2px 0 0 0; font-size: 0.90rem; font-weight: 900; color: #F59E0B;">$${avgPrice.toLocaleString()}</h3>
+      </div>
+    </div>
+
+    <!-- Recent Sales Log -->
+    <h4 style="font-size: 0.72rem; font-weight: 900; color: #94A3B8; margin: 0 0 6px 0; letter-spacing: 0.5px;">RECENT BUYER TRANSACTIONS</h4>
+    <div style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto;">
+      ${beatSalesHistory.map(sale => `
+        <div style="background: #151821; border: 1px solid #262B38; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-size: 0.76rem; font-weight: 900; color: #FFFFFF;">${sale.buyerName}</div>
+            <div style="font-size: 0.62rem; color: #94A3B8;">${sale.beatTitle} &bull; <span style="color: #FF2A2A;">${sale.type}</span> &bull; ${sale.date}</div>
+          </div>
+          <span style="font-size: 0.82rem; font-weight: 900; color: #34D399; background: rgba(52, 211, 153, 0.1); padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(52, 211, 153, 0.3);">
+            +$${sale.price.toLocaleString()}
+          </span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  container.innerHTML = html;
+  modal.style.display = "flex";
+}
+
+function closeBeatstoreSalesModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreSalesModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreSalesModal");
+  if (modal) modal.style.display = "none";
+}
+
+// 4. Add Beat to Store Modal
+function populateBeatstoreVaultSelect() {
+  const select = document.getElementById("beatstoreVaultSelect");
+  if (!select) return;
+
+  const unreleased = typeof FULL_CATALOGUE_DATA !== "undefined"
+    ? FULL_CATALOGUE_DATA.filter(i => !i.isReleased)
+    : [];
+
+  let optionsHtml = "";
+  if (unreleased.length > 0) {
+    unreleased.forEach(item => {
+      optionsHtml += `<option value="${item.id}" data-title="${item.title}" data-genre="${item.genre || 'Trap'}">${item.title} (${item.genre || 'Custom'})</option>`;
+    });
+  } else {
+    optionsHtml = `
+      <option value="vault-preset-1" data-title="Dark 808 Night Stalker" data-genre="Trap">Dark 808 Night Stalker (Trap)</option>
+      <option value="vault-preset-2" data-title="East London Drill Master" data-genre="Drill">East London Drill Master (Drill)</option>
+      <option value="vault-preset-3" data-title="Vintage Vinyl Chop #4" data-genre="Boom Bap">Vintage Vinyl Chop #4 (Boom Bap)</option>
+      <option value="vault-preset-4" data-title="Cyber Hyperpop Synth Vault" data-genre="Rage">Cyber Hyperpop Synth Vault (Rage)</option>
+    `;
+  }
+
+  select.innerHTML = optionsHtml;
+  handleBeatstoreVaultSelectionChange();
+}
+
+function handleBeatstoreVaultSelectionChange() {
+  const select = document.getElementById("beatstoreVaultSelect");
+  const titleInput = document.getElementById("beatstoreTitleInput");
+  if (!select || !titleInput) return;
+
+  const opt = select.selectedOptions[0];
+  if (opt) {
+    const rawTitle = opt.getAttribute("data-title") || opt.textContent;
+    titleInput.value = rawTitle.split("(")[0].trim().toUpperCase();
+  }
+}
+
+function openBeatstoreAddBeatModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreAddBeatModal");
+  if (!modal) return;
+
+  populateBeatstoreVaultSelect();
+  setBeatListingType("single");
+  modal.style.display = "flex";
+}
+
+function closeBeatstoreAddBeatModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreAddBeatModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreAddBeatModal");
+  if (modal) modal.style.display = "none";
+}
+
+function setBeatListingType(type) {
+  activeBeatListingType = type;
+  const singleBtn = document.getElementById("btnListingTypeSingle");
+  const packBtn = document.getElementById("btnListingTypePack");
+  const priceInput = document.getElementById("beatstorePriceInput");
+
+  if (type === "single") {
+    if (singleBtn) singleBtn.classList.add("active");
+    if (packBtn) packBtn.classList.remove("active");
+    if (priceInput) priceInput.value = "2000";
+  } else {
+    if (singleBtn) singleBtn.classList.remove("active");
+    if (packBtn) packBtn.classList.add("active");
+    if (priceInput) priceInput.value = "20000";
+  }
+}
+
+function handleSaveNewBeatListing(e) {
+  if (e) e.preventDefault();
+  playMechanicalClick();
+
+  const titleInput = document.getElementById("beatstoreTitleInput");
+  const priceInput = document.getElementById("beatstorePriceInput");
+  const genreSelect = document.getElementById("beatstoreGenreSelect");
+  const vaultSelect = document.getElementById("beatstoreVaultSelect");
+
+  const title = titleInput ? titleInput.value.trim().toUpperCase() : "UNTITLED BEAT";
+  const price = priceInput ? parseInt(priceInput.value, 10) || 2000 : 2000;
+  const genre = genreSelect ? genreSelect.value : "Trap";
+  const vaultId = vaultSelect ? vaultSelect.value : "vault-" + Date.now();
+
+  const newBeat = {
+    id: "beat-p" + Date.now(),
+    title: title,
+    type: activeBeatListingType.toUpperCase(),
+    price: price,
+    genre: genre,
+    cover: typeof getRandomAlbumCover === "function" ? getRandomAlbumCover() : "album covers/download (2).jpg",
+    vaultRefId: vaultId,
+    bpm: activeBeatListingType === "pack" ? 144 : 140,
+    key: "C Minor",
+    plays: 0,
+    likes: 0
+  };
+
+  playerBeatInventory.unshift(newBeat);
+  closeBeatstoreAddBeatModal();
+  renderBeatstoreInventory();
+  showToast(`LISTED "${newBeat.title}" ON STORE FOR $${newBeat.price.toLocaleString()}!`);
+}
+
+// --- BUY Tab: Industry Beats & Producer Actions ---
+
+function renderBeatstoreReleasedThisWeek() {
+  const container = document.getElementById("beatstoreMarketList");
+  const outboundBadge = document.getElementById("beatstoreOutboundBadge");
+
+  // Outbound Negotiations Badge
+  const pendingOutbound = outboundProducerNegotiations.filter(n => n.status === "counter_received").length;
+  if (outboundBadge) {
+    outboundBadge.textContent = pendingOutbound;
+    outboundBadge.style.display = pendingOutbound > 0 ? "flex" : "none";
+  }
+
+  if (!container) return;
+
+  let html = "";
+  industryBeatsReleasedThisWeek.forEach(beat => {
+    html += `
+      <div class="beatstore-beat-row" onclick="openBeatstoreBuyBeatModal('${beat.id}')">
+        <div class="beat-row-left">
+          <img src="${beat.cover}" class="beat-thumb" alt="${beat.title}" onerror="this.src='album covers/download (2).jpg'">
+          <div class="beat-info">
+            <span class="beat-title">${beat.title}</span>
+            <div class="beat-sub">
+              <span>PROD. ${beat.producerName.toUpperCase()}</span>
+            </div>
+          </div>
+        </div>
+        <span class="beat-type-badge">${beat.type}</span>
+        <span class="beat-price-pill">$${beat.price.toLocaleString()}</span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// 5. Search Producers Modal (Buy Tab)
+function openBeatstoreProducerSearchModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreProducerSearchModal");
+  const filterRow = document.getElementById("beatstoreGenreFilters");
+  const searchInput = document.getElementById("beatstoreProducerSearchInput");
+
+  if (searchInput) searchInput.value = "";
+  selectedBeatstoreGenreFilter = "ALL";
+
+  // Render Genre Pills
+  if (filterRow) {
+    const genres = ["ALL", "Trap", "Melodic", "Boom Bap", "Rage"];
+    filterRow.innerHTML = genres.map(g => `
+      <button class="beatstore-filter-pill ${g === 'ALL' ? 'active' : ''}" onclick="filterBeatstoreProducers('${g}', this)">
+        ${g}
+      </button>
+    `).join("");
+  }
+
+  renderBeatstoreProducersList();
+  if (modal) modal.style.display = "flex";
+}
+
+function closeBeatstoreProducerSearchModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreProducerSearchModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreProducerSearchModal");
+  if (modal) modal.style.display = "none";
+}
+
+function filterBeatstoreProducers(genre, btnEl) {
+  playMechanicalClick();
+  selectedBeatstoreGenreFilter = genre;
+
+  const filterRow = document.getElementById("beatstoreGenreFilters");
+  if (filterRow) {
+    filterRow.querySelectorAll(".beatstore-filter-pill").forEach(b => b.classList.remove("active"));
+  }
+  if (btnEl) btnEl.classList.add("active");
+
+  renderBeatstoreProducersList();
+}
+
+function handleProducerSearchInput(query) {
+  renderBeatstoreProducersList(query);
+}
+
+function renderBeatstoreProducersList(searchQuery = "") {
+  const container = document.getElementById("beatstoreProducersListContent");
+  if (!container) return;
+
+  const query = (searchQuery || "").trim().toLowerCase();
+  let list = beatstoreProducersDirectory.filter(p => {
+    const matchGenre = selectedBeatstoreGenreFilter === "ALL" || p.genre.toLowerCase() === selectedBeatstoreGenreFilter.toLowerCase();
+    const matchQuery = !query || p.name.toLowerCase().includes(query) || p.bio.toLowerCase().includes(query);
+    return matchGenre && matchQuery;
+  });
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 20px; color: #94A3B8;">
+        <p>No producers found matching query.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let html = "";
+  list.forEach(prod => {
+    html += `
+      <div class="beatstore-producer-card">
+        <div class="producer-card-top">
+          <div class="producer-identity">
+            <img src="${prod.avatar}" class="producer-avatar" alt="${prod.name}" onerror="this.src='album covers/download (6).jpg'">
+            <div>
+              <h4 class="producer-name">${prod.name}</h4>
+              <div class="producer-tags">
+                <span class="producer-genre">${prod.genre}</span>
+                <span>&bull;</span>
+                <span style="color: #F59E0B; font-weight: 800;">★ ${prod.reputation} REP</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 0.60rem; color: #94A3B8;">FROM</span>
+            <div style="font-size: 0.78rem; font-weight: 900; color: #34D399;">$${prod.startingPrice.toLocaleString()}</div>
+          </div>
+        </div>
+        <p class="producer-bio">${prod.bio}</p>
+        <div style="display: flex; gap: 8px; margin-top: 6px;">
+          <button class="beatstore-submit-btn" style="padding: 5px 10px; font-size: 0.68rem;" onclick="viewProducerCatalog('${prod.name}')">
+            VIEW CATALOG (${prod.beatsCount} BEATS)
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function viewProducerCatalog(producerName) {
+  playMechanicalClick();
+  closeBeatstoreProducerSearchModal();
+  showToast(`FILTERED BY PRODUCER: ${producerName.toUpperCase()}`);
+}
+
+// 6. Producer Outbound Negotiations (Chat List Modal)
+function openBeatstoreOutboundNegotiationsModal() {
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreOutboundNegotiationsModal");
+  const container = document.getElementById("beatstoreOutboundListContainer");
+  if (!modal || !container) return;
+
+  if (outboundProducerNegotiations.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 20px; color: #94A3B8;">
+        <p>No active producer negotiations.</p>
+      </div>
+    `;
+  } else {
+    let html = "";
+    outboundProducerNegotiations.forEach(neg => {
+      const isCounter = neg.status === "counter_received";
+      const isAccepted = neg.status === "accepted";
+      const isPending = neg.status === "pending";
+
+      html += `
+        <div style="background: #151821; border: 1.2px solid ${isCounter ? '#FF2A2A' : '#2D3342'}; border-radius: 12px; padding: 12px; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="${neg.producerAvatar}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.2px solid #FF2A2A;" onerror="this.src='album covers/download (6).jpg'">
+              <div>
+                <h4 style="margin: 0; font-size: 0.82rem; font-weight: 900; color: #FFFFFF;">${neg.producerName}</h4>
+                <span style="font-size: 0.62rem; color: #94A3B8;">TRACK: ${neg.beatTitle}</span>
+              </div>
+            </div>
+            <span style="font-size: 0.60rem; color: #64748B;">${neg.date}</span>
+          </div>
+
+          <div style="background: #0E1016; padding: 8px 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.70rem; color: #CBD5E1; border-left: 3px solid ${isCounter ? '#F59E0B' : '#3B82F6'};">
+            ${neg.lastMessage}
+          </div>
+
+          ${isCounter ? `
+            <div style="display: flex; gap: 8px;">
+              <button class="beatstore-submit-btn" style="flex: 2; padding: 7px 10px; font-size: 0.72rem; background: #16A34A;" onclick="acceptProducerCounterOffer('${neg.id}')">
+                ACCEPT COUNTER ($${neg.counterPrice.toLocaleString()})
+              </button>
+              <button class="beatstore-submit-btn" style="flex: 1; padding: 7px 10px; font-size: 0.72rem; background: #2D3342; color: #F1F5F9;" onclick="rejectProducerCounterOffer('${neg.id}')">
+                PASS
+              </button>
+            </div>
+          ` : isAccepted ? `
+            <div style="background: rgba(34, 197, 94, 0.15); border: 1px solid #22C55E; color: #4ADE80; font-size: 0.68rem; font-weight: 800; padding: 6px; border-radius: 6px; text-align: center;">
+              ✓ LICENSED &amp; DELIVERED TO STUDIO VAULT
+            </div>
+          ` : `
+            <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid #3B82F6; color: #60A5FA; font-size: 0.68rem; font-weight: 800; padding: 6px; border-radius: 6px; text-align: center;">
+              ⏳ OFFER UNDER REVIEW ($${neg.playerOffer.toLocaleString()})
+            </div>
+          `}
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeBeatstoreOutboundNegotiationsModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreOutboundNegotiationsModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  const modal = document.getElementById("beatstoreOutboundNegotiationsModal");
+  if (modal) modal.style.display = "none";
+}
+
+function acceptProducerCounterOffer(negId) {
+  playMechanicalClick();
+  const neg = outboundProducerNegotiations.find(n => n.id === negId);
+  if (!neg || neg.status !== "counter_received") return;
+
+  const cost = neg.counterPrice || 10000;
+  if (careerMoney < cost) {
+    showToast(`INSUFFICIENT FUNDS! Need $${cost.toLocaleString()} to accept counteroffer.`);
+    return;
+  }
+
+  careerMoney -= cost;
+  const statusMoney = document.getElementById("statusMoney");
+  if (statusMoney) statusMoney.textContent = `$${careerMoney.toLocaleString()}`;
+
+  neg.status = "accepted";
+  neg.lastMessage = `You accepted the $${cost.toLocaleString()} counteroffer. Exclusive master stems downloaded to Studio Vault.`;
+
+  showToast(`ACQUIRED "${neg.beatTitle}" FROM ${neg.producerName.toUpperCase()}!`);
+  openBeatstoreOutboundNegotiationsModal();
+  renderBeatstoreReleasedThisWeek();
+}
+
+function rejectProducerCounterOffer(negId) {
+  playMechanicalClick();
+  const neg = outboundProducerNegotiations.find(n => n.id === negId);
+  if (!neg) return;
+
+  neg.status = "declined";
+  neg.lastMessage = `You passed on the $${(neg.counterPrice || 0).toLocaleString()} counteroffer. Negotiation closed.`;
+  showToast(`PASSED ON COUNTEROFFER`);
+  openBeatstoreOutboundNegotiationsModal();
+  renderBeatstoreReleasedThisWeek();
+}
+
+// 7. Buy / Inspect Beat Modal
+function openBeatstoreBuyBeatModal(beatId) {
+  playMechanicalClick();
+  const beat = industryBeatsReleasedThisWeek.find(b => b.id === beatId);
+  if (!beat) return;
+
+  inspectingBuyBeatId = beatId;
+  const modal = document.getElementById("beatstoreBuyBeatModal");
+  const titleEl = document.getElementById("buyModalTitle");
+  const bodyEl = document.getElementById("buyModalBody");
+
+  if (titleEl) titleEl.textContent = beat.title;
+  if (bodyEl) {
+    bodyEl.innerHTML = `
+      <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
+        <img src="${beat.cover}" style="width: 72px; height: 72px; border-radius: 12px; object-fit: cover; border: 2px solid #FF2A2A;" onerror="this.src='album covers/download (2).jpg'">
+        <div style="flex: 1;">
+          <h3 style="margin: 0; font-size: 0.95rem; font-weight: 900; color: #FFFFFF;">${beat.title}</h3>
+          <div style="color: #FF2A2A; font-weight: 800; font-size: 0.76rem; margin-top: 2px;">Prod. by ${beat.producerName}</div>
+          <div style="font-size: 0.64rem; color: #94A3B8; margin-top: 4px;">
+            ${beat.genre} &bull; ${beat.bpm} BPM &bull; Key: ${beat.key}
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio Waveform Mock Preview -->
+      <div style="background: #14161E; border: 1.2px solid #2D3342; border-radius: 10px; padding: 10px; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 0.64rem; font-weight: 800; color: #94A3B8;">AUDIO WATERMARK PREVIEW (128 KBPS)</span>
+          <button class="beatstore-pill-btn active" id="btnAudioPreviewPlay" onclick="toggleBeatstoreAudioPreview()" style="font-size: 0.64rem; height: 26px; padding: 0 10px;">
+            ▶ PLAY DEMO
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; height: 32px; gap: 3px;" id="audioWaveBars">
+          ${[35, 60, 85, 40, 95, 70, 50, 80, 100, 65, 45, 90, 80, 55, 30, 75, 95, 60, 40, 70, 85, 50, 65, 40, 80, 90, 45, 60].map(h => `
+            <div style="flex: 1; height: ${h}%; background: #FF2A2A; border-radius: 2px; opacity: 0.75;"></div>
+          `).join("")}
+        </div>
+      </div>
+
+      <p style="font-size: 0.72rem; color: #CBD5E1; line-height: 1.4; margin: 0 0 12px 0;">${beat.description}</p>
+
+      <!-- Purchase Options -->
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button class="beatstore-submit-btn" style="background: #16A34A; padding: 12px;" onclick="buyBeatInstant('${beat.id}')">
+          ⚡ INSTANT BUY ($${beat.price.toLocaleString()})
+        </button>
+        
+        <form onsubmit="submitBeatOffer(event, '${beat.id}')" style="background: #151821; border: 1px solid #2D3342; border-radius: 10px; padding: 10px;">
+          <span style="font-size: 0.68rem; font-weight: 900; color: #FFFFFF; display: block; margin-bottom: 6px;">MAKE AN EXCLUSIVE OFFER</span>
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <input type="number" id="producerOfferAmtInput" value="${Math.round(beat.price * 0.8)}" min="500" max="100000" step="100" style="flex: 1; height: 34px; background: #0E1016; border: 1px solid #2D3342; border-radius: 6px; padding: 0 8px; color: #34D399; font-weight: 900; font-size: 0.80rem;" required />
+            <button type="submit" class="beatstore-submit-btn" style="width: auto; padding: 0 14px; font-size: 0.70rem;">
+              SEND OFFER
+            </button>
+          </div>
+          <span style="font-size: 0.60rem; color: #94A3B8;">Producer management replies within 2-4 hours.</span>
+        </form>
+      </div>
+    `;
+  }
+
+  if (modal) modal.style.display = "flex";
+}
+
+function closeBeatstoreBuyBeatModal(e) {
+  if (e && e.target && e.target.id !== "beatstoreBuyBeatModal" && !e.target.classList.contains("beatstore-modal-close-btn")) {
+    return;
+  }
+  playMechanicalClick();
+  beatstoreAudioPlaying = false;
+  const modal = document.getElementById("beatstoreBuyBeatModal");
+  if (modal) modal.style.display = "none";
+}
+
+function toggleBeatstoreAudioPreview() {
+  playMechanicalClick();
+  beatstoreAudioPlaying = !beatstoreAudioPlaying;
+  const btn = document.getElementById("btnAudioPreviewPlay");
+  if (btn) {
+    btn.textContent = beatstoreAudioPlaying ? "⏸ PAUSE" : "▶ PLAY DEMO";
+  }
+  showToast(beatstoreAudioPlaying ? "PLAYING AUDIO PREVIEW (TAGGED)" : "PREVIEW PAUSED");
+}
+
+function buyBeatInstant(beatId) {
+  playMechanicalClick();
+  const beat = industryBeatsReleasedThisWeek.find(b => b.id === beatId);
+  if (!beat) return;
+
+  if (careerMoney < beat.price) {
+    showToast(`INSUFFICIENT FUNDS! Need $${beat.price.toLocaleString()} for instant buy.`);
+    return;
+  }
+
+  careerMoney -= beat.price;
+  const statusMoney = document.getElementById("statusMoney");
+  if (statusMoney) statusMoney.textContent = `$${careerMoney.toLocaleString()}`;
+
+  // Deliver to player vault
+  if (typeof FULL_CATALOGUE_DATA !== "undefined") {
+    FULL_CATALOGUE_DATA.push({
+      id: "cat-s" + Date.now(),
+      type: "song",
+      typeName: "SONG",
+      isReleased: false,
+      title: beat.title + " (DEMO)",
+      status: "UNRELEASED",
+      quality: "9.2",
+      genre: beat.genre,
+      bpm: beat.bpm + " BPM",
+      cover: beat.cover,
+      details: `EXCLUSIVE PRODUCTION BY ${beat.producerName.toUpperCase()}`
+    });
+  }
+
+  closeBeatstoreBuyBeatModal();
+  showToast(`PURCHASED "${beat.title}" FOR $${beat.price.toLocaleString()}! ADDED TO STUDIO VAULT.`);
+}
+
+function submitBeatOffer(e, beatId) {
+  if (e) e.preventDefault();
+  playMechanicalClick();
+
+  const beat = industryBeatsReleasedThisWeek.find(b => b.id === beatId);
+  const amtInput = document.getElementById("producerOfferAmtInput");
+  if (!beat || !amtInput) return;
+
+  const offerAmt = parseInt(amtInput.value, 10) || Math.round(beat.price * 0.8);
+
+  outboundProducerNegotiations.unshift({
+    id: "outb-" + Date.now(),
+    producerName: beat.producerName,
+    producerAvatar: beat.producerAvatar,
+    beatTitle: beat.title,
+    beatId: beat.id,
+    listPrice: beat.price,
+    playerOffer: offerAmt,
+    status: "pending",
+    lastMessage: `You offered $${offerAmt.toLocaleString()} for exclusive rights. Awaiting producer review.`,
+    counterPrice: null,
+    date: "Just now"
+  });
+
+  closeBeatstoreBuyBeatModal();
+  showToast(`OFFER OF $${offerAmt.toLocaleString()} SENT TO ${beat.producerName.toUpperCase()}!`);
+  renderBeatstoreReleasedThisWeek();
+}
+
+

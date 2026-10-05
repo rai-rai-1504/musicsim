@@ -10207,22 +10207,55 @@ body[data-wood="gold-wood"]::after {
    ========================================================================== */
 
 .label-contract-card {
-  background: #FFFFFF;
+  background-color: #fcfaf3;
+  background-image: 
+    radial-gradient(#cfc5b0 0.8px, transparent 0.8px),
+    radial-gradient(#e5ddd0 0.8px, transparent 0.8px),
+    repeating-linear-gradient(0deg, rgba(180, 165, 140, 0.06) 0px, rgba(180, 165, 140, 0.06) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(90deg, rgba(180, 165, 140, 0.035) 0px, rgba(180, 165, 140, 0.035) 1px, transparent 1px, transparent 32px),
+    linear-gradient(145deg, #ffffff 0%, #faf5ea 42%, #f5ece0 82%, #ece1ce 100%);
+  background-size: 7px 7px, 11px 11px, 100% 16px, 32px 100%, 100% 100%;
+  background-position: 0 0, 3.5px 3.5px, 0 0, 0 0, 0 0;
   border-radius: 22px;
   padding: 18px 18px 14px 18px;
   position: relative;
-  border: 2px solid #ded6c8;
+  border: 1.8px solid #d4cbb8;
+  border-top: 2px solid #ffffff;
+  border-bottom: 2.5px solid #baa992;
   box-shadow: 
-    0 6px 18px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 #ffffff;
+    0 10px 24px rgba(0, 0, 0, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 #ffffff,
+    inset 0 -2px 5px rgba(180, 160, 120, 0.15);
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
   color: #111827;
+  overflow: hidden;
+}
+
+.label-contract-card::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(165, 142, 112, 0.38);
+  border-radius: 16px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.label-contract-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: radial-gradient(circle at 85% 15%, rgba(153, 27, 27, 0.04) 0%, transparent 45%),
+              radial-gradient(circle at 15% 85%, rgba(180, 160, 120, 0.08) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .label-contract-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 #ffffff;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.52), 0 3px 8px rgba(0, 0, 0, 0.28), inset 0 1px 0 #ffffff;
 }
 
 .label-contract-card:active {
@@ -10237,6 +10270,7 @@ body[data-wood="gold-wood"]::after {
   width: 44px;
   height: 44px;
   flex-shrink: 0;
+  z-index: 2;
 }
 
 .label-contract-title {
@@ -10248,34 +10282,43 @@ body[data-wood="gold-wood"]::after {
   max-width: calc(100% - 56px);
   text-transform: uppercase;
   line-height: 1.15;
+  position: relative;
+  z-index: 1;
 }
 
 .label-contract-meta-grid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 12px;
+  gap: 5px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
 }
 
 .label-meta-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.72rem;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 7px;
+  font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #1e293b;
+  line-height: 1.5;
 }
 
 .label-meta-key {
-  color: #334155;
+  color: #1e293b;
   font-weight: 800;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .label-meta-val {
   color: #0f172a;
   font-weight: 900;
+  letter-spacing: 0.5px;
 }
 
 .label-contract-bottom-row {
@@ -10284,6 +10327,8 @@ body[data-wood="gold-wood"]::after {
   justify-content: space-between;
   margin-top: 6px;
   padding-top: 4px;
+  position: relative;
+  z-index: 1;
 }
 
 .label-advance-group {
@@ -10293,21 +10338,26 @@ body[data-wood="gold-wood"]::after {
 }
 
 .label-advance-label {
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 800;
   color: #1e293b;
   letter-spacing: 0.6px;
 }
 
 .label-advance-pill {
-  background: #52c46e;
-  color: #0a2f14;
-  font-size: 0.76rem;
+  background: linear-gradient(180deg, #5de07b 0%, #3ec461 45%, #2bb04c 100%);
+  color: #06260f;
+  font-size: 0.78rem;
   font-weight: 900;
-  padding: 4px 14px;
+  padding: 4.5px 15px;
   border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(82, 196, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border: 1px solid #239a40;
+  box-shadow: 
+    0 3px 8px rgba(34, 197, 94, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   letter-spacing: 0.5px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .label-pen-signature {
@@ -10323,15 +10373,37 @@ body[data-wood="gold-wood"]::after {
    ========================================================================== */
 
 .your-label-parchment-card {
-  background: #FAF1E6;
+  background-color: #f7eee1;
+  background-image: 
+    radial-gradient(#cfc5b0 0.8px, transparent 0.8px),
+    radial-gradient(#e5ddd0 0.8px, transparent 0.8px),
+    repeating-linear-gradient(0deg, rgba(180, 165, 140, 0.06) 0px, rgba(180, 165, 140, 0.06) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(90deg, rgba(180, 165, 140, 0.035) 0px, rgba(180, 165, 140, 0.035) 1px, transparent 1px, transparent 32px),
+    linear-gradient(145deg, #fdfbf7 0%, #f6eee0 48%, #ede1ce 100%);
+  background-size: 7px 7px, 11px 11px, 100% 16px, 32px 100%, 100% 100%;
   border-radius: 26px;
-  padding: 20px 18px 16px 18px;
+  padding: 22px 20px 18px 20px;
   position: relative;
-  border: 2px solid #e7d8c7;
+  border: 1.8px solid #d2c5b0;
+  border-top: 2px solid #ffffff;
+  border-bottom: 3px solid #baa992;
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 #ffffff;
+    0 12px 30px rgba(0, 0, 0, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 #ffffff,
+    inset 0 -2px 6px rgba(180, 160, 120, 0.2);
   color: #111827;
+  overflow: hidden;
+}
+
+.your-label-parchment-card::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(165, 142, 112, 0.38);
+  border-radius: 20px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
 }
 
 .your-label-top-seals {
@@ -11119,4 +11191,2469 @@ body[data-wood="gold-wood"]::after {
   padding: 2px 6px;
   border-radius: 4px;
 }
+
+/* ==========================================================================
+   PROFILE SUBPAGE: MEDIA MANAGEMENT (BLACK CONTRACT PAPER SYSTEM)
+   ========================================================================== */
+
+.profile-mgmt-subpage-view {
+  background: var(--screen-hardwood) !important;
+}
+
+/* Management Switcher Tab styling (matches Labels color scheme with reduced font size) */
+.mgmt-switcher-wrap .labels-dual-switcher-bar {
+  background: none;
+  padding: 0;
+  border: none;
+  gap: 8px;
+}
+
+.mgmt-switcher-wrap .labels-switcher-tab {
+  flex: 1;
+  height: 38px;
+  border-radius: 20px;
+  background: rgba(206, 106, 107, 0.42);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.mgmt-switcher-wrap .labels-switcher-tab:hover {
+  background: rgba(206, 106, 107, 0.65);
+  color: #ffffff;
+}
+
+.mgmt-switcher-wrap .labels-switcher-tab.active {
+  background: #CE6A6B;
+  border: 2.2px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(206, 106, 107, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+
+.mgmt-switcher-wrap .labels-switcher-divider {
+  width: 2.5px;
+  height: 26px;
+  background: #ffffff;
+  border-radius: 2px;
+  flex-shrink: 0;
+  opacity: 0.95;
+}
+
+.mgmt-switcher-wrap .labels-switcher-underline {
+  width: 100%;
+  height: 3.5px;
+  background: #ffffff;
+  border-radius: 2px;
+  opacity: 0.95;
+  margin-top: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   SECTION 1: "ALL MANAGEMENT" BLACK CONTRACT CARDS
+   ========================================================================== */
+
+.mgmt-contract-card {
+  background-color: #11141a;
+  background-image:
+    radial-gradient(#262d3a 0.8px, transparent 0.8px),
+    radial-gradient(#1c222c 0.8px, transparent 0.8px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0px, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 32px),
+    linear-gradient(145deg, #181d27 0%, #12151c 45%, #0b0d13 100%);
+  background-size: 7px 7px, 11px 11px, 100% 16px, 32px 100%, 100% 100%;
+  background-position: 0 0, 3.5px 3.5px, 0 0, 0 0, 0 0;
+  border-radius: 22px;
+  padding: 18px 18px 14px 18px;
+  position: relative;
+  border: 1.8px solid #2a3342;
+  border-top: 2px solid #475569;
+  border-bottom: 2.5px solid #0a0d12;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.75),
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  color: #f1f5f9;
+  overflow: hidden;
+}
+
+.mgmt-contract-card::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 16px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.mgmt-contract-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: radial-gradient(circle at 85% 15%, rgba(148, 163, 184, 0.07) 0%, transparent 45%),
+              radial-gradient(circle at 15% 85%, rgba(251, 191, 36, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.mgmt-contract-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85), 0 3px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  border-color: #3b4758;
+}
+
+.mgmt-contract-card:active {
+  transform: scale(0.985);
+}
+
+/* Silver Agency Seal Stamp */
+.mgmt-silver-seal {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  z-index: 2;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7));
+}
+
+.mgmt-contract-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #f8fafc;
+  margin: 0 0 12px 0;
+  max-width: calc(100% - 56px);
+  text-transform: uppercase;
+  line-height: 1.15;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.mgmt-contract-meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.mgmt-meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 7px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.mgmt-meta-key {
+  color: #94a3b8;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.mgmt-meta-val {
+  color: #f1f5f9;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.mgmt-contract-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.mgmt-advance-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mgmt-advance-label {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.6px;
+}
+
+/* Green box for plan data field value (matching labels section advance pill) */
+.mgmt-cost-pill {
+  background: linear-gradient(180deg, #5de07b 0%, #3ec461 45%, #2bb04c 100%);
+  color: #06260f;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 4.5px 15px;
+  border-radius: 999px;
+  border: 1px solid #239a40;
+  box-shadow:
+    0 3px 8px rgba(34, 197, 94, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mgmt-silver-signature {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 48px;
+  height: 36px;
+}
+
+/* ==========================================================================
+   SECTION 2: "YOUR MANAGEMENT" BLACK CONTRACT CARD
+   ========================================================================== */
+
+.your-mgmt-black-card {
+  background-color: #11141a;
+  background-image:
+    radial-gradient(#262d3a 0.8px, transparent 0.8px),
+    radial-gradient(#1c222c 0.8px, transparent 0.8px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0px, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 32px),
+    linear-gradient(145deg, #191f2a 0%, #12161f 48%, #0a0d13 100%);
+  background-size: 7px 7px, 11px 11px, 100% 16px, 32px 100%, 100% 100%;
+  border-radius: 26px;
+  padding: 22px 20px 18px 20px;
+  position: relative;
+  border: 1.8px solid #2a3342;
+  border-top: 2px solid #475569;
+  border-bottom: 3px solid #090c10;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.75),
+    0 3px 8px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.6);
+  color: #f1f5f9;
+  overflow: hidden;
+}
+
+.your-mgmt-black-card::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 20px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.your-mgmt-top-seals {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.your-mgmt-contract-doc-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.your-mgmt-contract-doc-btn:hover {
+  transform: scale(1.15);
+}
+
+.your-mgmt-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: #f8fafc;
+  margin: 0 0 12px 0;
+  max-width: calc(100% - 60px);
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.your-mgmt-stats-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+/* Green box for current plan in your management section */
+.your-mgmt-plan-pill {
+  background: linear-gradient(180deg, #5de07b 0%, #3ec461 45%, #2bb04c 100%);
+  color: #06260f;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 5px 16px;
+  border-radius: 999px;
+  border: 1px solid #239a40;
+  box-shadow: 
+    0 3px 8px rgba(34, 197, 94, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.6px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  margin-bottom: 2px;
+  width: fit-content;
+}
+
+.your-mgmt-meta-item {
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #cbd5e1;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 2 Action Buttons Only (Staff & Requests) */
+.your-mgmt-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.your-mgmt-action-btn {
+  width: 100%;
+  height: 50px;
+  background: #1e293b;
+  border: 1.5px solid #334155;
+  border-top: 1.5px solid #475569;
+  border-bottom: 2.5px solid #0f172a;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  outline: none;
+}
+
+.your-mgmt-action-btn:hover {
+  background: #283548;
+  transform: translateY(-1px);
+  border-color: #475569;
+}
+
+.your-mgmt-action-btn:active {
+  transform: translateY(1px);
+  border-bottom-width: 1.5px;
+}
+
+.your-mgmt-btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.your-mgmt-btn-label {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #f1f5f9;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.your-mgmt-history-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.your-mgmt-history-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.your-mgmt-history-btn:hover {
+  transform: scale(1.18);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   MODAL 1: FORMAL BLACK CONTRACT SHEET MODAL
+   ========================================================================== */
+
+.mgmt-black-contract-sheet {
+  background: #0f141d !important;
+  border: 2px solid #334155 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  color: #f1f5f9 !important;
+}
+
+.mgmt-black-header {
+  background: #161e2a !important;
+  border-bottom: 1.5px solid #283548 !important;
+}
+
+.mgmt-silver-stamp {
+  color: #fbbf24 !important;
+  background: #1e1a12 !important;
+  border: 1px solid #78350f !important;
+}
+
+.mgmt-black-body {
+  background: #0f141d;
+  color: #f1f5f9;
+}
+
+.mgmt-clause-box {
+  background: #161e2b;
+  border: 1px solid #283548;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mgmt-clause-title {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mgmt-black-footer {
+  background: #161e2a !important;
+  border-top: 1.5px solid #283548 !important;
+}
+
+/* ==========================================================================
+   MODAL 2 & 3: MANAGEMENT SUBDRAWER (STAFF, REQUESTS, HISTORY)
+   ========================================================================== */
+
+.mgmt-subdrawer-card {
+  background: #0f141d !important;
+  border: 2px solid #334155 !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85) !important;
+}
+
+.mgmt-subdrawer-header {
+  background: #161e2a !important;
+  border-bottom: 2px solid #0f141d !important;
+}
+
+.mgmt-subdrawer-body {
+  background: #0f141d !important;
+}
+
+.mgmt-subdrawer-body .subdrawer-staff-card {
+  background: #161e2b;
+  border: 1.5px solid #283548;
+  color: #f1f5f9;
+}
+
+.mgmt-subdrawer-body .staff-avatar-box {
+  background: #b45309;
+  color: #ffffff;
+  border: 1.5px solid #fbbf24;
+}
+
+.mgmt-subdrawer-body .staff-info-box h4 {
+  color: #f8fafc;
+}
+
+.mgmt-subdrawer-body .staff-info-box span.role {
+  color: #94a3b8;
+}
+
+.mgmt-subdrawer-body .staff-rel-meter-row {
+  color: #cbd5e1;
+}
+
+.mgmt-subdrawer-body .staff-rel-bar {
+  background: #1e293b;
+}
+
+.mgmt-subdrawer-body .staff-quote {
+  background: #111722;
+  color: #94a3b8;
+  border-left: 3px solid #fbbf24;
+}
+
+.mgmt-subdrawer-body .subdrawer-request-card {
+  background: #161e2b;
+  border: 1.5px solid #283548;
+  color: #f1f5f9;
+}
+
+.mgmt-subdrawer-body .subdrawer-request-card h4 {
+  color: #f8fafc;
+}
+
+.mgmt-subdrawer-body .subdrawer-request-card p {
+  color: #94a3b8;
+}
+
+.mgmt-subdrawer-body .request-card-foot {
+  border-top: 1px dashed #334155;
+}
+
+.mgmt-subdrawer-body .history-contract-entry {
+  background: #161e2b;
+  border: 1.5px solid #283548;
+  color: #f1f5f9;
+}
+
+.mgmt-subdrawer-body .history-contract-entry.active {
+  border-color: #f59e0b;
+  background: #1c1811;
+}
+
+.mgmt-subdrawer-body .history-contract-entry h4 {
+  color: #f8fafc !important;
+}
+
+.mgmt-subdrawer-body .history-contract-entry span {
+  color: #94a3b8 !important;
+}
+
+.mgmt-subdrawer-body .history-contract-entry p {
+  color: #cbd5e1 !important;
+}
+
+/* ==========================================================================
+   CALENDAR FULL-SCREEN APP & ITINERARY SUITE
+   Faithfully modeled on user reference sketch (media_1791145109525.png)
+   Warm ivory/cream canvas (#F6EFE8), terracotta borders & accents (#CE6A6B)
+   4-Week Grid, Month Pills, Multi-day Event Banners, Navigation, Itinerary,
+   and Restricted Industry Release Intelligence (Current Week + 4).
+   ========================================================================== */
+
+.calendar-full-screen-app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5000;
+  background-color: #F7EFE8;
+  background-image: 
+    radial-gradient(#E8DACF 0.7px, transparent 0.7px),
+    linear-gradient(180deg, #F9F3ED 0%, #F5EDE5 100%);
+  background-size: 8px 8px, 100% 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1E293B;
+  user-select: none;
+  animation: fadeIn 0.15s ease-out;
+}
+
+/* Top Hardware Status Bar (Around & Behind Notch) */
+.calendar-top-hardware-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42px;
+  z-index: 5050;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: linear-gradient(180deg, rgba(247, 239, 232, 0.96) 0%, rgba(247, 239, 232, 0.75) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.calendar-top-hardware-bar > * {
+  pointer-events: auto;
+}
+
+.calendar-top-back-btn {
+  position: relative;
+  z-index: 5060;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.calendar-top-back-btn:hover {
+  background: rgba(206, 106, 107, 0.15);
+}
+
+.calendar-top-back-btn:active {
+  transform: scale(0.9);
+}
+
+.calendar-notch-hardware {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.calendar-top-status-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4A5568;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  pointer-events: none;
+}
+
+.calendar-phone-time {
+  font-weight: 900;
+  color: #2D3748;
+}
+
+.calendar-status-icon {
+  opacity: 0.85;
+}
+
+/* Main Scrollable Viewport */
+.calendar-main-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 42px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+}
+
+.calendar-view-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Header Date Range Title */
+.calendar-header-title-wrap {
+  padding: 6px 14px 10px 14px;
+  text-align: center;
+}
+
+.calendar-header-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: #1F2937;
+  margin: 0;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+
+/* 4-Week Grid Card */
+.calendar-grid-card {
+  margin: 0 6px 12px 6px;
+  background: #FFFDFB;
+  border: 1.8px solid #C97272;
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 12px rgba(185, 83, 83, 0.12),
+    inset 0 1px 0 #FFFFFF;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Days of Week Header Row */
+.calendar-days-header-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #F8EBE3;
+  border-bottom: 1.5px solid #C97272;
+}
+
+.cal-col-header {
+  text-align: center;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #5D6778;
+  padding: 6px 1px;
+  border-right: 1px solid rgba(201, 114, 114, 0.35);
+  text-transform: uppercase;
+}
+
+.cal-col-header:last-child {
+  border-right: none;
+}
+
+/* 4 Weeks Container */
+.calendar-4weeks-rows-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Week Row */
+.cal-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1.2px solid rgba(201, 114, 114, 0.45);
+  min-height: 64px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cal-week-row:last-child {
+  border-bottom: none;
+}
+
+.cal-week-row:hover {
+  background: rgba(206, 106, 107, 0.04);
+}
+
+.cal-week-row.is-current-week {
+  background: rgba(206, 106, 107, 0.07);
+}
+
+/* Day Cell */
+.cal-day-cell {
+  border-right: 1px solid rgba(201, 114, 114, 0.3);
+  padding: 2px 1px 4px 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  min-height: 64px;
+  box-sizing: border-box;
+}
+
+.cal-day-cell:last-child {
+  border-right: none;
+}
+
+/* Month Pill Badge (Above Monday of Week 1 or 1st of month) */
+.cal-month-pill {
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #CE6A6B;
+  color: #FFFFFF;
+  font-size: 0.48rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(206, 106, 107, 0.4);
+}
+
+.cal-day-cell.has-month-tag .cal-day-number {
+  margin-top: 13px;
+}
+
+.cal-day-number {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #1F2937;
+  margin-top: 4px;
+  line-height: 1;
+}
+
+.cal-day-cell.is-today .cal-day-number {
+  color: #CE6A6B;
+  font-weight: 900;
+  background: #FCE8E8;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Task Icons Below Date */
+.cal-day-task-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  margin-top: 4px;
+  max-width: 100%;
+}
+
+.cal-task-mini-icon {
+  font-size: 0.72rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+/* Multi-Day Event Banner Overlay */
+.cal-multi-event-banner {
+  position: absolute;
+  bottom: 2px;
+  height: 15px;
+  background: #CE6A6B;
+  color: #FFFFFF;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.48rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(206, 106, 107, 0.35);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cal-multi-event-banner::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 3px;
+  background: #CE6A6B;
+}
+
+/* 2-Arrow Navigation Bar */
+.calendar-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 10px 12px 18px 12px;
+}
+
+.cal-arrow-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.cal-arrow-btn:hover {
+  background: rgba(206, 106, 107, 0.12);
+}
+
+.cal-arrow-btn:active {
+  transform: scale(0.9);
+}
+
+.cal-arrow-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cal-reset-today-btn {
+  background: #FBF1EA;
+  border: 1.2px solid #C97272;
+  color: #C0392B;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.12s ease;
+}
+
+.cal-reset-today-btn:hover {
+  background: #FCE6E6;
+}
+
+.cal-reset-today-btn:active {
+  transform: scale(0.95);
+}
+
+/* Events Card Preview (Enlarged and shifted lower) */
+.calendar-events-preview-card {
+  margin: 6px 6px 26px 6px;
+  background: #FFFDFB;
+  border: 1.8px solid #C97272;
+  border-radius: 14px;
+  padding: 13px 14px;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 14px rgba(185, 83, 83, 0.10),
+    inset 0 1px 0 #FFFFFF;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.calendar-events-preview-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(185, 83, 83, 0.16);
+}
+
+.cal-events-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+
+.cal-events-header h3 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 900;
+  letter-spacing: 0.9px;
+  color: #1F2937;
+}
+
+.cal-events-view-all {
+  font-size: 0.70rem;
+  font-weight: 900;
+  color: #CE6A6B;
+  letter-spacing: 0.4px;
+}
+
+.cal-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cal-event-preview-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FBF4EE;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.2px solid rgba(201, 114, 114, 0.3);
+}
+
+.cal-event-prev-left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.cal-event-prev-icon {
+  font-size: 1.2rem;
+}
+
+.cal-event-prev-info h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.80rem;
+  font-weight: 900;
+  color: #1F2937;
+}
+
+.cal-event-prev-info span {
+  font-size: 0.68rem;
+  color: #475569;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.cal-event-prev-badge {
+  font-size: 0.64rem;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.badge-festival {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+.badge-award {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+}
+
+/* ==========================================================================
+   VIEW 2: WEEK DETAIL VIEW (PLAYER TASKS & INDUSTRY RELEASES)
+   ========================================================================== */
+
+.cal-detail-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px 10px 12px;
+}
+
+.cal-detail-back-btn {
+  background: transparent;
+  border: none;
+  color: #CE6A6B;
+  font-size: 0.74rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.12s ease;
+}
+
+.cal-detail-back-btn:hover {
+  background: rgba(206, 106, 107, 0.12);
+}
+
+.cal-detail-week-title {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #1F2937;
+  text-transform: uppercase;
+}
+
+.cal-add-event-btn {
+  background: #CE6A6B;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(206, 106, 107, 0.35);
+  transition: all 0.12s ease;
+}
+
+.cal-add-event-btn:hover {
+  background: #b85b5c;
+  transform: translateY(-1px);
+}
+
+.cal-plus-icon {
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Single Week Strip */
+.calendar-detail-week-strip {
+  margin: 0 12px 12px 12px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #FFFDFB;
+  border: 1.8px solid #C97272;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(185, 83, 83, 0.08);
+}
+
+.cal-strip-day {
+  border-right: 1px solid rgba(201, 114, 114, 0.3);
+  padding: 6px 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #FAF2EC;
+}
+
+.cal-strip-day:last-child {
+  border-right: none;
+}
+
+.cal-strip-day-name {
+  font-size: 0.58rem;
+  font-weight: 900;
+  color: #64748B;
+}
+
+.cal-strip-day-num {
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #1F2937;
+}
+
+.cal-strip-day.active-day .cal-strip-day-num {
+  color: #CE6A6B;
+}
+
+.cal-strip-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 14px;
+  margin-top: 2px;
+}
+
+/* Section Containers */
+.cal-tasks-section,
+.cal-releases-section {
+  margin: 0 12px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cal-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cal-section-badge {
+  background: #CE6A6B;
+  color: #FFFFFF;
+  font-size: 0.54rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.cal-section-badge.industry-badge {
+  background: #2563EB;
+}
+
+.cal-section-title {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: #1F2937;
+  text-transform: uppercase;
+}
+
+.cal-tasks-count,
+.cal-releases-intel-tag {
+  font-size: 0.60rem;
+  font-weight: 800;
+  color: #64748B;
+  text-transform: uppercase;
+}
+
+.cal-releases-intel-tag {
+  color: #2563EB;
+  font-weight: 900;
+}
+
+/* Tasks & Releases Cards */
+.cal-tasks-list,
+.cal-releases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.cal-task-item-card {
+  background: #FFFDFB;
+  border: 1.4px solid #C97272;
+  border-radius: 10px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(185, 83, 83, 0.06);
+}
+
+.cal-task-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cal-task-avatar-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #FAF2EC;
+  border: 1px solid rgba(201, 114, 114, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.cal-task-details h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #1F2937;
+}
+
+.cal-task-details p {
+  margin: 0;
+  font-size: 0.62rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.cal-task-day-pill {
+  font-size: 0.60rem;
+  font-weight: 900;
+  background: #FBF1EA;
+  color: #CE6A6B;
+  border: 1px solid rgba(206, 106, 107, 0.4);
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Industry Release Card */
+.cal-release-item-card {
+  background: #FFFDFB;
+  border: 1.4px solid #CBD5E1;
+  border-radius: 10px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.cal-release-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cal-release-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #94A3B8;
+  flex-shrink: 0;
+}
+
+.cal-release-meta h4 {
+  margin: 0 0 1px 0;
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #1F2937;
+}
+
+.cal-release-meta p {
+  margin: 0;
+  font-size: 0.62rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.cal-release-buzz-badge {
+  font-size: 0.58rem;
+  font-weight: 900;
+  color: #2563EB;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Classified Restricted Notice for Weeks > Current + 4 */
+.cal-classified-locked-card {
+  background: #1E293B;
+  border: 1.5px solid #334155;
+  border-radius: 12px;
+  padding: 18px 14px;
+  text-align: center;
+  color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.cal-lock-icon {
+  font-size: 1.5rem;
+}
+
+.cal-classified-locked-card h4 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: #F59E0B;
+  text-transform: uppercase;
+}
+
+.cal-classified-locked-card p {
+  margin: 0;
+  font-size: 0.66rem;
+  color: #94A3B8;
+  line-height: 1.45;
+  max-width: 290px;
+}
+
+/* ==========================================================================
+   MODALS: ALL EVENTS DIRECTORY & ADD CUSTOM EVENT
+   ========================================================================== */
+
+.cal-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 5200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.cal-modal-sheet {
+  background: #FFFDFB;
+  width: 100%;
+  max-height: 82%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 16px 14px 24px 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1.8px solid #C97272;
+  border-bottom: none;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3);
+  animation: slideUpSubdrawer 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cal-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1.2px solid rgba(201, 114, 114, 0.3);
+  margin-bottom: 12px;
+}
+
+.cal-modal-trophy {
+  font-size: 1.2rem;
+}
+
+.cal-modal-title {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: #1F2937;
+  text-transform: uppercase;
+}
+
+.cal-modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #64748B;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: color 0.12s ease;
+}
+
+.cal-modal-close-btn:hover {
+  color: #CE6A6B;
+}
+
+.cal-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Event Directory Items in Modal */
+.cal-dir-item {
+  background: #FBF4EE;
+  border: 1.2px solid rgba(201, 114, 114, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cal-dir-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cal-dir-title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-dir-title-box h4 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #1F2937;
+}
+
+.cal-dir-dates {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #CE6A6B;
+}
+
+.cal-dir-desc {
+  font-size: 0.64rem;
+  color: #4B5563;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cal-dir-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed rgba(201, 114, 114, 0.25);
+  padding-top: 5px;
+  margin-top: 2px;
+}
+
+.cal-dir-loc {
+  font-size: 0.60rem;
+  color: #6B7280;
+  font-weight: 700;
+}
+
+.cal-dir-reward {
+  font-size: 0.60rem;
+  color: #059669;
+  font-weight: 800;
+}
+
+/* Add Event Form */
+.cal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cal-form-group label {
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  color: #374151;
+  text-transform: uppercase;
+}
+
+.cal-form-group input,
+.cal-form-group select {
+  height: 34px;
+  background: #FDF9F5;
+  border: 1.2px solid #C97272;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #1F2937;
+  outline: none;
+  font-family: inherit;
+}
+
+.cal-form-group input:focus,
+.cal-form-group select:focus {
+  border-color: #CE6A6B;
+  box-shadow: 0 0 0 2px rgba(206, 106, 107, 0.2);
+}
+
+.cal-date-mode-toggle {
+  display: flex;
+  background: #F5EAE1;
+  border: 1px solid rgba(201, 114, 114, 0.4);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.cal-toggle-pill {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 6px 0;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: #64748B;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.cal-toggle-pill.active {
+  background: #CE6A6B;
+  color: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(206, 106, 107, 0.4);
+}
+
+.cal-form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.cal-form-actions {
+  margin-top: 6px;
+}
+
+.cal-submit-btn {
+  width: 100%;
+  height: 38px;
+  background: linear-gradient(180deg, #E07A7B 0%, #CE6A6B 50%, #B8595A 100%);
+  color: #FFFFFF;
+  border: 1px solid #9C4546;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(206, 106, 107, 0.4);
+  transition: all 0.12s ease;
+}
+
+.cal-submit-btn:hover {
+  filter: brightness(1.05);
+}
+
+.cal-submit-btn:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================================================
+   BEAT STORE: FULL-SCREEN ONLINE BEAT MARKETPLACE
+   Faithfully modeled on user sketch (media_1791186145751.png)
+   Matte dark charcoal (#141518), graffiti red accents (#FF2A2A),
+   high-contrast white action cards, and green price pills (#34D399).
+   ========================================================================== */
+
+.beatstore-full-screen-app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5000;
+  background-color: #141518;
+  background-image: radial-gradient(#20232a 0.8px, transparent 0.8px);
+  background-size: 8px 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #ffffff;
+  user-select: none;
+  animation: fadeIn 0.15s ease-out;
+}
+
+/* Top Hardware Status Bar (Around Notch) */
+.beatstore-top-hardware-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42px;
+  z-index: 5050;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: linear-gradient(180deg, rgba(20, 21, 24, 0.96) 0%, rgba(20, 21, 24, 0.75) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.beatstore-top-hardware-bar > * {
+  pointer-events: auto;
+}
+
+.beatstore-top-back-btn {
+  position: relative;
+  z-index: 5060;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.beatstore-top-back-btn:hover {
+  background: rgba(255, 42, 42, 0.15);
+}
+
+.beatstore-top-back-btn:active {
+  transform: scale(0.9);
+}
+
+.beatstore-notch-hardware {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.beatstore-top-status-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #94A3B8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  pointer-events: none;
+}
+
+.beatstore-phone-time {
+  font-weight: 900;
+  color: #F1F5F9;
+}
+
+.beatstore-status-icon {
+  opacity: 0.85;
+}
+
+/* Main Viewport */
+.beatstore-main-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 44px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Header Row: BEAT STORE + (+) ADD BEATS */
+.beatstore-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px 10px 14px;
+}
+
+.beatstore-brand-title {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-style: italic;
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #FF2A2A;
+  margin: 0;
+  text-shadow: 0 0 12px rgba(255, 42, 42, 0.45), 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+}
+
+.beatstore-add-btn {
+  background: #FFFFFF;
+  color: #FF2A2A;
+  border: 1.8px solid #FF2A2A;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.beatstore-add-btn:hover {
+  filter: brightness(0.96);
+}
+
+.beatstore-add-btn:active {
+  transform: scale(0.95);
+}
+
+.beatstore-plus-circle {
+  font-size: 0.95rem;
+  line-height: 1;
+  font-weight: 900;
+}
+
+/* Tab Views */
+.beatstore-tab-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  min-height: calc(100% - 44px);
+  animation: fadeIn 0.12s ease-out;
+}
+
+/* Card Container (Inventory & Released This Week) - Creamy White Drawer */
+.beatstore-card-container {
+  background: #FAF8F5;
+  border: 1.5px solid #EBE5DA;
+  border-radius: 14px;
+  margin: 4px 12px 14px 12px;
+  padding: 12px 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 330px;
+}
+
+.beatstore-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1.5px solid rgba(220, 38, 38, 0.18);
+  padding-bottom: 6px;
+}
+
+.beatstore-card-title {
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.90rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #DC2626;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.beatstore-card-meta {
+  font-family: var(--font-main);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #78716C;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Beats List - Fills available drawer height */
+.beatstore-beats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.beatstore-beat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #FFFFFF;
+  border-radius: 11px;
+  border: 1px solid #ECE7DD;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: background 0.12s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.beatstore-beat-row:hover {
+  background: #FDFBF7;
+}
+
+.beat-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.beat-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
+  object-fit: cover;
+  border: 1.5px solid #DC2626;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.beat-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.beat-title {
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #DC2626;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.beat-sub {
+  font-family: var(--font-main);
+  font-size: 0.60rem;
+  font-weight: 700;
+  color: #78716C;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.beat-type-badge {
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #EF4444;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+.beat-price-pill {
+  background: #10B981;
+  color: #FFFFFF;
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.70rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3.5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+  border: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Action Buttons Group */
+.beatstore-action-buttons-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0 12px 14px 12px;
+  flex-shrink: 0;
+}
+
+.beatstore-white-action-btn {
+  background: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.12s ease, filter 0.12s ease;
+  position: relative;
+}
+
+.beatstore-white-action-btn:hover {
+  filter: brightness(0.97);
+}
+
+.beatstore-white-action-btn:active {
+  transform: translateY(1px);
+}
+
+.beatstore-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.beatstore-btn-icon-wrap {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF2A2A;
+}
+
+.beatstore-btn-text {
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #FF2A2A;
+  text-transform: uppercase;
+}
+
+.beatstore-badge-count {
+  background: #FF2A2A;
+  color: #FFFFFF;
+  font-size: 0.68rem;
+  font-weight: 900;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(255, 42, 42, 0.5);
+}
+
+.beatstore-btn-arrow {
+  color: #FF2A2A;
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Bottom Navigation Bar (Sell vs Buy) */
+.beatstore-bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #0E0F12;
+  border-top: 1.5px solid #22252E;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 5060;
+}
+
+.beatstore-nav-tab {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: #71717A;
+  transition: all 0.15s ease;
+  flex: 1;
+  padding: 6px 0;
+}
+
+.beatstore-nav-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+}
+
+/* Sell Dollar Icon: Grey when inactive, Red when active */
+.beatstore-dollar-icon {
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #71717A;
+  background: #252830;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.beatstore-nav-tab.active .beatstore-dollar-icon {
+  color: #FFFFFF;
+  background: #FF2A2A;
+  box-shadow: 0 0 10px rgba(255, 42, 42, 0.45);
+}
+
+/* Buy Cart Icon SVG */
+.beatstore-nav-tab svg {
+  stroke: #71717A;
+  transition: stroke 0.15s ease;
+}
+
+.beatstore-nav-tab.active svg {
+  stroke: #FF2A2A;
+  filter: drop-shadow(0 0 6px rgba(255, 42, 42, 0.4));
+}
+
+.beatstore-nav-label {
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #71717A;
+  transition: color 0.15s ease;
+}
+
+.beatstore-nav-tab.active .beatstore-nav-label {
+  color: #FF2A2A;
+}
+
+/* Modals */
+.beatstore-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(8, 9, 12, 0.75);
+  backdrop-filter: blur(5px);
+  z-index: 5200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.beatstore-modal-sheet {
+  background: #1C1E26;
+  width: 100%;
+  max-height: 82%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 16px 14px 24px 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1.8px solid #FF2A2A;
+  border-bottom: none;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+  animation: slideUpSubdrawer 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.beatstore-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1.2px solid rgba(255, 42, 42, 0.3);
+  margin-bottom: 12px;
+}
+
+.beatstore-modal-title {
+  margin: 0;
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #FF2A2A;
+  text-transform: uppercase;
+}
+
+.beatstore-modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: color 0.12s ease;
+}
+
+.beatstore-modal-close-btn:hover {
+  color: #FF2A2A;
+}
+
+.beatstore-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Forms in Modal */
+.beatstore-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.beatstore-form-group label {
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #E2E8F0;
+  text-transform: uppercase;
+}
+
+.beatstore-form-group input,
+.beatstore-form-group select {
+  height: 36px;
+  background: #14161E;
+  border: 1.2px solid #2D3342;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  outline: none;
+  font-family: inherit;
+}
+
+.beatstore-form-group input:focus,
+.beatstore-form-group select:focus {
+  border-color: #FF2A2A;
+  box-shadow: 0 0 0 2px rgba(255, 42, 42, 0.25);
+}
+
+.beatstore-toggle-group {
+  display: flex;
+  background: #14161E;
+  border: 1.2px solid #2D3342;
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.beatstore-pill-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 7px 0;
+  font-size: 0.66rem;
+  font-weight: 900;
+  color: #94A3B8;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.beatstore-pill-btn.active {
+  background: #FF2A2A;
+  color: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(255, 42, 42, 0.4);
+}
+
+.beatstore-submit-btn {
+  width: 100%;
+  height: 38px;
+  background: linear-gradient(180deg, #FF4545 0%, #FF2A2A 50%, #D81E1E 100%);
+  color: #FFFFFF;
+  border: 1px solid #FF2A2A;
+  border-radius: 8px;
+  font-family: var(--font-main);
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(255, 42, 42, 0.4);
+  transition: all 0.12s ease;
+  margin-top: 6px;
+}
+
+.beatstore-submit-btn:hover {
+  filter: brightness(1.08);
+}
+
+.beatstore-submit-btn:active {
+  transform: translateY(1px);
+}
+
+/* Inbound Negotiation & Sales Cards */
+.beatstore-nego-card,
+.beatstore-sale-item,
+.beatstore-producer-card {
+  background: #151720;
+  border: 1.2px solid #2B303E;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nego-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nego-artist-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nego-artist-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #FF2A2A;
+}
+
+.nego-artist-info h4 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #F8FAFC;
+}
+
+.nego-artist-info span {
+  font-size: 0.62rem;
+  color: #94A3B8;
+  font-weight: 700;
+}
+
+.nego-price-badge {
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #34D399;
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.nego-message {
+  font-size: 0.66rem;
+  color: #CBD5E1;
+  margin: 0;
+  line-height: 1.4;
+  background: #111319;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.nego-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.nego-accept-btn {
+  flex: 1;
+  height: 30px;
+  background: #10B981;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.70rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.nego-decline-btn {
+  height: 30px;
+  padding: 0 12px;
+  background: #EF4444;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.70rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+/* Bulk Discount Item */
+.beatstore-discount-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #151720;
+  border: 1.2px solid #2B303E;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.discount-item-left h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #F8FAFC;
+}
+
+.discount-item-left p {
+  margin: 0;
+  font-size: 0.64rem;
+  color: #94A3B8;
+  line-height: 1.35;
+}
+
+.discount-toggle-switch {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.12s ease;
+}
+
+.discount-toggle-switch.active {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+.discount-toggle-switch.inactive {
+  background: #334155;
+  color: #94A3B8;
+}
+
+/* Search Bar & Genre Filters */
+.beatstore-search-bar input {
+  width: 100%;
+  height: 36px;
+  background: #14161E;
+  border: 1.2px solid #2D3342;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.beatstore-genre-filter-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 0;
+}
+
+.beatstore-genre-pill {
+  background: #151720;
+  border: 1px solid #2B303E;
+  color: #94A3B8;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.beatstore-genre-pill.active {
+  background: #FF2A2A;
+  color: #FFFFFF;
+  border-color: #FF2A2A;
+}
+
+/* Audio Wave Preview Bar in Buy Modal */
+.beat-wave-preview-box {
+  background: #111319;
+  border: 1.2px solid #252834;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.beat-play-round-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FF2A2A;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(255, 42, 42, 0.4);
+}
+
+
 

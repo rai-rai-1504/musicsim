@@ -21,6 +21,8 @@ from rapsim_reviews.ui_helpers import (
 from rapsim_reviews.critic_system import CRITIC_NAMES, _critic_username
 from rapsim_reviews.career_models import (
     Artist,
+    ARTIST_BASE_REPUTATION,
+    _ensure_song_bg_attrs,
     _player_week_index,
     _year_week_from_world_week,
     _ecosystem_artist_popularity,
@@ -234,13 +236,19 @@ def _grammy_nomination_blocks(results: dict) -> list[tuple[str, list[dict]]]:
     return blocks
 
 
-def _generate_grammy_tweets(current_week: int, world: EcosystemWorld, player_artist, all_artists: list[Artist], all_critics: list[str]) -> list[Tweet]:
+def _generate_grammy_tweets(current_week: int, world: EcosystemWorld, player_artist, all_artists: list[Artist], all_critics: list[str]) -> list:
     if player_artist is None or not _is_grammy_media_week(current_week):
         return []
     year, week_in_year = _year_week_from_world_week(current_week)
     results = _ensure_grammy_results(player_artist, world, year)
     if not results:
         return []
+
+    from rapsim_reviews.twitter_system import (
+        Tweet,
+        _ecosystem_artist_object,
+        _compact_tweet_title,
+    )
 
     tweets: list[Tweet] = []
     artist_names = {artist.name for artist in all_artists}
